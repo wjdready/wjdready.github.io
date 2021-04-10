@@ -9,7 +9,7 @@
     
     <title>
         
-            SDL安装与使用 |
+            MQTT开发 |
         
         东东
     </title>
@@ -149,7 +149,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">SDL安装与使用</span>
+            <span class="title-hover-animation">MQTT开发</span>
         </div>
 
         
@@ -167,7 +167,7 @@
                     <div class="meta-info">
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2020-12-20 14:12:06
+        <i class="fas fa-edit"></i>&nbsp;2021-04-10 23:33:30
     </span>
     
         <span class="article-categories article-meta-item">
@@ -175,7 +175,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/SDL-%E7%BC%96%E7%A8%8B/">SDL 编程</a>&nbsp;
+                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a>&nbsp;
                     </li>
                 
             </ul>
@@ -187,7 +187,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/SDL/">SDL</a>&nbsp;
+                        <a href="/tags/mqtt/">mqtt</a>&nbsp;
                     </li>
                 
             </ul>
@@ -210,20 +210,24 @@
         
 
         <div class="article-content markdown-body">
-            <p>本文介绍在 Ubuntu 下 SDL2 库的安装与使用</p>
+            <p>本文主要介绍Ubuntu环境下搭建MQTT服务器和简单使用</p>
 <span id="more"></span>
 
-<ul>
-<li><p>安装C语言开发库</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libsdl2-dev</span><br></pre></td></tr></table></figure>
+<h3 id="Linux-搭建MQTT服务器"><a href="#Linux-搭建MQTT服务器" class="headerlink" title="Linux 搭建MQTT服务器"></a>Linux 搭建MQTT服务器</h3><ul>
+<li><p>安装 </p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa     # 添加源到软件仓库</span><br><span class="line">sudo apt-get update                                         # 更新软件仓库列表</span><br><span class="line">sudo apt-get install mosquitto                              # 安装mosquitto</span><br></pre></td></tr></table></figure></li>
+<li><p>试运行</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service mosquitto status                               # 查看运行状态</span><br><span class="line">sudo service mosquitto start                                # 启动服务</span><br><span class="line">sudo service mosquitto stop                                 # 停止服务</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>demo.cpp 文件</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SDL_Window *window = SDL_CreateWindow(<span class="string">&quot;demo&quot;</span>, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, <span class="number">640</span>, <span class="number">480</span>, SDL_WINDOW_SHOWN);</span><br><span class="line">    SDL_Renderer *renderer = SDL_CreateRenderer(window, <span class="number">-1</span>, SDL_RENDERER_ACCELERATED);</span><br><span class="line">    <span class="keyword">bool</span> quit = <span class="literal">false</span>;</span><br><span class="line">    SDL_Event event;</span><br><span class="line"></span><br><span class="line">    SDL_SetRenderDrawColor(renderer, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>);</span><br><span class="line">    <span class="keyword">while</span> (!quit) &#123;</span><br><span class="line">        <span class="keyword">while</span> (SDL_PollEvent(&amp;event)) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (event.type) &#123;</span><br><span class="line">            <span class="keyword">case</span> SDL_QUIT:</span><br><span class="line">                quit = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SDL_MOUSEMOTION:</span><br><span class="line">                <span class="keyword">if</span>(SDL_GetMouseState(<span class="literal">NULL</span>, <span class="literal">NULL</span>) &amp;SDL_BUTTON(<span class="number">1</span>))</span><br><span class="line">                    SDL_RenderDrawPoint(renderer, event.motion.x, event.motion.y);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        SDL_RenderPresent(renderer);</span><br><span class="line">        SDL_Delay(<span class="number">1000</span> / <span class="number">60</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    SDL_DestroyWindow(window);</span><br><span class="line">    SDL_DestroyRenderer(renderer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>添加和系修改配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo service mosquitto stop   #首先停止服务</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用户的局部配置文件放在： /etc/mosquitto/conf.d/目录下，并且这个目录下的所有以.conf后缀的文件都将被mosquitto作为配置文件，在启动时加载。</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在/etc/mosquitto/conf.d目录下，新建myconfig.conf配置文件，输入以下内容</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭匿名访问，客户端必须使用用户名</span></span><br><span class="line">allow_anonymous false</span><br><span class="line"><span class="meta">#</span><span class="bash">指定 用户名-密码 文件</span></span><br><span class="line">password_file /etc/mosquitto/pwfile.txt</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>编译运行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc demo.c -lSDL2</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./a.out</span></span><br></pre></td></tr></table></figure>
+<li><p>创建一个MQTT服务器账户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 假设用户名为:user1， 在命令行运行：</span></span><br><span class="line">   </span><br><span class="line">mosquitto_passwd -c /etc/mosquitto/pwfile.txt user1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">回车后连续输入2次用户密码即可，然后重新启动 mosquitto</span></span><br><span class="line">sudo service mosquitto start      </span><br></pre></td></tr></table></figure>
 </li>
-<li><p>运行结果<br><img src="/2020/12/20/SDL%E7%BC%96%E7%A8%8B/SDL%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/SDL%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.png" alt="运行结果"></p>
+<li><p>测试 mosquitto：可在App Store下载MQTTool工具进行测试。</p>
+</li>
+<li><p>在线用测试网址参考<a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/cpongo3/article/details/89327641">博客<i class="fas fa-external-link-alt"></i></a></p>
 </li>
 </ul>
 
@@ -234,29 +238,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2020/12/22/%E5%85%B6%E4%BB%96/Ubuntu%E5%AE%89%E8%A3%85%E8%AE%BE%E7%BD%AE/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Ubuntu安装设置</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2020/12/20/C%E8%AF%AD%E8%A8%80/lua-c/"
+                           href="/2021/04/10/SDL%E7%BC%96%E7%A8%8B/SDL%E6%92%AD%E6%94%BEPCM%E9%9F%B3%E9%A2%91/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Lua 调用 C/C++ 动态库</span>
+                                <span class="post-nav-title-item">SDL 播放pcm音频</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -454,7 +443,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E6%90%AD%E5%BB%BAMQTT%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">Linux 搭建MQTT服务器</span></a></li></ol>
     </div>
 </div>
         </aside>
