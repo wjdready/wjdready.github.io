@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文是 SQLite 数据库的 C 编程教程，它介绍了使用 C 语言进行 SQLite 编程的基础知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sqlite3 C 语言">
+<meta property="og:url" content="http://example.com/2020/12/20/%E6%95%B0%E6%8D%AE%E5%BA%93/Sqlite3/index.html">
+<meta property="og:site_name" content="东东">
+<meta property="og:description" content="本文是 SQLite 数据库的 C 编程教程，它介绍了使用 C 语言进行 SQLite 编程的基础知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-20T02:28:54.000Z">
+<meta property="article:modified_time" content="2021-04-10T11:24:18.847Z">
+<meta property="article:author" content="东东">
+<meta property="article:tag" content="Sqlite3">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/12/20/%E6%95%B0%E6%8D%AE%E5%BA%93/Sqlite3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Sqlite3 C 语言 | 东东</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">东东</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/20/%E6%95%B0%E6%8D%AE%E5%BA%93/Sqlite3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="东东">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="东东">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Sqlite3 C 语言
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-20 10:28:54" itemprop="dateCreated datePublished" datetime="2020-12-20T10:28:54+08:00">2020-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-10 19:24:18" itemprop="dateModified" datetime="2021-04-10T19:24:18+08:00">2021-04-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index"><span itemprop="name">Lua</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/12/20/%E6%95%B0%E6%8D%AE%E5%BA%93/Sqlite3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/20/%E6%95%B0%E6%8D%AE%E5%BA%93/Sqlite3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文是 SQLite 数据库的 C 编程教程，它介绍了使用 C 语言进行 SQLite 编程的基础知识<span id="more"></span><br>更多信息访问 <a target="_blank" rel="noopener" href="http://zetcode.com/db/sqlite/">SQLite tutorial</a> 教程</p>
+<h2 id="SQL数据库"><a href="#SQL数据库" class="headerlink" title="SQL数据库"></a>SQL数据库</h2><ul>
+<li>SQLite 是一个支持嵌入式的<strong>关系型数据库引擎</strong>。它的开发人员称其为自包含(self-contained)、无服务器(serverless)、零配置和事务性的 SQL 数据库引擎。</li>
+<li>它目前非常流行，今天全世界有数亿设备在使用。SQLite 用于 Solaris 10、Mac OS、Android 或 iPhone。</li>
+<li>Qt4 库具有对 SQLite 以及 Python 和 PHP 的内置支持。</li>
+<li>许多流行的应用程序在内部使用 SQLite，比如 Firefox、Google Chrome 或 Amarok。</li>
+</ul>
+<h2 id="SQLite3-工具"><a href="#SQLite3-工具" class="headerlink" title="SQLite3 工具"></a>SQLite3 工具</h2><p>SQLite3 工具是 SQLite 库的基于终端的前端。它以交互方式来分析用户提供的查询 (queries) 操作，并以多种格式显示结果。它还可以在脚本中使用。它有自己的一组元命令，包括 <code>.tables</code>、<code>.load</code>、<code>.database</code> 或<code>.dump</code>。要获取所有指令的列表，我们只需键入. help 命令。</p>
+<p>现在，我们将使用 sqlite3 工具创建一个新数据库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqlite3 test.db</span></span><br><span class="line">SQLite version 3.22.0 2018-01-22 18:45:57</span><br><span class="line">Enter &quot;.help&quot; for usage hints.</span><br></pre></td></tr></table></figure>
+
+<p>这里，我们为 sqlite3 工具提供了一个参数；test.db 是一个数据库名称。这是我们磁盘上的一个文件。如果它存在，则会将其打开。如果不是，则创建它。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> .tables</span></span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> .<span class="built_in">exit</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>tables</code> 命令提供 test.db 数据库中所有存在的的**表 (table)**。当前没有表，因为我们没有创建它。<code>exit</code> 命令终止 sqlite3 命令行工具的交互会话。</p>
+<p>退出后，通过 unix 的 <code>ls</code> 命令显示当前工作目录的内容。我们可以看到 test.db 文件。数据库会把所有数据都将存储在此单个文件中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ls</span></span><br><span class="line">test.db</span><br></pre></td></tr></table></figure>
+
+<h2 id="C99"><a href="#C99" class="headerlink" title="C99"></a>C99</h2><p>本教程使用 C99。对于 GNU C 编译器，我们需要使用 <code>-std=c99</code> 选项。对于 Windows 用户，推荐使用 PELES C IDE。(MSVC 不支持 C99。)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> rc=sqlite3_open(“test.db”，&amp;db)；</span><br></pre></td></tr></table></figure>
+<p>在 C99 中，我们可以将声明与代码混合使用。但在旧的 C 程序中，我们需要将此行分成两行。</p>
+<h2 id="获取-SQLite-版本"><a href="#获取-SQLite-版本" class="headerlink" title="获取 SQLite 版本"></a>获取 SQLite 版本</h2><p>在第一个代码示例中，我们将获得 SQLite 数据库的版本。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- 获取 SQLite 版本 v1 --</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, sqlite3_libversion()); </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3_libversion</code> 函数的作用是：返回一个指示 SQLite 库的字符串。</p>
+<p>头文件 <code>sqlite3.h</code> 定义了 SQLite 库提供给客户端程序的接口。它包含定义、函数原型和注释。它是 SQLite API 的权威来源。</p>
+<p>我们使用 GNU C 编译器编译程序。然后运行它</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc -o version version.c -lsqlite3 -std=c99</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./version</span></span><br><span class="line">3.22.0</span><br></pre></td></tr></table></figure>
+
+<p>在第二个示例中，我们再次获取 SQLite 数据库的版本。但这次我们将使用 SQL 的查询 (query) 功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- 获取 SQLite 版本 v2 --</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    sqlite3_stmt *pStmt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;:memory:&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 编译 SQL 语句</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_prepare_v2(db, <span class="string">&quot;SELECT SQLITE_VERSION()&quot;</span>, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to fetch data: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行 SQL 语句</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_step(pStmt) == SQLITE_ROW) </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, sqlite3_column_text(pStmt, <span class="number">0</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 释放 SQL 语句句柄并关闭数据库</span></span><br><span class="line">    sqlite3_finalize(pStmt);</span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>SQLITE_VERSION()</code> 查询用于获取 SQLite 库的版本。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sqlite3 *db;</span><br><span class="line">sqlite3_stmt *pStmt;</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3</code> 结构定义了一个数据库句柄。每个打开的 SQLite 数据库由一个数据库句柄表示。<br><code>sqlite3_stmt</code> 结构表示单个 SQL 语句 (statement)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_open(<span class="string">&quot;:memory:&quot;</span>, &amp;db);</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3_open</code> 函数的作用是：打开一个数据库。它的参数是数据库名称和数据库句柄。<br><strong>:memory:</strong> 是一个特殊的数据库名称，使用它可以新开一个数据库且该数据存放在内存中。函数的返回代码指示数据库是否已成功打开。成功打开并建立连接时返回 SQLITE_OK。</p>
+<p>如果返回代码指示错误，这里我们会将消息打印到控制台，关闭数据库句柄，然后终止程序。<br><code>sqlite3_errmsg</code> 函数的作用是：返回错误的描述。<br>无论打开数据库连接句柄时是否发生错误，都应该通过将其传递给 <code>sqlite3_close()</code> 函数来释放与数据库连接句柄关联的资源。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_prepare_v2(db, <span class="string">&quot;SELECT SQLITE_VERSION()&quot;</span>, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>就像 C/C++ 或者 Java 那样，需要先编译才能执行命令。所以在执行 SQL 语句之前，必须首先使用 <code>sqlite3_prepare</code> 系列函数之一将其编译成字节码 (sqlite3_prepare() 函数已弃用)。</p>
+<p><code>sqlite3_prepare_v2()</code> 函数接受五个参数：</p>
+<ul>
+<li>第一个参数是从 <code>sqlite3_open()</code> 函数获得的数据库句柄</li>
+<li>第二个参数是要编译的 SQL 语句</li>
+<li>第三个参数是 SQL 语句的最大长度 (以字节为单位)，传递 -1 会导致 SQL 连续地向后读取语句字符串，直到出现第一个 <code>&#39;\0&#39;</code> 终止符为止，也就是 C 字符串的末尾。根据文档说明，通过传递所提供字符串的确切字节数，可以获得一些较小的性能优势。</li>
+<li>第四个参数是语句句柄。如果 <code>sqlite3_prepare_v2()</code> 运行成功，它将指向编译好的字节码语句。</li>
+<li>最后一个参数是指向 SQL 语句未使用部分的指针。因为函数每次只编译 SQL 字符串的第一条语句，因此该参数指向剩下的未编译内容。我们传递 0，因为该参数对我们来说并不重要。</li>
+</ul>
+<p>如果成功，<code>sqlite3_prepare_v2()</code> 将返回 SQLITE_OK；否则将返回错误代码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_step(pStmt);</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3_step()</code> 函数用来运行 SQL 语句。SQLITE_ROW 返回代码表示已经准备好下一行 (row) 数据，这说明我们的代码已经被正确执行。因为我们的 SQL 语句就为了获取版本号，它只返回一条数据，因此，我们只调用此函数一次。如果一次执行中可能会返回多条数据，我们可以进行多次调用，每调用一次就获取一条数据，SQL 内部会自动向下迭代。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_column_text(pStmt, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>正确执行后 pStmt 句柄包含当前所迭代到的数据的索引信息，我们可以用它来访问该条数据信息。</p>
+<p><code>sqlite3_finalize(res)</code> 函数的作用是：销毁我们准备好的语句对象。<br>最后<code>sqlite3_close()</code> 函数关闭了与数据库的连接。</p>
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><p>我们创建一个 CARS 表，并在其中插入几行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- SQLite3 数据库插入数据的例子 --</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置 SQL 语句字符串</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;DROP TABLE IF EXISTS Cars;&quot;</span> </span><br><span class="line">                <span class="string">&quot;CREATE TABLE Cars(Id INT, Name TEXT, Price INT);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(1, &#x27;Audi&#x27;, 52642);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(2, &#x27;Mercedes&#x27;, 57127);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(3, &#x27;Skoda&#x27;, 9000);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(4, &#x27;Volvo&#x27;, 29000);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(5, &#x27;Bentley&#x27;, 350000);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(6, &#x27;Citroen&#x27;, 21000);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(7, &#x27;Hummer&#x27;, 41400);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Cars VALUES(8, &#x27;Volkswagen&#x27;, 21600);&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 编译并执行 SQL 语句字符串</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, <span class="number">0</span>, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;SQL error: %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);        </span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，我们连接到 test.db 数据库，创建一个 CARS 表，并在创建的表中插入 8 行数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>如果出现错误，此指针将指向的错误消息。</p>
+<p>然后是设置 SQL 语句字符串， 这些 SQL 语句会创建一个 CARS 表，并用数据填充它。语句必须用分号 <code>&#39;;&#39;</code>分隔。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rc = sqlite3_exec(db, sql, <span class="number">0</span>, <span class="number">0</span>, &amp;err_msg);</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3_exec</code> 函数是 <code>sqlite3_prepare_v2</code>、<code>sqlite3_step</code> 和 <code>sqlite3_finalize</code> 的便捷封装方式，它允许应用程序运行 SQL 的多条语句，而不必使用大量 C 代码。</p>
+<ul>
+<li>第三个参数是一个回调函数，用于访问 SQL 语句中的每个结果行。</li>
+<li>第四个参数是给回调函数的第一个参数。如果我们不需要它们，可以设置为 0 或者 NULL。</li>
+<li>如果发生错误，则最后一个参数指向分配的错误消息。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_free(err_msg);</span><br></pre></td></tr></table></figure>
+<p>必须使用 sqlite3_free() 函数调用释放分配的消息字符串。</p>
+<p>我们可以使用 sqlite3 工具验证写入的数据。首先，我们修改数据在控制台中的显示方式。这里我们使用清爽的列对齐显示模式，并要求显示每条数据的标题。然后执行 <code>SELECT * FROM Cars;</code>语句。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; .mode column  </span><br><span class="line">sqlite&gt; .headers on</span><br><span class="line">sqlite&gt; SELECT * FROM Cars;</span><br><span class="line">Id          Name        Price     </span><br><span class="line">----------  ----------  ----------</span><br><span class="line"><span class="number">1</span>           Audi        <span class="number">52642</span>     </span><br><span class="line"><span class="number">2</span>           Mercedes    <span class="number">57127</span>     </span><br><span class="line"><span class="number">3</span>           Skoda       <span class="number">9000</span>      </span><br><span class="line"><span class="number">4</span>           Volvo       <span class="number">29000</span>     </span><br><span class="line"><span class="number">5</span>           Bentley     <span class="number">350000</span>    </span><br><span class="line"><span class="number">6</span>           Citroen     <span class="number">21000</span>     </span><br><span class="line"><span class="number">7</span>           Hummer      <span class="number">41400</span>     </span><br><span class="line"><span class="number">8</span>           Volkswagen  <span class="number">21600</span></span><br></pre></td></tr></table></figure>
+
+<p>这就是我们写入CARS表的数据。</p>
+<h2 id="最后插入的行ID"><a href="#最后插入的行ID" class="headerlink" title="最后插入的行ID"></a>最后插入的行ID</h2><p>有时，我们需要确定最后插入的行的 ID。为此，我们使用 <code>sqlite3_last_insert_rowid</code> 函数。如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> last_id = sqlite3_last_insert_rowid(db);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;The last Id of the inserted row is %d\n&quot;</span>, last_id);</span><br></pre></td></tr></table></figure>
+
+<p>下面语句执行后会在内存中创建一个 Friends 表。其 ID 列自动递增。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *sql = <span class="string">&quot;CREATE TABLE Friends(Id INTEGER PRIMARY KEY, Name TEXT);&quot;</span></span><br><span class="line">            <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Tom&#x27;);&quot;</span></span><br><span class="line">            <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Rebecca&#x27;);&quot;</span></span><br><span class="line">            <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Jim&#x27;);&quot;</span></span><br><span class="line">            <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Roger&#x27;);&quot;</span></span><br><span class="line">            <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Robert&#x27;);&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>在 SQLite 中，整数主键 (PRIMARY KEY) 列会自动递增。还有一个 <code>AUTOINCREMENT</code> 关键字。当该关键字应用于整数主键时，使用的 ID 创建算法略有不同。当使用自动递增列时，我们需要显式地声明列名。</p>
+<h2 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h2><p>我们已经将一些数据插入到 test.db 数据库中。在下面的示例中，我们将从数据库检索数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- 检索数据 Callback方法</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, </span><br><span class="line">                sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置语句并编译执行</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;SELECT * FROM Cars;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, callback, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;    </span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to select data\n&quot;</span>);</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;SQL error: %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *NotUsed, <span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **azColName)</span> </span>&#123;</span><br><span class="line">    NotUsed = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s = %s\n&quot;</span>, azColName[i], argv[i] ? argv[i] : <span class="string">&quot;NULL&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们使用 <code>SELECT * FROM Cars;</code> 语句从 CARS 表中检索所有行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这是与 sqlite3_exec() 函数结合使用的回调函数的函数原型。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_exec(db, sql, callback, <span class="number">0</span>, &amp;err_msg);</span><br></pre></td></tr></table></figure>
+<p>这次 <code>sqlite3_exec</code> 函数中的我们加入了回调函数，sqlite3_exec 在处理求值语句时每得到一个结果行将调用一次 <code>callback</code> 函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *NotUsed, <span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **azColName)</span> </span>&#123;</span><br><span class="line">    NotUsed = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s = %s\n&quot;</span>, azColName[i], argv[i] ? argv[i] : <span class="string">&quot;NULL&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>来看这个回调函数</p>
+<ul>
+<li>第一个参数是 <code>sqlite3_exec</code> 的第四个参数中提供的数据，通常不使用它。</li>
+<li>第二个参数是结果行中列的个数。</li>
+<li>第三个参数是表示结果行中字段的字符串数组。它包含着我们每一行的数据。</li>
+<li>最后一个参数就是我们设置的标题行，该行的每一列保存着每一列数据的标题名称。</li>
+</ul>
+<p>所以上面代码中，我们遍历<strong>结果行</strong>和<strong>标题行</strong>中的所有列就并打印出了它们的名称和内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ./select_all </span><br><span class="line">Id = <span class="number">1</span></span><br><span class="line">Name = Audi</span><br><span class="line">Price = <span class="number">52642</span></span><br><span class="line"></span><br><span class="line">Id = <span class="number">2</span></span><br><span class="line">Name = Mercedes</span><br><span class="line">Price = <span class="number">57127</span></span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>以上是示例的部分输出。</p>
+<h2 id="参数化查询"><a href="#参数化查询" class="headerlink" title="参数化查询"></a>参数化查询</h2><p>现在我们将用到参数化查询。参数化查询，也称为预准备语句 (prepared statements), 可提高安全性和性能。当我们使用参数化查询时，我们使用占位符，而不是直接将值写入语句。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- SQLite3 参数化查询例子 --</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    sqlite3_stmt *pStmt;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置并预编译 SQL 语句</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;SELECT Id, Name FROM Cars WHERE Id = ?&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>) == SQLITE_OK)</span><br><span class="line">        <span class="comment">// 如果预编译成功，则对占位符进行绑定：第一个占位符，设置为 3</span></span><br><span class="line">        sqlite3_bind_int(pStmt, <span class="number">1</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to execute statement: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行语句获取结果行，如果数据可用则获取数据</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_step(pStmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s: &quot;</span>, sqlite3_column_text(pStmt, <span class="number">0</span>));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, sqlite3_column_text(pStmt, <span class="number">1</span>));</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    sqlite3_finalize(pStmt);</span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，问号 <code>&#39;?&#39;</code> 用作占位符，稍后将其替换为实际值并为 SQL 查询提供 Id。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *sql = <span class="string">&quot;SELECT Id, Name FROM Cars WHERE Id = ?&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_bind_int(pStmt, <span class="number">1</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>sqlite3_bind_int</code> 将整数值绑定到准备好的语句，占位符替换为整数值3。</p>
+<ul>
+<li>第二个参数表明要设置第几个占位符，这里我们只有一个占位符</li>
+<li>第三个参数表明要把占位符替换成什么</li>
+</ul>
+<p><code>sqlite3_step</code> 函数将执行处理好的 SQL 语句，并索引到执行结果行。</p>
+<p>如果有某行数据可用，我们将使用 <code>sqlite3_column_text</code> 函数获取结果行中的两列的值，即</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%s: &quot;</span>, sqlite3_column_text(res, <span class="number">0</span>));</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, sqlite3_column_text(res, <span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./parameterized </span><br><span class="line"><span class="number">3</span>: Skoda</span><br></pre></td></tr></table></figure>
+<p>正如所期待的，该示例返回第三个数据的 Id 和汽车的名称，因为我们绑定到占位符的数据是 3 。</p>
+<p>第二个示例使用<strong>带有命名占位符</strong>的参数化语句</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -- SQLite3 使用命名占位例子 --</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    sqlite3_stmt *pStmt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置并预编译 SQL 语句</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;SELECT Id, Name FROM Cars WHERE Id = @id&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to execute statement: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过占位符名 @name 获取占位符位置</span></span><br><span class="line">    <span class="keyword">int</span> idx = sqlite3_bind_parameter_index(pStmt, <span class="string">&quot;@id&quot;</span>);</span><br><span class="line">    <span class="keyword">int</span> value = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 把整数值绑定到语句中的占位符位置</span></span><br><span class="line">    sqlite3_bind_int(pStmt, idx, value);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 执行语句获取结果行，如果数据可用则打印数据</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_step(pStmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s: &quot;</span>, sqlite3_column_text(pStmt, <span class="number">0</span>));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, sqlite3_column_text(pStmt, <span class="number">1</span>));</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    sqlite3_finalize(pStmt);</span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>命名占位符的前缀可以是 <code>&#39;@&#39;</code>, 也可以是冒号 <code>&#39;:&#39;</code>。 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> idx = sqlite3_bind_parameter_index(pStmt, <span class="string">&quot;@id&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p><code>sqlite3_bind_parameter_index</code> 函数的作用是返回给定占位符名称的 SQL 占位符的索引。</p>
+<h2 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h2><p>在本节中，我们将向 SQLite 数据库插入图像。请注意，有些人反对将图像放入数据库。这里我们只演示如何做到这一点。我们没有详细讨论是否应该将图像保存在数据库中的技术问题。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; <span class="function">CREATE TABLE <span class="title">Images</span><span class="params">(Id INTEGER PRIMARY KEY, Data BLOB)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>对于本例，我们创建一个名为 Images 的新表。其中我们使用 BLOB 数据类型来存放图片，它代表二进制大对象。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;woman.jpg&quot;</span>, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open image file\n&quot;</span>);    </span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取文件大小，在这里为了简洁，我们没有对获取过程</span></span><br><span class="line">    <span class="comment">// 可能出现的出错进行处理，实际开发应注意这一点</span></span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_END);</span><br><span class="line">    <span class="keyword">int</span> fsize = ftell(fp);</span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据获取文件大小获取内存，并将文件读入到内存</span></span><br><span class="line">    <span class="keyword">char</span> *data = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*fsize);</span><br><span class="line">    <span class="keyword">if</span>(data == <span class="literal">NULL</span> || fread(data, <span class="number">1</span>, fsize, fp) != fsize) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;malloc or readfile error\n&quot;</span>);</span><br><span class="line">        fclose(fp);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    sqlite3_stmt *pStmt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 语句预处理</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;INSERT INTO Images(Data) VALUES(?)&quot;</span>;    </span><br><span class="line">    <span class="keyword">if</span> (sqlite3_prepare(db, sql, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot prepare statement: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定占位符并插入内存中的二进制文件</span></span><br><span class="line">    sqlite3_bind_blob(pStmt, <span class="number">1</span>, data, fsize, SQLITE_STATIC);</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_step(pStmt) != SQLITE_DONE)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;execution failed: %s&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">    </span><br><span class="line">    sqlite3_finalize(pStmt);    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在此程序中，我们从当前工作目录读取图像到堆内存中，之后将其写入 SQLite test.db 数据库的 Images 表。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_bind_blob(pStmt, <span class="number">1</span>, data, size, SQLITE_STATIC);</span><br></pre></td></tr></table></figure>
+<p><code>sqlite3_bind_blob</code> 函数的作用是：将二进制数据绑定到编译后的语句中的占位符。SQLITE_STATIC 参数表示指向内容信息的指针是静态的，不需要由 SQLite 释放，这将由我们主动释放。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_step(pStmt);</span><br></pre></td></tr></table></figure>
+<p>最后调用 <code>sqlite3_step</code> 执行上面处理好的 SQLite 语句 <code>pStmt</code> 便可以将图形写入到表中。</p>
+<h2 id="读取图像"><a href="#读取图像" class="headerlink" title="读取图像"></a>读取图像</h2><p>在本节中，我们将执行相反的操作，从数据库表中读取图像。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;2233.jpg&quot;</span>, <span class="string">&quot;wb&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open image file\n&quot;</span>);    </span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    sqlite3_stmt *pStmt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 语句预处理</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;SELECT Data FROM Images WHERE Id = 1&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, <span class="number">-1</span>, &amp;pStmt, <span class="number">0</span>) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot prepare statement: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 执行语句</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_step(pStmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="comment">// 先获取对应列数据的大小</span></span><br><span class="line">        <span class="keyword">int</span> bytes = sqlite3_column_bytes(pStmt, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 获取二进制文件并将其写入文件</span></span><br><span class="line">        fwrite(sqlite3_column_blob(pStmt, <span class="number">0</span>), bytes, <span class="number">1</span>, fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fclose(fp);</span><br><span class="line">    sqlite3_finalize(pStmt);   </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bytes = sqlite3_column_bytes(pStmt, <span class="number">0</span>);</span><br><span class="line">fwrite(sqlite3_column_blob(pStmt, <span class="number">0</span>), bytes, <span class="number">1</span>, fp);</span><br></pre></td></tr></table></figure>
+<p><code>sqlite3_column_bytes</code> 函数的作用是：返回 BLOB 中的字节数。<br><code>sqlite3_column_blob</code> 函数返回指向所选二进制数据的指针。</p>
+<h2 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h2><p>元数据是关于数据库中数据的信息。SQLite 中的元数据包含有关表和列的信息，我们在这些表和列中存储数据。受 SQL 语句影响的行数是元数据。结果集中返回的行数和列数也属于元数据。</p>
+<p>可以使用 Pragma 命令获取 SQLite 中的元数据。SQLite 对象可能具有属性，这些属性是元数据。最后，我们还可以通过查询 SQLite 系统 sqlite_master 表来获得特定的元数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打开数据库</span></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 编译并执行语句</span></span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;PRAGMA table_info(Cars);&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, callback, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Failed to select data %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *NotUsed, <span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **azColName)</span> </span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">    NotUsed = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s = %s\n&quot;</span>, azColName[i], argv[i] ? argv[i] : <span class="string">&quot;NULL&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;------------\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，我们执行语句 <code>PRAGMA table_info(Cars);</code>，以获取有关 CARS 表的一些元数据信息。结果集中的列包括列序号、列名、数据类型、列是否可以为NULL以及列的默认值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ ./column_names</span><br><span class="line">cid = <span class="number">0</span></span><br><span class="line">name = Id</span><br><span class="line">type = INT</span><br><span class="line">notnull = <span class="number">0</span></span><br><span class="line">dflt_value = <span class="literal">NULL</span></span><br><span class="line">pk = <span class="number">1</span></span><br><span class="line">------------</span><br><span class="line">cid = <span class="number">1</span></span><br><span class="line">name = Name</span><br><span class="line">type = TEXT</span><br><span class="line">notnull = <span class="number">0</span></span><br><span class="line">dflt_value = <span class="literal">NULL</span></span><br><span class="line">pk = <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">cid = <span class="number">2</span></span><br><span class="line">name = Price</span><br><span class="line">type = INT</span><br><span class="line">notnull = <span class="number">0</span></span><br><span class="line">dflt_value = <span class="literal">NULL</span></span><br><span class="line">pk = <span class="number">0</span></span><br><span class="line">------------</span><br></pre></td></tr></table></figure>
+
+<p>在下一个与元数据相关的示例中，我们将列出test.db数据库中的所有表</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">int</span>, <span class="keyword">char</span> **, <span class="keyword">char</span> **)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;SELECT name FROM sqlite_master WHERE type=&#x27;table&#x27;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, callback, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;SQL error: %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *NotUsed, <span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **azColName)</span> </span>&#123;</span><br><span class="line">    NotUsed = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; argc; i++) </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, argv[i] ? argv[i] : <span class="string">&quot;NULL&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码示例将当前数据库中的所有可用表打印到终端。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ./list_tables </span><br><span class="line">Friends</span><br><span class="line">Cars</span><br><span class="line">Images</span><br></pre></td></tr></table></figure>
+<p>以上就是之前操作的数据内容。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>事务是针对一个或多个数据库中的数据执行的数据库操作的原子单元。事务中所有 SQL 语句的效果可以全部提交到数据库，也可以全部回滚。</p>
+<p>在 SQLite 中，除 SELECT 之外的任何命令都将启动隐式事务。此外，在事务中，像 create table.、Vacuum、Pragma 这样的命令将在执行之前提交以前的更改。</p>
+<p>手动事务以 BEGIN TRANSACTION 语句开始，以 COMMIT 或 ROLLBACK 语句结束。</p>
+<p>SQLite 支持三个非标准事务级别：延迟、立即和独占。</p>
+<h2 id="自动提交"><a href="#自动提交" class="headerlink" title="自动提交"></a>自动提交</h2><p>默认情况下，SQLite 版本 3 在自动提交模式下运行。在自动提交模式下，与当前数据库连接关联的所有操作完成后，立即提交对数据库的所有更改。自动提交模式由 BEGIN 语句禁用，由 COMMIT 或 ROLLBACK 重新启用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Autocommit: %d\n&quot;</span>, sqlite3_get_autocommit(db));</span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Autocommit: %d\n&quot;</span>, sqlite3_get_autocommit(db));</span><br></pre></td></tr></table></figure>
+<p>此示例检查数据库是否处于自动提交模式，如果数据库未处于自动提交模式，则 sqlite3_get_autoCommit() 函数返回零。如果处于自动提交模式，则返回非零值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./get_ac_mode </span><br><span class="line">Autocommit: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>该示例确认 SQLite 默认处于自动提交模式。</p>
+<p>下一个示例进一步阐明了自动提交模式。在自动提交模式下，每个非 SELECT 语句都是一个立即提交的小事务。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;DROP TABLE IF EXISTS Friends;&quot;</span> </span><br><span class="line">                <span class="string">&quot;CREATE TABLE Friends(Id INTEGER PRIMARY KEY, Name TEXT);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Tom&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Rebecca&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Jim&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friend(Name) VALUES (&#x27;Robert&#x27;);&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, <span class="number">0</span>, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;SQL error: %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);        </span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们创建 Friends 表，并尝试用数据填充它，最后一条 SQL 语句有一个错误；因为没有 Friend 表。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ ./autocommit </span><br><span class="line">SQL error: no such table: Friend</span><br><span class="line">$ sqlite3 test.db</span><br><span class="line">sqlite&gt; .tables</span><br><span class="line">Cars     Friends  Images </span><br><span class="line">sqlite&gt; SELECT * FROM Friends;</span><br><span class="line"><span class="number">1</span>|Tom</span><br><span class="line"><span class="number">2</span>|Rebecca</span><br><span class="line"><span class="number">3</span>|Jim</span><br></pre></td></tr></table></figure>
+<p>因为每插入一个就自动提交一次，所以虽然插入最后一个数据的时候发生了错误，但是前面的三个数据已经提交到数据库里了。</p>
+<h2 id="交易"><a href="#交易" class="headerlink" title="交易"></a>交易</h2><p>在下一个示例中，我们将一些 SQL 语句插入到事务中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sqlite3.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *err_msg = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (sqlite3_open(<span class="string">&quot;test.db&quot;</span>, &amp;db) != SQLITE_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Cannot open database: %s\n&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span> *sql = <span class="string">&quot;DROP TABLE IF EXISTS Friends;&quot;</span></span><br><span class="line">                <span class="string">&quot;BEGIN TRANSACTION;&quot;</span> </span><br><span class="line">                <span class="string">&quot;CREATE TABLE Friends(Id INTEGER PRIMARY KEY, Name TEXT);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Tom&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Rebecca&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friends(Name) VALUES (&#x27;Jim&#x27;);&quot;</span> </span><br><span class="line">                <span class="string">&quot;INSERT INTO Friend(Name) VALUES (&#x27;Robert&#x27;);&quot;</span></span><br><span class="line">                <span class="string">&quot;COMMIT;&quot;</span>;</span><br><span class="line">                           </span><br><span class="line">    <span class="keyword">if</span> (sqlite3_exec(db, sql, <span class="number">0</span>, <span class="number">0</span>, &amp;err_msg) != SQLITE_OK ) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;SQL error: %s\n&quot;</span>, err_msg);</span><br><span class="line">        sqlite3_free(err_msg);        </span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    </span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个语句如果存在表 <code>Friends</code> 则将其删除。其他语句则放在事务中。事务在全有或全无模式下工作。要么什么都不做，要么什么都做。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; .tables</span><br><span class="line">Cars    Images</span><br></pre></td></tr></table></figure>
+<p>因为最后一条语句有错误，所以事务被回滚，并且没有创建Friends表。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Sqlite3/" rel="tag"># Sqlite3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/20/%E5%B5%8C%E5%85%A5%E5%BC%8F/arm%20%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="next" title="arm 交叉编译工具">
+      arm 交叉编译工具 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">SQL数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLite3-%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">SQLite3 工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C99"><span class="nav-number">3.</span> <span class="nav-text">C99</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-SQLite-%E7%89%88%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">获取 SQLite 版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">5.</span> <span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E6%8F%92%E5%85%A5%E7%9A%84%E8%A1%8CID"><span class="nav-number">6.</span> <span class="nav-text">最后插入的行ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE"><span class="nav-number">7.</span> <span class="nav-text">检索数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2"><span class="nav-number">8.</span> <span class="nav-text">参数化查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87"><span class="nav-number">9.</span> <span class="nav-text">插入图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E5%9B%BE%E5%83%8F"><span class="nav-number">10.</span> <span class="nav-text">读取图像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-number">11.</span> <span class="nav-text">元数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">12.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4"><span class="nav-number">13.</span> <span class="nav-text">自动提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%98%93"><span class="nav-number">14.</span> <span class="nav-text">交易</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="东东"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">东东</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/" title="GitHub → https:&#x2F;&#x2F;github.com" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wjdready@163.com" title="E-Mail → mailto:wjdready@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">东东</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : '560MmOhb352QbSdaKotC1NbB-gzGzoHsz',
+      appKey     : 'u6C6yTuYR7b5PkARtyGMiIDO',
+      placeholder: "有什么想说的呢?",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '3' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
