@@ -33,6 +33,71 @@
       </tags>
   </entry>
   <entry>
+    <title>SDL 播放pcm音频</title>
+    <url>/2021/04/10/SDL%E7%BC%96%E7%A8%8B/SDL%E6%92%AD%E6%94%BEPCM%E9%9F%B3%E9%A2%91/</url>
+    <content><![CDATA[<p>本文主要介绍如何利用SDL来播放pcm音频</p>
+<span id="more"></span>
+
+
+<h4 id="生成-pcm-音频"><a href="#生成-pcm-音频" class="headerlink" title="生成 pcm 音频"></a>生成 pcm 音频</h4><ul>
+<li>mp3 截取<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ffmpeg -i test.mp3 -ss 00:00:10 -t 00:00:30 -acodec copy cut.mp3</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-acodec copy 编码格式复制</p>
+</blockquote>
+</li>
+<li>mp3 转 pcm<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ffmpeg -i cut.mp3 -acodec pcm_s16le -f s16le -ac 2 -ar 44100 test.pcm</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-f 强制文件格式 -ac 通道数 -ar 采用率</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h4><ul>
+<li><p>demo.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @brief SDL2 获取音频的回调函数</span></span><br><span class="line"><span class="comment">* @param userdata 用户数据</span></span><br><span class="line"><span class="comment">* @param stream 音频缓冲区</span></span><br><span class="line"><span class="comment">* @param len 音频长度</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fill_audio_cb</span><span class="params">(<span class="keyword">void</span> *userdata, Uint8 * stream, <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  FILE **fpp = (FILE**)userdata;</span><br><span class="line">  <span class="keyword">if</span>(fpp == <span class="literal">NULL</span> || *fpp == <span class="literal">NULL</span> || len == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  SDL_memset(stream, <span class="number">0</span>, len);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fread(stream, <span class="number">1</span>, len, *fpp) != len)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Play Done! Replay\n&quot;</span>);</span><br><span class="line">    fseek(*fpp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER);</span><br><span class="line"></span><br><span class="line">  FILE *audio_file = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  SDL_AudioSpec aduio_spec = &#123;</span><br><span class="line">    .format = AUDIO_S16LSB,    <span class="comment">/* 音频格式 signed 16bit LSB */</span></span><br><span class="line">    .freq = <span class="number">44100</span>,             <span class="comment">/* 采样率 */</span></span><br><span class="line">    .channels = <span class="number">2</span>,             <span class="comment">/* 通道数 */</span></span><br><span class="line">    .silence = <span class="number">0</span>,              <span class="comment">/* 静音值 */</span></span><br><span class="line">    .callback = fill_audio_cb, <span class="comment">/* 回调函数 */</span></span><br><span class="line">    .userdata = &amp;audio_file    <span class="comment">/* 回调函数用户数据 */</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ((audio_file = fopen(<span class="string">&quot;test.pcm&quot;</span>, <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Cannot open this file\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (SDL_OpenAudio(&amp;aduio_spec, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Can&#x27;t open audio.\n&quot;</span>);</span><br><span class="line">    fclose(audio_file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Start to play, return to exit\n&quot;</span>);</span><br><span class="line">  SDL_PauseAudio(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  getchar();</span><br><span class="line">  fclose(audio_file);</span><br><span class="line">  SDL_Quit();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译运行（mingw 环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc demo.c -lmingw32 -lSDL2main -lSDL2</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./a.exe</span></span><br><span class="line">Start to play, return to exit</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>SDL 编程</category>
+      </categories>
+      <tags>
+        <tag>pcm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MQTT开发</title>
+    <url>/2021/04/10/%E5%B5%8C%E5%85%A5%E5%BC%8F/MQTT%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<p>本文主要介绍Ubuntu环境下搭建MQTT服务器和简单使用</p>
+<span id="more"></span>
+
+<h3 id="Linux-搭建MQTT服务器"><a href="#Linux-搭建MQTT服务器" class="headerlink" title="Linux 搭建MQTT服务器"></a>Linux 搭建MQTT服务器</h3><ul>
+<li><p>安装 </p>
+  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa     # 添加源到软件仓库</span><br><span class="line">sudo apt-get update                                         # 更新软件仓库列表</span><br><span class="line">sudo apt-get install mosquitto                              # 安装mosquitto</span><br></pre></td></tr></table></figure></li>
+<li><p>试运行</p>
+  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mosquitto status                               # 查看运行状态</span><br><span class="line">sudo service mosquitto start                                # 启动服务</span><br><span class="line">sudo service mosquitto stop                                 # 停止服务</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加和系修改配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mosquitto stop   #首先停止服务</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用户的局部配置文件放在： /etc/mosquitto/conf.d/目录下，并且这个目录下的所有以.conf后缀的文件都将被mosquitto作为配置文件，在启动时加载。</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在/etc/mosquitto/conf.d目录下，新建myconfig.conf配置文件，输入以下内容</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭匿名访问，客户端必须使用用户名</span></span><br><span class="line">allow_anonymous false</span><br><span class="line"><span class="meta">#</span><span class="bash">指定 用户名-密码 文件</span></span><br><span class="line">password_file /etc/mosquitto/pwfile.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建一个MQTT服务器账户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 假设用户名为:user1， 在命令行运行：</span></span><br><span class="line">   </span><br><span class="line">mosquitto_passwd -c /etc/mosquitto/pwfile.txt user1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">回车后连续输入2次用户密码即可，然后重新启动 mosquitto</span></span><br><span class="line">sudo service mosquitto start      </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试 mosquitto：可在App Store下载MQTTool工具进行测试。</p>
+</li>
+<li><p>在线用测试网址参考<a class="link" href="https://blog.csdn.net/cpongo3/article/details/89327641">博客<i class="fas fa-external-link-alt"></i></a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>嵌入式</category>
+      </categories>
+      <tags>
+        <tag>mqtt</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>arm 交叉编译工具</title>
     <url>/2020/12/20/%E5%B5%8C%E5%85%A5%E5%BC%8F/arm%20%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<p>本文主要介绍 arm 交叉编译工具的命名规则和常见的编译器</p>
@@ -87,6 +152,97 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu安装设置</title>
+    <url>/2020/12/22/%E5%85%B6%E4%BB%96/Ubuntu%E5%AE%89%E8%A3%85%E8%AE%BE%E7%BD%AE/</url>
+    <content><![CDATA[<p>介绍 VMware Ubuntu 安装到使用 </p>
+<span id="more"></span>
+
+<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><ul>
+<li>方案1, 以简单为原则：<table>
+<thead>
+<tr>
+<th align="center">挂载点</th>
+<th align="center">分区类型</th>
+<th align="center">分区格式</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">swap</td>
+<td align="center">逻辑分区</td>
+<td align="center">swap</td>
+<td align="center">充当虚拟内存, 大小等于内存大小</td>
+</tr>
+<tr>
+<td align="center">/</td>
+<td align="center">主分区</td>
+<td align="center">ext4</td>
+<td align="center">安装系统和软件, 大小余下所有</td>
+</tr>
+</tbody></table>
+</li>
+<li>方案2, 资深用户：<table>
+<thead>
+<tr>
+<th align="center">挂载点</th>
+<th align="center">分区类型</th>
+<th align="center">分区格式</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">swap</td>
+<td align="center">逻辑分区</td>
+<td align="center">swap</td>
+<td align="center">充当虚拟内存, 大小等于内存大小</td>
+</tr>
+<tr>
+<td align="center">/</td>
+<td align="center">主分区</td>
+<td align="center">ext4</td>
+<td align="center">安装系统和软件, 大小 20GB 以上</td>
+</tr>
+<tr>
+<td align="center">/boot</td>
+<td align="center">逻辑分区</td>
+<td align="center">ext4</td>
+<td align="center">引导分区, 大小 1G 左右</td>
+</tr>
+<tr>
+<td align="center">/home</td>
+<td align="center">逻辑分区</td>
+<td align="center">ext4</td>
+<td align="center">相当于 “我的文档”, 大小为硬盘剩下的</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="安装-VMare-Tools"><a href="#安装-VMare-Tools" class="headerlink" title="安装 VMare Tools"></a>安装 VMare Tools</h4><p>  VMare Tools 提供分辨率自适应, 同 win10 共享剪贴板, 直接拖动文件与 win10 交互等高级功能</p>
+<ul>
+<li>将VMare Tools 镜像安装到系统后复制 VMwareTools 压缩包到系统目录, 执行<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo ./vmware-install.pl</span><br></pre></td></tr></table></figure>
+一路默认设置即可</li>
+</ul>
+<h4 id="添加源和安装必备软件"><a href="#添加源和安装必备软件" class="headerlink" title="添加源和安装必备软件"></a>添加源和安装必备软件</h4><ul>
+<li><a class="link" href="https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/">清华源<i class="fas fa-external-link-alt"></i></a> <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">sudo vi /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+ 复制进去, 保存退出, 更新软件 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure></li>
+<li>安装软件<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install vim git </span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="安装-sougou-输入法"><a href="#安装-sougou-输入法" class="headerlink" title="安装 sougou 输入法"></a>安装 sougou 输入法</h4><ul>
+<li>安装 fcitx<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install fcitx</span><br></pre></td></tr></table></figure></li>
+<li>下载安装 <a class="link" href="https://pinyin.sogou.com/linux/">sougou 输入法<i class="fas fa-external-link-alt"></i></a> <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i xxxx.deb   # 安装下载的 deb 包</span><br><span class="line">sudo apt -f install     # 自动安装依赖</span><br></pre></td></tr></table></figure>
+ 安装完成, 设置–&gt;区域与语言–&gt;管理已安装的语言, 设置为 fcitx, 然后重启即可</li>
+</ul>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SDL安装与使用</title>
     <url>/2020/12/20/SDL%E7%BC%96%E7%A8%8B/SDL%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/SDL%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>本文介绍在 Ubuntu 下 SDL2 库的安装与使用</p>
@@ -111,6 +267,155 @@
       </categories>
       <tags>
         <tag>SDL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MSYS2 的使用</title>
+    <url>/2021/04/10/%E5%85%B6%E4%BB%96/MSYS/</url>
+    <content><![CDATA[<p>本文主要介绍 MSYS2 的历史和使用</p>
+<span id="more"></span>
+
+<h2 id="MSYS2-的前世今生"><a href="#MSYS2-的前世今生" class="headerlink" title="MSYS2 的前世今生"></a>MSYS2 的前世今生</h2><h3 id="Cygwin"><a href="#Cygwin" class="headerlink" title="Cygwin"></a>Cygwin</h3><p>这一切得从源头说起, 1995年Cygnus的一位工程师Steve Chamberlain, 他观察到Windows 系统使用COFF作为目标文件 (即可执行文件) 格式，与此同时GNU的工具链已经支持x86和COFF的目标文件，并提供C语言库newlib (Newlib 是嵌入式系统上的C标准库的实现) 。他认为既然GNU的工具链已经能够编译生成x86指令集的机器码并可链接生成COFF格式的目标文件, 而且还提供了可移植到任意平台的C标准库newlib, 那么理论上只要将GCC重定向(根据对应目标平台重新编译), 作为一个 cross compiler(交叉编译器)，那么这个GCC 编译器不就可以生成 Windows 平台下的可执行文件了吗? 事实证明这是可行的， Steve Chamberlain 很快开发出了原型, 并把他这个项目命名为Cygwin.</p>
+<p>现在 GCC 工具链有了，终于可以使用熟悉的GCC而不是微软的那一套MSVC来生成Windows 平台的应用程序了。不过，光有GCC 并不能很好的进行构建工作, 还需要 shell 脚本解释器以及那些与Uinx系统配套的一系列称手的工具也加入进来，因为只有这些工具的加持，GCC 才能用得舒服。因此 Steve Chamberlain 的下一步工作是尝试在 Windows 构建 shell 脚本运行环境, 因此需要一个与 Bourne shell 兼容的命令解释器(比如 bash), 而移植构建shell 解释器需要一个fork系统来实现程序的调用和标准输入/输出。Windows包含类似的功能, 但它们的接口和POSIX不兼容，这么一来Cygwin的库还需要提供与POSIX兼容的应用程序编程接口(API)。为了达到这个目的 Cygwin 提供了一套抽象层 dll，用于将部分 Posix 调用转换成 Windows 的 API 调用，实现相关功能。这里面最典型的，最基本的模拟层就是那个 cygwin1.dll。</p>
+<p>这些工作早期都是由Steve Chamberlain一个人来完成, 但是到了1996年，由于看到cygwin可以提供Windows系统上的嵌入式工具链（以往的方案是使用DJGPP），其他工程师也加入了进来。特别吸引人的是，Cygwin可以实现three-way cross-compile(第三方交叉编译)，也就是说可以在远程工作站上使用cygwin来编译其他平台的代码, 而操作工作站的电脑只是一台普通的pc, 该pc 本身不编译代码。由于工作站的CPU普遍更为强大，这比在PC上使用PC的速度更快。1998年起，Cygnus开始将Cygwin包作为产品来提供。</p>
+<p>随着 Linux 系统的发展壮大，目前的 Cygwin 已经不仅仅提供 POSIX 兼容，因此也顺带多了更多模拟层的依赖关系。同时，由于它的模拟层实现了相当良好的 Posix 兼容，人们试着将许多重要的 Linux/BSD 应用移植到了Cygwin下，使得Cygwin越来越大，功能也越来越丰富，以至于目前很多人直接把将Linux应用移植到Windows平台的任务都交给了Cygwin（当然，这种移植并非原生）。</p>
+<p><strong>总结</strong>：从上面的描述可以看出, Cygwin 诞生之初，Steve Chamberlain 本来可能只是想通过GCC编译出Windows应用来，却因为 Posix 而顺带搞了一坨别的东西过来，最后发展到现在。可以说, Cygwin是运行于Windows平台的POSIX“子系统”，提供Windows下的类Unix环境，并提供将部分 Linux 应用“移植”到Windows平台的开发环境的一套软件。</p>
+<h3 id="MinGW"><a href="#MinGW" class="headerlink" title="MinGW"></a>MinGW</h3><p>由于 Cygwin 的编译和调用方式总是需要依赖一层 POSIX 到 Windows API 的中间层, 比起日渐庞大的 Cygwin, 或许一个最小化且不需要中间层 GNU 工具链更能满足一些开发的需求, 于是 Colin Peters 在1998年创建了一个开源项目并撰写了最初的版本, 他将其命名为 mingw32 (Minimalist GNU for W32), 其意思就是Windows 上的最小化GNU 工具链, 这里的Windows被简称为 “W32”, 后来为了避免暗示它仅限于生成32位二进制文件, 后面的 32 被去除，从而变成了MinGW.</p>
+<p>在最初的版本，Colin Peters首先为MSVCRT.DLL(Microsoft Visual C Runtime )库提供了一组头文件和一个导入库, 不过这些代码需要依赖和使用Cygwin的某些接口。之后的 Jan-Jaap van der Heijden希望不再依赖于Cygwin库，而是仅仅使用本机的构建环境来构建应用程序，所以Jan-Jaap着手开发了binutils、GCC和make，并生成了第一个无需使用Cygwin即可生成本机代码的编译器、汇编器和链接器工具。Mumit Khan 后来接手了开发工作，向程序包添加了更多Windows特定的功能，包括Anders Norlander的Windows系统标头。2000年，该项目移至SourceForge，以寻求社区的更多帮助并集中开发。 在 SourceForge 上得到了更多开源人士的帮助, MinGW也得到很大的发展，甚至2005年9月MinGW被选为SourceForge的月度最佳项目。不过在与SourceForge对其邮件列表的管理存在分歧之后，2018年，MinGW迁移到OSDN。</p>
+<p><strong>总结</strong>: MinGW 的出现是为了能够使用 GCC 工具链来构建不依赖于第三方运行库的应用程序, 相对于Cygwin，它首要特点就是简单性和性能好，因此，它不提供某些不能使用Windows API轻松实现的POSIX API，如fork()、mmap()和ioctl()。而用Cygwin编写的Windows程序总是需要运行在兼容层DLL之上，因此该DLL必须与程序的源代码一起分发。MinGW不需要兼容层，因为基于MinGW的程序是通过直接调用Windows API编译的。</p>
+<h3 id="MSYS"><a href="#MSYS" class="headerlink" title="MSYS"></a>MSYS</h3><p>MinGW 出现之后, 为了更方便地使用 GNU 工具链, 需要提供一个可执行 shell 脚本的运行环境从而可以在shell 中调用MinGW 提供的那些工具如 gcc, make, linkr, 于是诞生了 MSYS(Minimal SYStem)。不过和 Cygwin 追求大而全的 POSIX 兼容系统不同, 其中间层 msys.dll 只提供基本的 POSIX API。因此MSYS可以看做是 Cygwin 的简化版, 但是因为一般 MSYS 都集成了MinGW, 所以当使用MSYS来构建应用程序时如果不使用一些特殊的 POSIX API时, 比如 fork, mmap 其实就是在使用 MinGW 编译代码, 其程序是通过直接调用Windows API编译的, 所以可以不需要依赖任何中间层和第三方DLL库, 也就是说, 这时 MSYS 在这个编译过程只是作为一个辅助工具箱来使用。</p>
+<p><strong>总结</strong>: MSYS 环境虽然也像 Cygwin 一样提供 POSIX API, 但是因为本着注重 Minimal(最小化)的原则, 其只提供了最基本的 API, 其兼容性相对于 Cygwin 较差, 但相对于庞大的 Cygwin, 结合 MinGW 的MSYS 可以编译不依赖于中间层DLL的应用程序，执行效率也更高，这个过程MSYS就相当于一个工具箱而已了。</p>
+<h3 id="MinGW-w64"><a href="#MinGW-w64" class="headerlink" title="MinGW-w64"></a>MinGW-w64</h3><p>可能是由于维护MinGW的人员工作太过于繁忙, 或是其他原因，MinGW 在后来更新速度异常缓慢，而且当初从ming32 改名为 MinGW, 去掉 32 是为了避免它暗示仅限于生成32位二进制文件, 这就意味着在创建项目的时候开发人员还考虑到将来会更新64位版本, 但是直到现在, MinGW 仍然只支持生成32位的Windows程序, 甚至开发人员以及不打算让其支持 64位的程序了。</p>
+<p>2005年，因为最初的MinGW项目没有及时更新其代码库，包括包括几个关键的新API和急需的64位支持，OneVision Software 就创建了一个 MinGW 分支, 并把它命名为 MinGW-w64, 这里的 w64 是 windows 64 位的意思, 代表着支持生成 Windows 64位程序的MinGW, 但不限于64位, MinGW-w64 可以生成 32 位或 64 位的Windows 应用程序。</p>
+<p>完成 64位的支持和API更新后 OneVision 将 MinGW-w64 代码提交给MinGW原始项目维护人员，但他们由于怀疑OneVision使用非公开或专有信息而将其拒绝。之后的 2008年，OneVision 将代码捐赠给了其主要开发人员之一的Kai Tietz, 其条件是该代码仍保持开源状态。由于许多原因，后来的MinGW-W64项目的主要开发人员和联合创始人Kai Tietz决定不再尝试与MinGW进一步合作了。</p>
+<p>相对于 MinGW, MinGW-w64提供了更完整的Win32 API实现, 但是，MinGW-w64项目不提供官方的二进制构建，不过可以从开发人员的个人构建目录或者从相关但独立的项目（如tdm-gcc或mingw-builds或msys2）中获取。</p>
+<p><strong>总结</strong>: 因为 MinGW 更新缓慢以及不支持生成Windows 64位系统程序, 这才诞生了 MinGW-w64, 因此可以说MinGW-w64 就是 MinGW 的升级版, 是基于MinGW 的一个分支, 所以功能和MinGW一样，生成的程序是通过直接调用Windows API编译的而不需要中间层。</p>
+<h3 id="MSYS2"><a href="#MSYS2" class="headerlink" title="MSYS2"></a>MSYS2</h3><p>MSYS2(Minimal SYStem 2)是对MSYS的独立重写，和MinGW-w64 的诞生情况基本一致，因为 MSYS 太老了, 更新缓慢, 这才有了MSYS2，不过, 它是基于现代Cygwin和MinGW-w64，它的作用与以前的MSYS在MinGW中所起的作用相同。</p>
+<p>作为项目，Cygwin和MSYS2有着明显不同的目标。</p>
+<p>Cygwin试图为Windows带来一个与POSIX兼容的环境，这样在Unices上运行的大多数软件都可以在Cygwin上构建和运行，而无需进行任何重大修改。Cygwin提供了大量包含此类软件的软件包，以及用于开发这些软件的库。</p>
+<p>MSYS2试图为构建本机Windows软件提供环境。MSYS2提供了包含此类软件的大量软件包，以及用于开发这些软件的库。由于该软件的很大一部分使用GNU构建工具，而GNU构建工具与Unix紧密耦合，因此该环境也与POSIX兼容，并且实际上是基于Cygwin的。</p>
+<p>MSYS2提供了运行AutoTools和其他构建系统所需的最小外壳，这些构建系统从互联网上从不同的存储库获取软件源代码，并对其进行配置和构建。外壳和核心工具的存在主要是为了允许移植Unix程序在Windows上本地运行(即不需要POSIX模拟层)。MSYS2不会在必要时重复Cygwin的工作，因此提供的POSIX仿真软件的数量非常少。</p>
+<p>MSYS2使用Pacman(出自Arch Linux)来管理其软件包，并附带三个不同的软件包存储库：<br>Msys2：包含依赖于MSYS2的软件。<br>Mingw64：包含64位原生Windows软件(使用mingw-W64 x86_64工具链编译)。<br>Mingw32：包含32位原生Windows软件(使用mingw-W64 i686工具链编译)。</p>
+<p>总结: MSYS2 可看做是 MSYS 的升级版，它的作用与以前的MSYS在MinGW中所起的作用相同，并且基于MinGW-w64, 因此可以编译运行 32位和 64 位的程序。同时 MSYS2 使用 pacman 来管理软件包, 并且包含三个不同的软件包存储库，这意味着我们可以在不同的软件存储库之间切换。</p>
+<h2 id="MSYS2-使用"><a href="#MSYS2-使用" class="headerlink" title="MSYS2 使用"></a>MSYS2 使用</h2><h3 id="三个运行环境"><a href="#三个运行环境" class="headerlink" title="三个运行环境"></a>三个运行环境</h3><p>安装自然不用说, 安装完成后生成三个快捷图标，</p>
+<ul>
+<li>MSYS MinGW 32-bit</li>
+<li>MSYS MinGW 64-bit</li>
+<li>MSYS2 MSYS</li>
+</ul>
+<p>对快捷图标进行查看属性, 我们可以看到其打开时执行的命令：</p>
+<ul>
+<li>MSYS MinGW 32-bit 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -mingw32</span><br></pre></td></tr></table></figure></li>
+<li>MSYS MinGW 64-bit 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -mingw64</span><br></pre></td></tr></table></figure></li>
+<li>MSYS2 MSYS 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -msys</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>因此可以知道, 切换三个不同的环境是通过向脚本文件msys2_shell.cmd 中传递不同的参数实现的。于是我们在命令行中输入上面的任何一句话:</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">mingw64</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>立刻弹出一个页面，进入 MSYS2 提供的默认终端, 环境显示的是 MINGW64 的</p>
+</blockquote>
+<p>由此确定MSYS2 提供了一个msys2_shell.cmd 然后该批处理脚本可接受参数, 通过输入的参数来用于切换三个不同的环境类型。</p>
+<p>那么如果不输入参数直接运行会怎么样:</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>也弹出了窗口, 环境显示的是 MSYS</p>
+</blockquote>
+<p>也就是说, 默认的环境是 MSYS 环境</p>
+<h3 id="msys2-shell-cmd-探索"><a href="#msys2-shell-cmd-探索" class="headerlink" title="msys2_shell.cmd 探索"></a>msys2_shell.cmd 探索</h3><p>既然 msys2_shell.cmd 可接受参数, 那么还可以接受那些参数呢? 一般来说命令程序都会提供一个 -h 或者 -help(–help)参数来提供给使用者提供帮助的, 于是尝试在cmd中输入如下内容:</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">help</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>出现如下内容:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line">   msys2_shell.cmd [options] [login shell parameters]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">   -mingw32 | -mingw64 | -msys[2]   Set shell type</span><br><span class="line">   -defterm | -mintty | -conemu     Set terminal type</span><br><span class="line">   -here                            Use current &gt;directory as working</span><br><span class="line">                                    directory</span><br><span class="line">   -where DIRECTORY                 Use specified &gt;DIRECTORY as working</span><br><span class="line">                                    directory</span><br><span class="line">   -[use-]full-path                 Use full current PATH variable</span><br><span class="line">                                    instead of trimming to minimal</span><br><span class="line">   -no-start                        Do not use &quot;start&quot; command and</span><br><span class="line">                                    return login shell resulting</span><br><span class="line">                                    errorcode as this batch file</span><br><span class="line">                                    resulting errorcode</span><br><span class="line">   -shell SHELL                     Set login shell</span><br><span class="line">   -help | --help | -? | &#x2F;?         Display this help and exit</span><br><span class="line"></span><br><span class="line">Any parameter that cannot be treated as valid option and all</span><br><span class="line">following parameters are passed as login shell command parameters.</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>可以清楚地看到所有可接受的参数和其使用说明</p>
+<ul>
+<li><p>第一条是自然不必说, 就是设置我们的shell环境类型的.</p>
+</li>
+<li><p>第二条是设置终端类型, 看这<code>-defterm</code>应该是default terminal(默认终端)的意思吧, 尝试一下:</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">defterm</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>仍旧弹出一个页面, 然而终端类型变成微软默认的终端了, 因为看左上角的图标, 已经不是 MSYS2 提供的终端了. </p>
+</blockquote>
+<p>用同样的方法, 在cmd 中分别调用C:\Library\win64\msys64\msys2_shell.cmd批处理并输入<code>-mintty</code>和<code>-conemu</code> 参数观察到:</p>
+<blockquote>
+<p>输入 <code>-mintty</code>参数时, 弹出的窗口和不输入<code>-mintty</code>时是一致的, 由此得知 MSYS2 默认确实是使用 mintty 作为默认的终端, 输入<code>-conemu</code> 参数时, cmd 出现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ConEmu not found. Exiting.</span><br></pre></td></tr></table></figure>
+<p>这说明 MSYS2 并没有集成ConEmu终端，可能需要用户自己主动去下载才能使用.</p>
+</blockquote>
+</li>
+<li><p>第三条和第四条参数显而易见, 当我们在终端打开 MSYS2 的某一个环境时, 通过 <code>-here</code> 参数可以使MSYS2 环境打开后立刻进入当前命令执行的环境, 如果没有 <code>-here</code>，参数, 则默认会进入 HOME 目录，而输入 <code>-where </code> + DIRECTORY 则可以进入指定文件夹. </p>
+</li>
+<li><p><code>-use-full-path</code>(-full-path) 参数根据描述应该是将整个Windows 的PATH 添加到MSYS2 环境中的可选参数, 也就是说, 进入MSYS2 环境时，默认是把Windows 下的PATH环境给部分屏蔽掉的, 使用full-path将把PATH的所有内容添加进来, 这里可以验证一下, 我电脑安装了VSCode 并把其添加到了环境变量中去了, 这样一来只要在终端输入 code+[dir] 就可以打开VSCode 编辑器了。那么首先在不使用 <code>-full-path </code>参数进入 MSYS2 环境：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
+<p>进入 MSYS2 环境后输入 code</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ code</span><br><span class="line">bash: $&#39;\302\203code&#39;: 未找到命令</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<p>可以看到 MSYS2 并没能找到 code, 那么使用 <code>-full-path</code> 参数进入MSYS环境:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -full-path</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
+<p>进入 MSYS2 环境后输入 code</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ code</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>VSCode 编辑器已经打开, 并且程序正常执行并返回了。</p>
+</blockquote>
+<p>说明想要让MSYS2拥有完整的Windows PATH只需在使用<code>msys2_shell.cmd</code>进入环境时加入参数 <code>-full-path</code>即可，这也是官方默认且推荐的做法。除此之外, 还可以想到的方法是在 .bashrc 通过 export 手动来添加, 这种添加就比较灵活并且有更多的选择性。</p>
+<p>其实MSYS2 默认是有继承一部分 Windows 的环境变量的, 这个在我尝试使用 <code>explorer</code> 命令来打开某个文件夹时注意到了, 因为我在没有加入 <code>-full-path</code> 的情况下执行Windows 环境下的命令 <code>explorer</code> . 也是执行成功的。然后我通过 <code>where</code> 命令查看了 <code>explorer</code> 的位置:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ where explorer</span><br><span class="line">C:\Windows\explorer.exe</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure></li>
+<li><p><code>-no-start</code> 根据描述, 就是不需要再启动终端程序而是直接在当前终端进入 MSYS2 环境, 这一点非常不错, 因为很多时候我们只是想在当前终端下进入MSYS2 环境然后执行一些任务, 频繁地弹出弹框会让人厌烦。并且该参数使得 MSYS2 可以更好地和VSCode 编辑器或者其他编译器进行更好地集成和交互。打开cmd 测试一下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -defterm -no-start</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>不再弹出弹框, 而是直接原地进入 MSYS2 环境</p>
+</blockquote>
+<p>需要注意的是: 在 cmd 里进入MSYS2 环境需要把终端类型设置成 <code>-defterm</code> 因为MSYS2 默认使用的是 <code>mintty</code> 终端, 因此没有 <code>-defterm</code> 它会先打开 <code>mintty</code>终端，然后执行 <code>no-start</code> 参数, 这不是我们想要的结果。</p>
+</li>
+<li><p>最后一个参数 -shell 指定了进入环境时使用的 shell 解释器的类型, 默认是 bash。例如，当我们想使用当前比较流行的 <code>zsh</code>, 可以在启动时传入如下参数:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -shell zsh</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
+<p>当然, 前提是你已经安装了zsh解释器, 在后面, 我们将讨论在 MSYS2 通过使用 pacman 包管理工具来进行方便的安装和卸载。</p>
+</li>
+</ul>
+<h3 id="msys2-shell-cmd-使用"><a href="#msys2-shell-cmd-使用" class="headerlink" title="msys2_shell.cmd 使用"></a>msys2_shell.cmd 使用</h3><p>通过上面对 msys2_shell.cmd 的了解, 我们就可以更方便地使用 MSYS2 了, 下面举例几个比较典型的用法:</p>
+<ol>
+<li>作为 VSCode 终端的环境: 我们想要实现在 VSCode 中打开终端时就默认进入了 MSYS2 的环境, 那么我们可以在<code>setting.json</code> 文件中添加如下内容: <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&quot;terminal.integrated.shell.windows&quot;: &quot;C:\\Library\\win64\\msys64\\msys2_shell.cmd&quot;,    </span><br><span class="line">&quot;terminal.integrated.shellArgs.windows&quot;: [&quot;-defterm&quot;, &quot;-mingw64&quot;, &quot;-no-start&quot;, &quot;-here&quot;],</span><br></pre></td></tr></table></figure></li>
+<li>按需进入 MSYS2 环境: 我们想要实现打开默认cmd的时候并不会立刻进入 MSYS2 环境, 而是在任何时刻我们想进入MSYS2 环境时只需输入 msys 就可以原地进入 MSYS2 环境, 这也是我比较推荐的做法。那么只需要新建一个 <code>msys.bat</code> 文件, 然后将其所在的目录放入环境变量 PATH 中即可: <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/c/Library/common $ ls</span><br><span class="line">msys.bat</span><br><span class="line">/c/Library/common $ cat msys.bat</span><br><span class="line">@C:\Library\win64\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -here -shell zsh</span><br><span class="line">/c/Library/common $ </span><br></pre></td></tr></table></figure>
+我将 <code>msys.bat</code> 放到了 <code>/c/Library/common</code> 文件夹中, 内容如 cat 显示的那样, 只包含了一行命令就可以完成我们想要的工作, 将  <code>/c/Library/common</code> 文件夹加入到Windows 的PATH 环境变量中就可以在cmd中通过调用 msys 来切换MSYS2 的环境:<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">msys</span></span></span><br><span class="line"><span class="function">~ » </span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在 cmd 中输入msys 后终端提示符变成了<code>~ » </code>，这是因为我将默认 shell 设置成了 zsh 的结果</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="设置-HOME-目录"><a href="#设置-HOME-目录" class="headerlink" title="设置 HOME 目录"></a>设置 HOME 目录</h3><p>有时需要指定MSYS2 的home 目录的位置, 但是 <code>msys2_shell.cmd</code> 似乎没有这个选项, 目前只能想到的方案是修改 <code>msys2_shell.cmd</code>文件, 在文件较前面添加这样一行:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set &quot;HOME&#x3D;%USERPROFILE%&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>= 后面是可选的目录, 这里将其设置得和 Windows 默认的一样</p>
+</blockquote>
+<h3 id="pacman-包管理"><a href="#pacman-包管理" class="headerlink" title="pacman 包管理"></a>pacman 包管理</h3><p>MSYS2 提供了非常方便的 pacman 包管理工具, 这个工具来自于 ArchLinux, 因此各种命令参数都是通用的。不过由于 MSYS2 提供了三个运行环境, 因此 pacman 管理的软件包也分三个来源，这三个源分别由一下三个文件管理:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw32</span><br><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw64</span><br><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.msys</span><br></pre></td></tr></table></figure>
+<p>国内使用 pacman 一般需要将软件源设置成国内的源，这样下载更新才会比较快，例如使用<a class="link" href="https://mirror.tuna.tsinghua.edu.cn/help/msys2/">清华源<i class="fas fa-external-link-alt"></i></a>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw32 ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;mingw&#x2F;i686</span><br><span class="line"></span><br><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw64 ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;mingw&#x2F;x86_64</span><br><span class="line"></span><br><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.msys ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;msys&#x2F;$arch</span><br><span class="line"></span><br><span class="line">然后执行 pacman -Sy 刷新软件包数据即可。</span><br></pre></td></tr></table></figure>
+
+<p>因为 pacman 同时管理三个环境的软件源，因此在安装卸载等操作时需要提供完整的软件包名，如果不是完整的软件包名称，则pacman 默认操作的是 msys 环境下的软件, 例如 gcc， 三个环境的名称分别是:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MSYS: gcc</span><br><span class="line">mingw64: mingw-w64-x86_64-gcc</span><br><span class="line">mingw32: mingw-w64-i686-gcc</span><br></pre></td></tr></table></figure>
+
+<p>可以看到, 如果想要让 pacman 安装 mingw64环境下的gcc 则需要在gcc 前加入前置 <code>mingw-w64-x86_64- </code>, 其意义也十分的明显, mingw-w64就是我们上面所说的由OneVision 创建的MinGW-w64 环境, 它支持64位和32位, 因此x86_64则代表64位环境程序, i686则代表32 位的。</p>
+<p>使用方法参考<a class="link" href="https://www.jianshu.com/p/47cce454f200">pacman<i class="fas fa-external-link-alt"></i></a></p>
+<p>值得注意的是, 在 mingw64或mingw32 环境中, 如果对应环境的程序没有安装,则默认会去调用 MSYS 环境的程序, 例如 gcc 只安装了 MSYS 版本的, 在mingw64 环境中并没有安装gcc，但是输入 gcc 也可以执行, 因为这时候执行的是 MSYS 环境下的 gcc 程序，如果安装了自己环境下的gcc ，则调用的gcc 就变成当前环境下的gcc了。</p>
+<h3 id="举例-SDL2-安装和使用"><a href="#举例-SDL2-安装和使用" class="headerlink" title="举例: SDL2 安装和使用"></a>举例: SDL2 安装和使用</h3><p>使用 pacman 安装64位 SDL2 库并编译运行</p>
+<ul>
+<li><p>安装 SDL2 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -S mingw-w64-x86_64-SDL2</span><br></pre></td></tr></table></figure></li>
+<li><p>demo.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SDL_Window *window = SDL_CreateWindow(<span class="string">&quot;demo&quot;</span>, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, <span class="number">640</span>, <span class="number">480</span>, SDL_WINDOW_SHOWN);</span><br><span class="line">    SDL_Renderer *renderer = SDL_CreateRenderer(window, <span class="number">-1</span>, SDL_RENDERER_ACCELERATED);</span><br><span class="line">    <span class="keyword">bool</span> quit = <span class="literal">false</span>;</span><br><span class="line">    SDL_Event event;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World\n&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    SDL_SetRenderDrawColor(renderer, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>);</span><br><span class="line">    <span class="keyword">while</span> (!quit) &#123;</span><br><span class="line">        <span class="keyword">while</span> (SDL_PollEvent(&amp;event)) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (event.type) &#123;</span><br><span class="line">            <span class="keyword">case</span> SDL_QUIT:</span><br><span class="line">                quit = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SDL_MOUSEMOTION:</span><br><span class="line">                <span class="keyword">if</span>(SDL_GetMouseState(<span class="literal">NULL</span>, <span class="literal">NULL</span>) &amp;SDL_BUTTON(<span class="number">1</span>))</span><br><span class="line">                    SDL_RenderDrawPoint(renderer, event.motion.x, event.motion.y);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        SDL_RenderPresent(renderer);</span><br><span class="line">        SDL_Delay(<span class="number">1000</span> / <span class="number">60</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    SDL_DestroyWindow(window);</span><br><span class="line">    SDL_DestroyRenderer(renderer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译运行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~&#x2F;Desktop&#x2F;SDL » gcc demo.c -lmingw32 -lSDL2main -lSDL2 -mwindows</span><br><span class="line">~&#x2F;Desktop&#x2F;SDL » .&#x2F;a.exe </span><br><span class="line">~&#x2F;Desktop&#x2F;SDL » </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>MSYS2</tag>
       </tags>
   </entry>
   <entry>
@@ -303,311 +608,6 @@
       </categories>
       <tags>
         <tag>Sqlite3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SDL 播放pcm音频</title>
-    <url>/2021/04/10/SDL%E7%BC%96%E7%A8%8B/SDL%E6%92%AD%E6%94%BEPCM%E9%9F%B3%E9%A2%91/</url>
-    <content><![CDATA[<p>本文主要介绍如何利用SDL来播放pcm音频</p>
-<span id="more"></span>
-
-
-<h4 id="生成-pcm-音频"><a href="#生成-pcm-音频" class="headerlink" title="生成 pcm 音频"></a>生成 pcm 音频</h4><ul>
-<li>mp3 截取<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ffmpeg -i test.mp3 -ss 00:00:10 -t 00:00:30 -acodec copy cut.mp3</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>-acodec copy 编码格式复制</p>
-</blockquote>
-</li>
-<li>mp3 转 pcm<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ffmpeg -i cut.mp3 -acodec pcm_s16le -f s16le -ac 2 -ar 44100 test.pcm</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>-f 强制文件格式 -ac 通道数 -ar 采用率</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h4><ul>
-<li><p>demo.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* @brief SDL2 获取音频的回调函数</span></span><br><span class="line"><span class="comment">* @param userdata 用户数据</span></span><br><span class="line"><span class="comment">* @param stream 音频缓冲区</span></span><br><span class="line"><span class="comment">* @param len 音频长度</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fill_audio_cb</span><span class="params">(<span class="keyword">void</span> *userdata, Uint8 * stream, <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  FILE **fpp = (FILE**)userdata;</span><br><span class="line">  <span class="keyword">if</span>(fpp == <span class="literal">NULL</span> || *fpp == <span class="literal">NULL</span> || len == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  SDL_memset(stream, <span class="number">0</span>, len);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fread(stream, <span class="number">1</span>, len, *fpp) != len)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Play Done! Replay\n&quot;</span>);</span><br><span class="line">    fseek(*fpp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER);</span><br><span class="line"></span><br><span class="line">  FILE *audio_file = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  SDL_AudioSpec aduio_spec = &#123;</span><br><span class="line">    .format = AUDIO_S16LSB,    <span class="comment">/* 音频格式 signed 16bit LSB */</span></span><br><span class="line">    .freq = <span class="number">44100</span>,             <span class="comment">/* 采样率 */</span></span><br><span class="line">    .channels = <span class="number">2</span>,             <span class="comment">/* 通道数 */</span></span><br><span class="line">    .silence = <span class="number">0</span>,              <span class="comment">/* 静音值 */</span></span><br><span class="line">    .callback = fill_audio_cb, <span class="comment">/* 回调函数 */</span></span><br><span class="line">    .userdata = &amp;audio_file    <span class="comment">/* 回调函数用户数据 */</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ((audio_file = fopen(<span class="string">&quot;test.pcm&quot;</span>, <span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Cannot open this file\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (SDL_OpenAudio(&amp;aduio_spec, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Can&#x27;t open audio.\n&quot;</span>);</span><br><span class="line">    fclose(audio_file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Start to play, return to exit\n&quot;</span>);</span><br><span class="line">  SDL_PauseAudio(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  getchar();</span><br><span class="line">  fclose(audio_file);</span><br><span class="line">  SDL_Quit();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译运行（mingw 环境）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc demo.c -lmingw32 -lSDL2main -lSDL2</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./a.exe</span></span><br><span class="line">Start to play, return to exit</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>SDL 编程</category>
-      </categories>
-      <tags>
-        <tag>pcm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu安装设置</title>
-    <url>/2020/12/22/%E5%85%B6%E4%BB%96/Ubuntu%E5%AE%89%E8%A3%85%E8%AE%BE%E7%BD%AE/</url>
-    <content><![CDATA[<p>介绍 VMware Ubuntu 安装到使用 </p>
-<span id="more"></span>
-
-<h4 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h4><ul>
-<li>方案1, 以简单为原则：<table>
-<thead>
-<tr>
-<th align="center">挂载点</th>
-<th align="center">分区类型</th>
-<th align="center">分区格式</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">swap</td>
-<td align="center">逻辑分区</td>
-<td align="center">swap</td>
-<td align="center">充当虚拟内存, 大小等于内存大小</td>
-</tr>
-<tr>
-<td align="center">/</td>
-<td align="center">主分区</td>
-<td align="center">ext4</td>
-<td align="center">安装系统和软件, 大小余下所有</td>
-</tr>
-</tbody></table>
-</li>
-<li>方案2, 资深用户：<table>
-<thead>
-<tr>
-<th align="center">挂载点</th>
-<th align="center">分区类型</th>
-<th align="center">分区格式</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">swap</td>
-<td align="center">逻辑分区</td>
-<td align="center">swap</td>
-<td align="center">充当虚拟内存, 大小等于内存大小</td>
-</tr>
-<tr>
-<td align="center">/</td>
-<td align="center">主分区</td>
-<td align="center">ext4</td>
-<td align="center">安装系统和软件, 大小 20GB 以上</td>
-</tr>
-<tr>
-<td align="center">/boot</td>
-<td align="center">逻辑分区</td>
-<td align="center">ext4</td>
-<td align="center">引导分区, 大小 1G 左右</td>
-</tr>
-<tr>
-<td align="center">/home</td>
-<td align="center">逻辑分区</td>
-<td align="center">ext4</td>
-<td align="center">相当于 “我的文档”, 大小为硬盘剩下的</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<h4 id="安装-VMare-Tools"><a href="#安装-VMare-Tools" class="headerlink" title="安装 VMare Tools"></a>安装 VMare Tools</h4><p>  VMare Tools 提供分辨率自适应, 同 win10 共享剪贴板, 直接拖动文件与 win10 交互等高级功能</p>
-<ul>
-<li>将VMare Tools 镜像安装到系统后复制 VMwareTools 压缩包到系统目录, 执行<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo ./vmware-install.pl</span><br></pre></td></tr></table></figure>
-一路默认设置即可</li>
-</ul>
-<h4 id="添加源和安装必备软件"><a href="#添加源和安装必备软件" class="headerlink" title="添加源和安装必备软件"></a>添加源和安装必备软件</h4><ul>
-<li><a class="link" href="https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/">清华源<i class="fas fa-external-link-alt"></i></a> <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">sudo vi /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
- 复制进去, 保存退出, 更新软件 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure></li>
-<li>安装软件<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install vim git </span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="安装-sougou-输入法"><a href="#安装-sougou-输入法" class="headerlink" title="安装 sougou 输入法"></a>安装 sougou 输入法</h4><ul>
-<li>安装 fcitx<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install fcitx</span><br></pre></td></tr></table></figure></li>
-<li>下载安装 <a class="link" href="https://pinyin.sogou.com/linux/">sougou 输入法<i class="fas fa-external-link-alt"></i></a> <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i xxxx.deb   # 安装下载的 deb 包</span><br><span class="line">sudo apt -f install     # 自动安装依赖</span><br></pre></td></tr></table></figure>
- 安装完成, 设置–&gt;区域与语言–&gt;管理已安装的语言, 设置为 fcitx, 然后重启即可</li>
-</ul>
-]]></content>
-      <categories>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MQTT开发</title>
-    <url>/2021/04/10/%E5%B5%8C%E5%85%A5%E5%BC%8F/MQTT%E5%BC%80%E5%8F%91/</url>
-    <content><![CDATA[<p>本文主要介绍Ubuntu环境下搭建MQTT服务器和简单使用</p>
-<span id="more"></span>
-
-<h3 id="Linux-搭建MQTT服务器"><a href="#Linux-搭建MQTT服务器" class="headerlink" title="Linux 搭建MQTT服务器"></a>Linux 搭建MQTT服务器</h3><ul>
-<li><p>安装 </p>
-  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa     # 添加源到软件仓库</span><br><span class="line">sudo apt-get update                                         # 更新软件仓库列表</span><br><span class="line">sudo apt-get install mosquitto                              # 安装mosquitto</span><br></pre></td></tr></table></figure></li>
-<li><p>试运行</p>
-  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mosquitto status                               # 查看运行状态</span><br><span class="line">sudo service mosquitto start                                # 启动服务</span><br><span class="line">sudo service mosquitto stop                                 # 停止服务</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加和系修改配置</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mosquitto stop   #首先停止服务</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用户的局部配置文件放在： /etc/mosquitto/conf.d/目录下，并且这个目录下的所有以.conf后缀的文件都将被mosquitto作为配置文件，在启动时加载。</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在/etc/mosquitto/conf.d目录下，新建myconfig.conf配置文件，输入以下内容</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭匿名访问，客户端必须使用用户名</span></span><br><span class="line">allow_anonymous false</span><br><span class="line"><span class="meta">#</span><span class="bash">指定 用户名-密码 文件</span></span><br><span class="line">password_file /etc/mosquitto/pwfile.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建一个MQTT服务器账户</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 假设用户名为:user1， 在命令行运行：</span></span><br><span class="line">   </span><br><span class="line">mosquitto_passwd -c /etc/mosquitto/pwfile.txt user1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">回车后连续输入2次用户密码即可，然后重新启动 mosquitto</span></span><br><span class="line">sudo service mosquitto start      </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试 mosquitto：可在App Store下载MQTTool工具进行测试。</p>
-</li>
-<li><p>在线用测试网址参考<a class="link" href="https://blog.csdn.net/cpongo3/article/details/89327641">博客<i class="fas fa-external-link-alt"></i></a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>嵌入式</category>
-      </categories>
-      <tags>
-        <tag>mqtt</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MSYS2 的使用</title>
-    <url>/2021/04/10/%E5%85%B6%E4%BB%96/MSYS/</url>
-    <content><![CDATA[<p>本文主要介绍 MSYS2 的历史和使用</p>
-<span id="more"></span>
-
-<h2 id="MSYS2-的前世今生"><a href="#MSYS2-的前世今生" class="headerlink" title="MSYS2 的前世今生"></a>MSYS2 的前世今生</h2><h3 id="Cygwin"><a href="#Cygwin" class="headerlink" title="Cygwin"></a>Cygwin</h3><p>这一切得从源头说起, 1995年Cygnus的一位工程师Steve Chamberlain, 他观察到Windows 系统使用COFF作为目标文件 (即可执行文件) 格式，与此同时GNU的工具链已经支持x86和COFF的目标文件，并提供C语言库newlib (Newlib 是嵌入式系统上的C标准库的实现) 。他认为既然GNU的工具链已经能够编译生成x86指令集的机器码并可链接生成COFF格式的目标文件, 而且还提供了可移植到任意平台的C标准库newlib, 那么理论上只要将GCC重定向(根据对应目标平台重新编译), 作为一个 cross compiler(交叉编译器)，那么这个GCC 编译器不就可以生成 Windows 平台下的可执行文件了吗? 事实证明这是可行的， Steve Chamberlain 很快开发出了原型, 并把他这个项目命名为Cygwin.</p>
-<p>现在 GCC 工具链有了，终于可以使用熟悉的GCC而不是微软的那一套MSVC来生成Windows 平台的应用程序了。不过，光有GCC 并不能很好的进行构建工作, 还需要 shell 脚本解释器以及那些与Uinx系统配套的一系列称手的工具也加入进来，因为只有这些工具的加持，GCC 才能用得舒服。因此 Steve Chamberlain 的下一步工作是尝试在 Windows 构建 shell 脚本运行环境, 因此需要一个与 Bourne shell 兼容的命令解释器(比如 bash), 而移植构建shell 解释器需要一个fork系统来实现程序的调用和标准输入/输出。Windows包含类似的功能, 但它们的接口和POSIX不兼容，这么一来Cygwin的库还需要提供与POSIX兼容的应用程序编程接口(API)。为了达到这个目的 Cygwin 提供了一套抽象层 dll，用于将部分 Posix 调用转换成 Windows 的 API 调用，实现相关功能。这里面最典型的，最基本的模拟层就是那个 cygwin1.dll。</p>
-<p>这些工作早期都是由Steve Chamberlain一个人来完成, 但是到了1996年，由于看到cygwin可以提供Windows系统上的嵌入式工具链（以往的方案是使用DJGPP），其他工程师也加入了进来。特别吸引人的是，Cygwin可以实现three-way cross-compile(第三方交叉编译)，也就是说可以在远程工作站上使用cygwin来编译其他平台的代码, 而操作工作站的电脑只是一台普通的pc, 该pc 本身不编译代码。由于工作站的CPU普遍更为强大，这比在PC上使用PC的速度更快。1998年起，Cygnus开始将Cygwin包作为产品来提供。</p>
-<p>随着 Linux 系统的发展壮大，目前的 Cygwin 已经不仅仅提供 POSIX 兼容，因此也顺带多了更多模拟层的依赖关系。同时，由于它的模拟层实现了相当良好的 Posix 兼容，人们试着将许多重要的 Linux/BSD 应用移植到了Cygwin下，使得Cygwin越来越大，功能也越来越丰富，以至于目前很多人直接把将Linux应用移植到Windows平台的任务都交给了Cygwin（当然，这种移植并非原生）。</p>
-<p><strong>总结</strong>：从上面的描述可以看出, Cygwin 诞生之初，Steve Chamberlain 本来可能只是想通过GCC编译出Windows应用来，却因为 Posix 而顺带搞了一坨别的东西过来，最后发展到现在。可以说, Cygwin是运行于Windows平台的POSIX“子系统”，提供Windows下的类Unix环境，并提供将部分 Linux 应用“移植”到Windows平台的开发环境的一套软件。</p>
-<h3 id="MinGW"><a href="#MinGW" class="headerlink" title="MinGW"></a>MinGW</h3><p>由于 Cygwin 的编译和调用方式总是需要依赖一层 POSIX 到 Windows API 的中间层, 比起日渐庞大的 Cygwin, 或许一个最小化且不需要中间层 GNU 工具链更能满足一些开发的需求, 于是 Colin Peters 在1998年创建了一个开源项目并撰写了最初的版本, 他将其命名为 mingw32 (Minimalist GNU for W32), 其意思就是Windows 上的最小化GNU 工具链, 这里的Windows被简称为 “W32”, 后来为了避免暗示它仅限于生成32位二进制文件, 后面的 32 被去除，从而变成了MinGW.</p>
-<p>在最初的版本，Colin Peters首先为MSVCRT.DLL(Microsoft Visual C Runtime )库提供了一组头文件和一个导入库, 不过这些代码需要依赖和使用Cygwin的某些接口。之后的 Jan-Jaap van der Heijden希望不再依赖于Cygwin库，而是仅仅使用本机的构建环境来构建应用程序，所以Jan-Jaap着手开发了binutils、GCC和make，并生成了第一个无需使用Cygwin即可生成本机代码的编译器、汇编器和链接器工具。Mumit Khan 后来接手了开发工作，向程序包添加了更多Windows特定的功能，包括Anders Norlander的Windows系统标头。2000年，该项目移至SourceForge，以寻求社区的更多帮助并集中开发。 在 SourceForge 上得到了更多开源人士的帮助, MinGW也得到很大的发展，甚至2005年9月MinGW被选为SourceForge的月度最佳项目。不过在与SourceForge对其邮件列表的管理存在分歧之后，2018年，MinGW迁移到OSDN。</p>
-<p><strong>总结</strong>: MinGW 的出现是为了能够使用 GCC 工具链来构建不依赖于第三方运行库的应用程序, 相对于Cygwin，它首要特点就是简单性和性能好，因此，它不提供某些不能使用Windows API轻松实现的POSIX API，如fork()、mmap()和ioctl()。而用Cygwin编写的Windows程序总是需要运行在兼容层DLL之上，因此该DLL必须与程序的源代码一起分发。MinGW不需要兼容层，因为基于MinGW的程序是通过直接调用Windows API编译的。</p>
-<h3 id="MSYS"><a href="#MSYS" class="headerlink" title="MSYS"></a>MSYS</h3><p>MinGW 出现之后, 为了更方便地使用 GNU 工具链, 需要提供一个可执行 shell 脚本的运行环境从而可以在shell 中调用MinGW 提供的那些工具如 gcc, make, linkr, 于是诞生了 MSYS(Minimal SYStem)。不过和 Cygwin 追求大而全的 POSIX 兼容系统不同, 其中间层 msys.dll 只提供基本的 POSIX API。因此MSYS可以看做是 Cygwin 的简化版, 但是因为一般 MSYS 都集成了MinGW, 所以当使用MSYS来构建应用程序时如果不使用一些特殊的 POSIX API时, 比如 fork, mmap 其实就是在使用 MinGW 编译代码, 其程序是通过直接调用Windows API编译的, 所以可以不需要依赖任何中间层和第三方DLL库, 也就是说, 这时 MSYS 在这个编译过程只是作为一个辅助工具箱来使用。</p>
-<p><strong>总结</strong>: MSYS 环境虽然也像 Cygwin 一样提供 POSIX API, 但是因为本着注重 Minimal(最小化)的原则, 其只提供了最基本的 API, 其兼容性相对于 Cygwin 较差, 但相对于庞大的 Cygwin, 结合 MinGW 的MSYS 可以编译不依赖于中间层DLL的应用程序，执行效率也更高，这个过程MSYS就相当于一个工具箱而已了。</p>
-<h3 id="MinGW-w64"><a href="#MinGW-w64" class="headerlink" title="MinGW-w64"></a>MinGW-w64</h3><p>可能是由于维护MinGW的人员工作太过于繁忙, 或是其他原因，MinGW 在后来更新速度异常缓慢，而且当初从ming32 改名为 MinGW, 去掉 32 是为了避免它暗示仅限于生成32位二进制文件, 这就意味着在创建项目的时候开发人员还考虑到将来会更新64位版本, 但是直到现在, MinGW 仍然只支持生成32位的Windows程序, 甚至开发人员以及不打算让其支持 64位的程序了。</p>
-<p>2005年，因为最初的MinGW项目没有及时更新其代码库，包括包括几个关键的新API和急需的64位支持，OneVision Software 就创建了一个 MinGW 分支, 并把它命名为 MinGW-w64, 这里的 w64 是 windows 64 位的意思, 代表着支持生成 Windows 64位程序的MinGW, 但不限于64位, MinGW-w64 可以生成 32 位或 64 位的Windows 应用程序。</p>
-<p>完成 64位的支持和API更新后 OneVision 将 MinGW-w64 代码提交给MinGW原始项目维护人员，但他们由于怀疑OneVision使用非公开或专有信息而将其拒绝。之后的 2008年，OneVision 将代码捐赠给了其主要开发人员之一的Kai Tietz, 其条件是该代码仍保持开源状态。由于许多原因，后来的MinGW-W64项目的主要开发人员和联合创始人Kai Tietz决定不再尝试与MinGW进一步合作了。</p>
-<p>相对于 MinGW, MinGW-w64提供了更完整的Win32 API实现, 但是，MinGW-w64项目不提供官方的二进制构建，不过可以从开发人员的个人构建目录或者从相关但独立的项目（如tdm-gcc或mingw-builds或msys2）中获取。</p>
-<p><strong>总结</strong>: 因为 MinGW 更新缓慢以及不支持生成Windows 64位系统程序, 这才诞生了 MinGW-w64, 因此可以说MinGW-w64 就是 MinGW 的升级版, 是基于MinGW 的一个分支, 所以功能和MinGW一样，生成的程序是通过直接调用Windows API编译的而不需要中间层。</p>
-<h3 id="MSYS2"><a href="#MSYS2" class="headerlink" title="MSYS2"></a>MSYS2</h3><p>MSYS2(Minimal SYStem 2)是对MSYS的独立重写，和MinGW-w64 的诞生情况基本一致，因为 MSYS 太老了, 更新缓慢, 这才有了MSYS2，不过, 它是基于现代Cygwin和MinGW-w64，它的作用与以前的MSYS在MinGW中所起的作用相同。</p>
-<p>作为项目，Cygwin和MSYS2有着明显不同的目标。</p>
-<p>Cygwin试图为Windows带来一个与POSIX兼容的环境，这样在Unices上运行的大多数软件都可以在Cygwin上构建和运行，而无需进行任何重大修改。Cygwin提供了大量包含此类软件的软件包，以及用于开发这些软件的库。</p>
-<p>MSYS2试图为构建本机Windows软件提供环境。MSYS2提供了包含此类软件的大量软件包，以及用于开发这些软件的库。由于该软件的很大一部分使用GNU构建工具，而GNU构建工具与Unix紧密耦合，因此该环境也与POSIX兼容，并且实际上是基于Cygwin的。</p>
-<p>MSYS2提供了运行AutoTools和其他构建系统所需的最小外壳，这些构建系统从互联网上从不同的存储库获取软件源代码，并对其进行配置和构建。外壳和核心工具的存在主要是为了允许移植Unix程序在Windows上本地运行(即不需要POSIX模拟层)。MSYS2不会在必要时重复Cygwin的工作，因此提供的POSIX仿真软件的数量非常少。</p>
-<p>MSYS2使用Pacman(出自Arch Linux)来管理其软件包，并附带三个不同的软件包存储库：<br>Msys2：包含依赖于MSYS2的软件。<br>Mingw64：包含64位原生Windows软件(使用mingw-W64 x86_64工具链编译)。<br>Mingw32：包含32位原生Windows软件(使用mingw-W64 i686工具链编译)。</p>
-<p>总结: MSYS2 可看做是 MSYS 的升级版，它的作用与以前的MSYS在MinGW中所起的作用相同，并且基于MinGW-w64, 因此可以编译运行 32位和 64 位的程序。同时 MSYS2 使用 pacman 来管理软件包, 并且包含三个不同的软件包存储库，这意味着我们可以在不同的软件存储库之间切换。</p>
-<h2 id="MSYS2-使用"><a href="#MSYS2-使用" class="headerlink" title="MSYS2 使用"></a>MSYS2 使用</h2><h3 id="三个运行环境"><a href="#三个运行环境" class="headerlink" title="三个运行环境"></a>三个运行环境</h3><p>安装自然不用说, 安装完成后生成三个快捷图标，</p>
-<ul>
-<li>MSYS MinGW 32-bit</li>
-<li>MSYS MinGW 64-bit</li>
-<li>MSYS2 MSYS</li>
-</ul>
-<p>对快捷图标进行查看属性, 我们可以看到其打开时执行的命令：</p>
-<ul>
-<li>MSYS MinGW 32-bit 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -mingw32</span><br></pre></td></tr></table></figure></li>
-<li>MSYS MinGW 64-bit 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -mingw64</span><br></pre></td></tr></table></figure></li>
-<li>MSYS2 MSYS 快捷图标的目标是:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Library\win64\msys64\msys2_shell.cmd -msys</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>因此可以知道, 切换三个不同的环境是通过向脚本文件msys2_shell.cmd 中传递不同的参数实现的。于是我们在命令行中输入上面的任何一句话:</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">mingw64</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>立刻弹出一个页面，进入 MSYS2 提供的默认终端, 环境显示的是 MINGW64 的</p>
-</blockquote>
-<p>由此确定MSYS2 提供了一个msys2_shell.cmd 然后该批处理脚本可接受参数, 通过输入的参数来用于切换三个不同的环境类型。</p>
-<p>那么如果不输入参数直接运行会怎么样:</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>也弹出了窗口, 环境显示的是 MSYS</p>
-</blockquote>
-<p>也就是说, 默认的环境是 MSYS 环境</p>
-<h3 id="msys2-shell-cmd-探索"><a href="#msys2-shell-cmd-探索" class="headerlink" title="msys2_shell.cmd 探索"></a>msys2_shell.cmd 探索</h3><p>既然 msys2_shell.cmd 可接受参数, 那么还可以接受那些参数呢? 一般来说命令程序都会提供一个 -h 或者 -help(–help)参数来提供给使用者提供帮助的, 于是尝试在cmd中输入如下内容:</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">help</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>出现如下内容:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line">   msys2_shell.cmd [options] [login shell parameters]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">   -mingw32 | -mingw64 | -msys[2]   Set shell type</span><br><span class="line">   -defterm | -mintty | -conemu     Set terminal type</span><br><span class="line">   -here                            Use current &gt;directory as working</span><br><span class="line">                                    directory</span><br><span class="line">   -where DIRECTORY                 Use specified &gt;DIRECTORY as working</span><br><span class="line">                                    directory</span><br><span class="line">   -[use-]full-path                 Use full current PATH variable</span><br><span class="line">                                    instead of trimming to minimal</span><br><span class="line">   -no-start                        Do not use &quot;start&quot; command and</span><br><span class="line">                                    return login shell resulting</span><br><span class="line">                                    errorcode as this batch file</span><br><span class="line">                                    resulting errorcode</span><br><span class="line">   -shell SHELL                     Set login shell</span><br><span class="line">   -help | --help | -? | &#x2F;?         Display this help and exit</span><br><span class="line"></span><br><span class="line">Any parameter that cannot be treated as valid option and all</span><br><span class="line">following parameters are passed as login shell command parameters.</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>可以清楚地看到所有可接受的参数和其使用说明</p>
-<ul>
-<li><p>第一条是自然不必说, 就是设置我们的shell环境类型的.</p>
-</li>
-<li><p>第二条是设置终端类型, 看这<code>-defterm</code>应该是default terminal(默认终端)的意思吧, 尝试一下:</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">C</span>:\<span class="title">Library</span>\<span class="title">win64</span>\<span class="title">msys64</span>\<span class="title">msys2_shell.cmd</span> -<span class="title">defterm</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Users</span>\<span class="title">shino</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>仍旧弹出一个页面, 然而终端类型变成微软默认的终端了, 因为看左上角的图标, 已经不是 MSYS2 提供的终端了. </p>
-</blockquote>
-<p>用同样的方法, 在cmd 中分别调用C:\Library\win64\msys64\msys2_shell.cmd批处理并输入<code>-mintty</code>和<code>-conemu</code> 参数观察到:</p>
-<blockquote>
-<p>输入 <code>-mintty</code>参数时, 弹出的窗口和不输入<code>-mintty</code>时是一致的, 由此得知 MSYS2 默认确实是使用 mintty 作为默认的终端, 输入<code>-conemu</code> 参数时, cmd 出现</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ConEmu not found. Exiting.</span><br></pre></td></tr></table></figure>
-<p>这说明 MSYS2 并没有集成ConEmu终端，可能需要用户自己主动去下载才能使用.</p>
-</blockquote>
-</li>
-<li><p>第三条和第四条参数显而易见, 当我们在终端打开 MSYS2 的某一个环境时, 通过 <code>-here</code> 参数可以使MSYS2 环境打开后立刻进入当前命令执行的环境, 如果没有 <code>-here</code>，参数, 则默认会进入 HOME 目录，而输入 <code>-where </code> + DIRECTORY 则可以进入指定文件夹. </p>
-</li>
-<li><p><code>-use-full-path</code>(-full-path) 参数根据描述应该是将整个Windows 的PATH 添加到MSYS2 环境中的可选参数, 也就是说, 进入MSYS2 环境时，默认是把Windows 下的PATH环境给部分屏蔽掉的, 使用full-path将把PATH的所有内容添加进来, 这里可以验证一下, 我电脑安装了VSCode 并把其添加到了环境变量中去了, 这样一来只要在终端输入 code+[dir] 就可以打开VSCode 编辑器了。那么首先在不使用 <code>-full-path </code>参数进入 MSYS2 环境：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
-<p>进入 MSYS2 环境后输入 code</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ code</span><br><span class="line">bash: $&#39;\302\203code&#39;: 未找到命令</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-<p>可以看到 MSYS2 并没能找到 code, 那么使用 <code>-full-path</code> 参数进入MSYS环境:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -full-path</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
-<p>进入 MSYS2 环境后输入 code</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ code</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>VSCode 编辑器已经打开, 并且程序正常执行并返回了。</p>
-</blockquote>
-<p>说明想要让MSYS2拥有完整的Windows PATH只需在使用<code>msys2_shell.cmd</code>进入环境时加入参数 <code>-full-path</code>即可，这也是官方默认且推荐的做法。除此之外, 还可以想到的方法是在 .bashrc 通过 export 手动来添加, 这种添加就比较灵活并且有更多的选择性。</p>
-<p>其实MSYS2 默认是有继承一部分 Windows 的环境变量的, 这个在我尝试使用 <code>explorer</code> 命令来打开某个文件夹时注意到了, 因为我在没有加入 <code>-full-path</code> 的情况下执行Windows 环境下的命令 <code>explorer</code> . 也是执行成功的。然后我通过 <code>where</code> 命令查看了 <code>explorer</code> 的位置:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$ where explorer</span><br><span class="line">C:\Windows\explorer.exe</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure></li>
-<li><p><code>-no-start</code> 根据描述, 就是不需要再启动终端程序而是直接在当前终端进入 MSYS2 环境, 这一点非常不错, 因为很多时候我们只是想在当前终端下进入MSYS2 环境然后执行一些任务, 频繁地弹出弹框会让人厌烦。并且该参数使得 MSYS2 可以更好地和VSCode 编辑器或者其他编译器进行更好地集成和交互。打开cmd 测试一下:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -defterm -no-start</span><br><span class="line">shino@DESKTOP-2E1H5DE MSYS ~</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>不再弹出弹框, 而是直接原地进入 MSYS2 环境</p>
-</blockquote>
-<p>需要注意的是: 在 cmd 里进入MSYS2 环境需要把终端类型设置成 <code>-defterm</code> 因为MSYS2 默认使用的是 <code>mintty</code> 终端, 因此没有 <code>-defterm</code> 它会先打开 <code>mintty</code>终端，然后执行 <code>no-start</code> 参数, 这不是我们想要的结果。</p>
-</li>
-<li><p>最后一个参数 -shell 指定了进入环境时使用的 shell 解释器的类型, 默认是 bash。例如，当我们想使用当前比较流行的 <code>zsh</code>, 可以在启动时传入如下参数:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\shino&gt; C:\Library\win64\msys64\msys2_shell.cmd -shell zsh</span><br><span class="line">C:\Users\shino&gt;</span><br></pre></td></tr></table></figure>
-<p>当然, 前提是你已经安装了zsh解释器, 在后面, 我们将讨论在 MSYS2 通过使用 pacman 包管理工具来进行方便的安装和卸载。</p>
-</li>
-</ul>
-<h3 id="msys2-shell-cmd-使用"><a href="#msys2-shell-cmd-使用" class="headerlink" title="msys2_shell.cmd 使用"></a>msys2_shell.cmd 使用</h3><p>通过上面对 msys2_shell.cmd 的了解, 我们就可以更方便地使用 MSYS2 了, 下面举例几个比较典型的用法:</p>
-<ol>
-<li>作为 VSCode 终端的环境: 我们想要实现在 VSCode 中打开终端时就默认进入了 MSYS2 的环境, 那么我们可以在<code>setting.json</code> 文件中添加如下内容: <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&quot;terminal.integrated.shell.windows&quot;: &quot;C:\\Library\\win64\\msys64\\msys2_shell.cmd&quot;,    </span><br><span class="line">&quot;terminal.integrated.shellArgs.windows&quot;: [&quot;-defterm&quot;, &quot;-mingw64&quot;, &quot;-no-start&quot;, &quot;-here&quot;],</span><br></pre></td></tr></table></figure></li>
-<li>按需进入 MSYS2 环境: 我们想要实现打开默认cmd的时候并不会立刻进入 MSYS2 环境, 而是在任何时刻我们想进入MSYS2 环境时只需输入 msys 就可以原地进入 MSYS2 环境, 这也是我比较推荐的做法。那么只需要新建一个 <code>msys.bat</code> 文件, 然后将其所在的目录放入环境变量 PATH 中即可: <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/c/Library/common $ ls</span><br><span class="line">msys.bat</span><br><span class="line">/c/Library/common $ cat msys.bat</span><br><span class="line">@C:\Library\win64\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -here -shell zsh</span><br><span class="line">/c/Library/common $ </span><br></pre></td></tr></table></figure>
-我将 <code>msys.bat</code> 放到了 <code>/c/Library/common</code> 文件夹中, 内容如 cat 显示的那样, 只包含了一行命令就可以完成我们想要的工作, 将  <code>/c/Library/common</code> 文件夹加入到Windows 的PATH 环境变量中就可以在cmd中通过调用 msys 来切换MSYS2 的环境:<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">shino</span>&gt; <span class="title">msys</span></span></span><br><span class="line"><span class="function">~ » </span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在 cmd 中输入msys 后终端提示符变成了<code>~ » </code>，这是因为我将默认 shell 设置成了 zsh 的结果</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="设置-HOME-目录"><a href="#设置-HOME-目录" class="headerlink" title="设置 HOME 目录"></a>设置 HOME 目录</h3><p>有时需要指定MSYS2 的home 目录的位置, 但是 <code>msys2_shell.cmd</code> 似乎没有这个选项, 目前只能想到的方案是修改 <code>msys2_shell.cmd</code>文件, 在文件较前面添加这样一行:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set &quot;HOME&#x3D;%USERPROFILE%&quot;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>= 后面是可选的目录, 这里将其设置得和 Windows 默认的一样</p>
-</blockquote>
-<h3 id="pacman-包管理"><a href="#pacman-包管理" class="headerlink" title="pacman 包管理"></a>pacman 包管理</h3><p>MSYS2 提供了非常方便的 pacman 包管理工具, 这个工具来自于 ArchLinux, 因此各种命令参数都是通用的。不过由于 MSYS2 提供了三个运行环境, 因此 pacman 管理的软件包也分三个来源，这三个源分别由一下三个文件管理:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw32</span><br><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw64</span><br><span class="line">&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.msys</span><br></pre></td></tr></table></figure>
-<p>国内使用 pacman 一般需要将软件源设置成国内的源，这样下载更新才会比较快，例如使用<a class="link" href="https://mirror.tuna.tsinghua.edu.cn/help/msys2/">清华源<i class="fas fa-external-link-alt"></i></a>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw32 ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;mingw&#x2F;i686</span><br><span class="line"></span><br><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.mingw64 ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;mingw&#x2F;x86_64</span><br><span class="line"></span><br><span class="line">编辑 &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist.msys ，在文件开头添加：</span><br><span class="line">Server &#x3D; https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;msys2&#x2F;msys&#x2F;$arch</span><br><span class="line"></span><br><span class="line">然后执行 pacman -Sy 刷新软件包数据即可。</span><br></pre></td></tr></table></figure>
-
-<p>因为 pacman 同时管理三个环境的软件源，因此在安装卸载等操作时需要提供完整的软件包名，如果不是完整的软件包名称，则pacman 默认操作的是 msys 环境下的软件, 例如 gcc， 三个环境的名称分别是:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MSYS: gcc</span><br><span class="line">mingw64: mingw-w64-x86_64-gcc</span><br><span class="line">mingw32: mingw-w64-i686-gcc</span><br></pre></td></tr></table></figure>
-
-<p>可以看到, 如果想要让 pacman 安装 mingw64环境下的gcc 则需要在gcc 前加入前置 <code>mingw-w64-x86_64- </code>, 其意义也十分的明显, mingw-w64就是我们上面所说的由OneVision 创建的MinGW-w64 环境, 它支持64位和32位, 因此x86_64则代表64位环境程序, i686则代表32 位的。</p>
-<p>使用方法参考<a class="link" href="https://www.jianshu.com/p/47cce454f200">pacman<i class="fas fa-external-link-alt"></i></a></p>
-<p>值得注意的是, 在 mingw64或mingw32 环境中, 如果对应环境的程序没有安装,则默认会去调用 MSYS 环境的程序, 例如 gcc 只安装了 MSYS 版本的, 在mingw64 环境中并没有安装gcc，但是输入 gcc 也可以执行, 因为这时候执行的是 MSYS 环境下的 gcc 程序，如果安装了自己环境下的gcc ，则调用的gcc 就变成当前环境下的gcc了。</p>
-<h3 id="举例-SDL2-安装和使用"><a href="#举例-SDL2-安装和使用" class="headerlink" title="举例: SDL2 安装和使用"></a>举例: SDL2 安装和使用</h3><p>使用 pacman 安装64位 SDL2 库并编译运行</p>
-<ul>
-<li><p>安装 SDL2 </p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -S mingw-w64-x86_64-SDL2</span><br></pre></td></tr></table></figure></li>
-<li><p>demo.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SDL_Window *window = SDL_CreateWindow(<span class="string">&quot;demo&quot;</span>, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, <span class="number">640</span>, <span class="number">480</span>, SDL_WINDOW_SHOWN);</span><br><span class="line">    SDL_Renderer *renderer = SDL_CreateRenderer(window, <span class="number">-1</span>, SDL_RENDERER_ACCELERATED);</span><br><span class="line">    <span class="keyword">bool</span> quit = <span class="literal">false</span>;</span><br><span class="line">    SDL_Event event;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World\n&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    SDL_SetRenderDrawColor(renderer, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>);</span><br><span class="line">    <span class="keyword">while</span> (!quit) &#123;</span><br><span class="line">        <span class="keyword">while</span> (SDL_PollEvent(&amp;event)) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (event.type) &#123;</span><br><span class="line">            <span class="keyword">case</span> SDL_QUIT:</span><br><span class="line">                quit = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SDL_MOUSEMOTION:</span><br><span class="line">                <span class="keyword">if</span>(SDL_GetMouseState(<span class="literal">NULL</span>, <span class="literal">NULL</span>) &amp;SDL_BUTTON(<span class="number">1</span>))</span><br><span class="line">                    SDL_RenderDrawPoint(renderer, event.motion.x, event.motion.y);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        SDL_RenderPresent(renderer);</span><br><span class="line">        SDL_Delay(<span class="number">1000</span> / <span class="number">60</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    SDL_DestroyWindow(window);</span><br><span class="line">    SDL_DestroyRenderer(renderer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译运行</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~&#x2F;Desktop&#x2F;SDL » gcc demo.c -lmingw32 -lSDL2main -lSDL2 -mwindows</span><br><span class="line">~&#x2F;Desktop&#x2F;SDL » .&#x2F;a.exe </span><br><span class="line">~&#x2F;Desktop&#x2F;SDL » </span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>MSYS2</tag>
       </tags>
   </entry>
 </search>
