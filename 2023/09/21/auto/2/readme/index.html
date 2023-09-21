@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            RTThread 上使用 CharryUSB packages |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">RTThread 上使用 CharryUSB packages</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-09-21 16:19:02</span>
+                <span class="mobile">2023-09-21 16:19</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2023-09-21 17:11:04</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/RTThread/">RTThread</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/RTThread/packages/">packages</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/USB/">USB</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RTThread/">RTThread</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍如何在 RTThread 上使用 CharryUSB</p>
+<span id="more"></span>
+
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>CharryUSB 试用了一下，感觉还不错，本身实现了多种 USB IP，支持多个 MCU. 许多 MCU 厂商对于 USB 的实现都是直接买现成的 IP，例如 stm32 是的 dwc2, 因此各个厂商的 USB 驱动可以使用同一套 IP 的驱动，这就是为什么 RTThread menuconfig 选项中有选择 IP 选项。</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>那么开始配置 menuconfig:</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RT-Thread online packages  ---&gt;</span><br><span class="line">    system packages  ---&gt; </span><br><span class="line">        CherryUSB: tiny and portable USB host/device stack for embedded system with USB IP  ---&gt; </span><br><span class="line">             Enable usb device mode  ---&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后 Select usb device ip 记得选择 DWC2, 其他根据需要进行选择. 例如这里选择了 <code>Enable usb msc device  ---&gt;</code> 并且使用 ram 模拟磁盘 <code>Use msc ram template</code></p>
+<p>设置完成后 `rtconfig.h`` 新增如下内容:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_USING_CHERRYUSB</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_FS</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_DWC2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_DWC2_STM32</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_DWC2_PORT_FS</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_MSC</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_CHERRYUSB_DEVICE_MSC_TEMPLATE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PKG_USING_CHERRYUSB_LATEST_VERSION</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意: 不需要在  RT-Thread Components –&gt; Device Drivers  —&gt; 中再启动 usb 驱动了, 因为 CharryUSB 直接集成 DWC2 驱动, RT-Thread 默认的 USB 驱动关闭就好了</p>
+</blockquote>
+<p>设置完成后执行 <code>pkgs --update</code> 拉取 CharryUSB 包。</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>拉取完成后似乎直接就能编译, 那么怎么使用呢？程序执行入口在哪? 启动流程是什么样的？</p>
+<p>CharryUSB 唯一需要提供的是一个 <code>usb_dc_low_level_init</code> 函数, 这个函数是用于将外设时钟使能以及和 IO 绑定的操作，实际上就等价于 cubemx 自动生成代码中 xxx_msp 函数, 因此如果使用 cubemx 自动生成则可以直接拿来使用。比如 </p>
+<p>cubemx 生成代码如下:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_PCD_MspInit</span><span class="params">(PCD_HandleTypeDef* hpcd)</span></span><br><span class="line">{</span><br><span class="line">  GPIO_InitTypeDef GPIO_InitStruct = {<span class="number">0</span>};</span><br><span class="line">  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {<span class="number">0</span>};</span><br><span class="line">  <span class="keyword">if</span>(hpcd-&gt;Instance==USB_OTG_FS)</span><br><span class="line">  {</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN USB_OTG_FS_MspInit 0 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END USB_OTG_FS_MspInit 0 */</span></span><br><span class="line">  <span class="comment">/** Initializes the peripherals clock</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;</span><br><span class="line">    PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;</span><br><span class="line">    <span class="keyword">if</span> (HAL_RCCEx_PeriphCLKConfig(&amp;PeriphClkInitStruct) != HAL_OK)</span><br><span class="line">    {</span><br><span class="line">      Error_Handler();</span><br><span class="line">    }</span><br><span class="line">  <span class="comment">/** Enable USB Voltage detector</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">    HAL_PWREx_EnableUSBVoltageDetector();</span><br><span class="line"></span><br><span class="line">    __HAL_RCC_GPIOA_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/**USB_OTG_FS GPIO Configuration</span></span><br><span class="line"><span class="comment">    PA12     ------&gt; USB_OTG_FS_DP</span></span><br><span class="line"><span class="comment">    PA11     ------&gt; USB_OTG_FS_DM</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_11;</span><br><span class="line">    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;</span><br><span class="line">    GPIO_InitStruct.Pull = GPIO_NOPULL;</span><br><span class="line">    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;</span><br><span class="line">    GPIO_InitStruct.Alternate = GPIO_AF10_OTG1_FS;</span><br><span class="line">    HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Peripheral clock enable */</span></span><br><span class="line">    __HAL_RCC_USB_OTG_FS_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/* USB_OTG_FS interrupt Init */</span></span><br><span class="line">    HAL_NVIC_SetPriority(OTG_FS_IRQn, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    HAL_NVIC_EnableIRQ(OTG_FS_IRQn);</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN USB_OTG_FS_MspInit 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END USB_OTG_FS_MspInit 1 */</span></span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以发现该函数 hpcd 其实没大多用, 去掉即可, 于是有:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">usb_dc_low_level_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    GPIO_InitTypeDef GPIO_InitStruct = {<span class="number">0</span>};</span><br><span class="line">    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {<span class="number">0</span>};</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN USB_OTG_FS_MspInit 0 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE END USB_OTG_FS_MspInit 0 */</span></span><br><span class="line">    <span class="comment">/** Initializes the peripherals clock</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;</span><br><span class="line">    PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;</span><br><span class="line">    <span class="keyword">if</span> (HAL_RCCEx_PeriphCLKConfig(&amp;PeriphClkInitStruct) != HAL_OK)</span><br><span class="line">    {</span><br><span class="line">        Error_Handler();</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/** Enable USB Voltage detector</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    HAL_PWREx_EnableUSBVoltageDetector();</span><br><span class="line"></span><br><span class="line">    __HAL_RCC_GPIOA_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/**USB_OTG_FS GPIO Configuration</span></span><br><span class="line"><span class="comment">    PA12     ------&gt; USB_OTG_FS_DP</span></span><br><span class="line"><span class="comment">    PA11     ------&gt; USB_OTG_FS_DM</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_11;</span><br><span class="line">    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;</span><br><span class="line">    GPIO_InitStruct.Pull = GPIO_NOPULL;</span><br><span class="line">    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;</span><br><span class="line">    GPIO_InitStruct.Alternate = GPIO_AF10_OTG1_FS;</span><br><span class="line">    HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Peripheral clock enable */</span></span><br><span class="line">    __HAL_RCC_USB_OTG_FS_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/* USB_OTG_FS interrupt Init */</span></span><br><span class="line">    HAL_NVIC_SetPriority(OTG_FS_IRQn, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    HAL_NVIC_EnableIRQ(OTG_FS_IRQn);</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN USB_OTG_FS_MspInit 1 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE END USB_OTG_FS_MspInit 1 */</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<p>执行流程如下，首先注册设备描述符, 添加接口, 然后执行 <code>usbd_initialize</code> 初始化 usb</p>
+<p>例如 msc 设备:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">msc_ram_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    usbd_desc_register(msc_ram_descriptor);</span><br><span class="line">    usbd_add_interface(usbd_msc_init_intf(&amp;intf0, MSC_OUT_EP, MSC_IN_EP));</span><br><span class="line"></span><br><span class="line">    usbd_initialize();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而 msc_ram_init 我们可以放到 shell 中手动执行，也可以设置开机后自动执行.</p>
+<p>usbd_initialize 会调用 usb_dc_init, 而 usb_dc_init 是移植到不同平台需要实现的部分, 对于 dwc2 平台, CharryUSB 已经有实现:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// core/usbd_core.c</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">usbd_initialize</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> usb_dc_init();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// port/dwc2/usb_dc_dwc2.c</span></span><br><span class="line">__WEAK <span class="type">void</span> <span class="title function_">usb_dc_low_level_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">__WEAK <span class="type">void</span> <span class="title function_">usb_dc_low_level_deinit</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">usb_dc_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">  <span class="comment">/*!&lt; dc init */</span></span><br><span class="line">  usb_dc_low_level_pre_init();</span><br><span class="line"></span><br><span class="line">  <span class="built_in">memset</span>(&amp;usb_dc_cfg, <span class="number">0</span>, <span class="keyword">sizeof</span>(usb_dc_cfg));</span><br><span class="line">  <span class="comment">/*!&lt; Clear USB Event Interrupt */</span></span><br><span class="line">  NRF_USBD-&gt;EVENTS_USBEVENT = <span class="number">0</span>;</span><br><span class="line">  NRF_USBD-&gt;EVENTCAUSE |= NRF_USBD-&gt;EVENTCAUSE;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*!&lt; Reset interrupt */</span></span><br><span class="line">  NRF_USBD-&gt;INTENCLR = NRF_USBD-&gt;INTEN;</span><br><span class="line">  NRF_USBD-&gt;INTENSET = USBD_INTEN_USBRESET_Msk | USBD_INTEN_USBEVENT_Msk | USBD_INTEN_EPDATA_Msk |</span><br><span class="line">                       USBD_INTEN_EP0SETUP_Msk | USBD_INTEN_EP0DATADONE_Msk | USBD_INTEN_ENDEPIN0_Msk | USBD_INTEN_ENDEPOUT0_Msk | USBD_INTEN_STARTED_Msk;</span><br><span class="line"></span><br><span class="line">  usb_dc_low_level_post_init();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此实际需要实现的函数就仅剩下 usb_dc_low_level_pre_init 了. 在 port/dwc2/usb_dc_dwc2.c 中 usb_dc_low_level_init 默认为 weak 这也就是为何即使一开始没实现该函数也能编译成功。</p>
+<p>至于 msc_ram_init 函数, 因为勾选了 Use msc ram template</p>
+<p>在 <code>third_party/rt-thread-4.1.1/msh_cmd.c</code> 命令也给我们导出来了</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> defined(PKG_CHERRYUSB_DEVICE_MSC_TEMPLATE)</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">msc_ram_init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line">MSH_CMD_EXPORT(msc_ram_init, start msc_ram_init);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>下载后通过命令执行 <code>msc_ram_init</code> 即可.</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/Embedded/Board/STM32/ART-Pi/packages/charryUSB/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/USB/"><i class="icon fas fa-hashtag"></i>USB</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/RTThread/"><i class="icon fas fa-hashtag"></i>RTThread</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/09/19/auto/0/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">Android 命令行工具的使用</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>
