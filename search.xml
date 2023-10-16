@@ -743,6 +743,12 @@
 <h3 id="对某个-commit-打标签"><a href="#对某个-commit-打标签" class="headerlink" title="对某个 commit 打标签"></a>对某个 commit 打标签</h3><p>git tag -a v0.1.1 9fbc3d0</p>
 <h3 id="对于-Windows-下换行符自动转换"><a href="#对于-Windows-下换行符自动转换" class="headerlink" title="对于 Windows 下换行符自动转换"></a>对于 Windows 下换行符自动转换</h3><p><a class="link" href="https://blog.csdn.net/Babylonxun/article/details/126598477">参考<i class="fas fa-external-link-alt"></i></a></p>
 <h3 id="修改之前提交的用户信息"><a href="#修改之前提交的用户信息" class="headerlink" title="修改之前提交的用户信息"></a>修改之前提交的用户信息</h3><p><a class="link" href="https://zhuanlan.zhihu.com/p/455741996">参考<i class="fas fa-external-link-alt"></i></a></p>
+<h3 id="重新提交某个版本"><a href="#重新提交某个版本" class="headerlink" title="重新提交某个版本"></a>重新提交某个版本</h3><p>有时候提交版本有问题，想做细微更改后重新提交；使用 commit –amend 就可以做到</p>
+<p>回退到刚提交的版本, 修改后执行:</p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></tbody></table></figure>
+
+
+
 <p><a class="link" href="https://gitee.com/wjundong/code/blob/master/Other/Git/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
 </body></html>]]></content>
       <categories>
