@@ -9,7 +9,7 @@
     
     <title>
         
-            GTK Custom Drawing |
+            GTK Packing |
         
         Keep
     </title>
@@ -169,7 +169,7 @@
         <div class="article-content-container border-box">
 
             <div class="article-title">
-                <span class="title-hover-animation">GTK Custom Drawing</span>
+                <span class="title-hover-animation">GTK Packing</span>
             </div>
 
             
@@ -203,7 +203,7 @@
 
             <span class="meta-info-item article-update-date">
                 <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="pc">2023-09-21 17:11:04</span>
+                <span class="pc">2023-10-22 12:40:14</span>
             </span>
         
 
@@ -254,24 +254,10 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <html><head></head><body><p>本文主要介绍 GTK 自定义绘制</p>
-<span id="more"></span>
-
-<p>许多小部件，如按钮，它们的所有绘图都是自己完成的。 你只需告诉他们你想要看到的标签，他们就会自动完成绘制按钮轮廓和聚焦矩形等。有时，有必要进行一些定制绘制。 在这种情况下，GtkDrawingArea 可能是合适的小部件。 它提供了一个画布，您可以通过设置其绘制功能在画布上绘制。</p>
-<p>窗口小部件的内容通常需要部分或全部重新绘制，例如，当移动另一个窗口并揭示该窗口的一部分时，或者当包含该窗口的窗口被调整大小时。<br>还可以通过调用 gtk_widget_queue_draw () 显式地重新绘制小部件。 GTK 通过向 draw 函数提供现成的 cairo 上下文来处理大部分细节。</p>
-<p>以下示例显示如何将绘制函数与 GtkDrawingArea 一起使用。它比前面的示例稍微复杂一些，因为它还演示了使用事件控制器处理输入事件。</p>
-<p>main.c </p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p>编译</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc `pkg-config --cflags gtk4` main.c `pkg-config --libs gtk4`</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>cairo_t </p>
-<p>cairo_t 包含 rendering device 的当前状态，包括尚未绘制的形状的坐标。<br>cairo_t 上下文(即 cairo_t 已经命名的 cairo_t 对象) 是 cairo  的核心内容，<br>所有使用 cairo 进行的绘制都是使用 cairo_t 对象完成的</p>
-</li>
-</ul>
-<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/Lib/GTK/04CustomDrawing/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+                <html><head></head><body><p>本文主要介绍 GTK 容器布局 <span id="more"></span></p>
+<p>main.c </p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;gtk/gtk.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">print_hello</span><span class="params">(GtkWidget *widget, gpointer data)</span></span><br><span class="line">{</span><br><span class="line">    g_print(<span class="string">"Hello World\n"</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">activate</span><span class="params">(GtkApplication *app, gpointer user_data)</span></span><br><span class="line">{</span><br><span class="line">    GtkWidget *window;</span><br><span class="line">    GtkWidget *grid;</span><br><span class="line">    GtkWidget *button;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 创建新窗口，并设置其标题 */</span></span><br><span class="line">    window = gtk_application_window_new(app);</span><br><span class="line">    gtk_window_set_title(GTK_WINDOW(window), <span class="string">"Window"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 在这里我们构造了一个容器，它将包装我们的按钮 */</span></span><br><span class="line">    grid = gtk_grid_new();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 把容器装在 window 内 */</span></span><br><span class="line">    gtk_window_set_child(GTK_WINDOW(window), grid);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 将第一个按钮放在网格单元格(0，0)中，并使其在水平和垂直方向上仅填充1个单元格(即 no spanning) */</span></span><br><span class="line">    button = gtk_button_new_with_label(<span class="string">"Button 1"</span>);</span><br><span class="line">    g_signal_connect(button, <span class="string">"clicked"</span>, G_CALLBACK(print_hello), <span class="literal">NULL</span>);</span><br><span class="line">    gtk_grid_attach(GTK_GRID(grid), button, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 将第二个按钮放置在网格单元格(1，0)中，并使其仅水平和垂直填充1个单元格(即 no spanning) */</span></span><br><span class="line">    button = gtk_button_new_with_label(<span class="string">"Button 2"</span>);</span><br><span class="line">    g_signal_connect(button, <span class="string">"clicked"</span>, G_CALLBACK(print_hello), <span class="literal">NULL</span>);</span><br><span class="line">    gtk_grid_attach(GTK_GRID(grid), button, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 将Quit按钮放置在网格单元(0，1)中，并使其跨过(span)2列。 */</span></span><br><span class="line">    button = gtk_button_new_with_label(<span class="string">"Quit"</span>);</span><br><span class="line">    g_signal_connect_swapped(button, <span class="string">"clicked"</span>, G_CALLBACK(gtk_window_destroy), window);</span><br><span class="line">    gtk_grid_attach(GTK_GRID(grid), button, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    gtk_widget_show(window);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">    GtkApplication *app;</span><br><span class="line">    <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">    app = gtk_application_new(<span class="string">"org.gtk.example"</span>, G_APPLICATION_DEFAULT_FLAGS);</span><br><span class="line">    g_signal_connect(app, <span class="string">"activate"</span>, G_CALLBACK(activate), <span class="literal">NULL</span>);</span><br><span class="line">    status = g_application_run(G_APPLICATION(app), argc, argv);</span><br><span class="line">    g_object_unref(app);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>编译 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc `pkg-config --cflags gtk4` main.c `pkg-config --libs gtk4`</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Lib/GTK/03Packing/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
 </body></html>
             </div>
 
@@ -293,13 +279,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2023/01/21/auto/26/readme/"
+                               href="/2023/01/27/auto/29/readme/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item text-ellipsis">GTK Packing</span>
+                                <span class="post-nav-title-item text-ellipsis">GTK Building user interfaces</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -309,10 +295,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/01/21/auto/25/readme/"
+                               href="/2023/01/21/auto/28/readme/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item text-ellipsis">GTK BoxButton</span>
+                                <span class="post-nav-title-item text-ellipsis">GTK Custom Drawing</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
