@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            02UseLibc |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">02UseLibc</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-03-21 09:46:06</span>
+                <span class="mobile">2023-03-21 09:46</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-03-13 14:57:44</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/ARMGNU/">ARMGNU</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/libc/">libc</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%8D%8A%E4%B8%BB%E6%9C%BA/">半主机</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍在ARM汇编中使用 Libc 和半主机调试 <span id="more"></span></p>
+<p>关于 ARM 汇编快速入门，请 <a class="link" target="_blank" rel="noopener" href="https://www.ic.unicamp.br/~celio/mc404-2014/docs/gnu-arm-directives.pdf">参考<i class="fas fa-external-link-alt"></i></a></p>
+<p>start.s</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.syntax unified</span><br><span class="line"></span><br><span class="line">/* 代码段 */</span><br><span class="line">.section .text.reset</span><br><span class="line">.type reset, %function</span><br><span class="line">.globl  reset</span><br><span class="line"></span><br><span class="line">/* 程序入口 */</span><br><span class="line">reset:</span><br><span class="line"></span><br><span class="line">    ldr sp, =_estack</span><br><span class="line"></span><br><span class="line">    /* 将 data 段从 flash 拷贝到 SRAM */</span><br><span class="line">    ldr r0, =_data_start</span><br><span class="line">    ldr r1, =_data_end</span><br><span class="line">    ldr r2, =_init_data_start</span><br><span class="line">    movs r3, #0</span><br><span class="line">    b copy_data_loop</span><br><span class="line"></span><br><span class="line">copy_data:</span><br><span class="line">    ldr r4, [r2, r3]    // r4 = *(_init_data_start + r3)</span><br><span class="line">    str r4, [r0, r3]    // *(_data_start + r3) = r4</span><br><span class="line">    adds r3, r3, #4     // r3 += 4</span><br><span class="line"></span><br><span class="line">copy_data_loop:</span><br><span class="line">    adds r4, r0, r3     // r4 = _data_start + r3</span><br><span class="line">    cmp r4, r1         </span><br><span class="line">    bcc copy_data       // if(r4 != r1) copy_data</span><br><span class="line"></span><br><span class="line">    /* 将 0 填充到 .bss 段中 */</span><br><span class="line">    ldr r2, =_bss_start</span><br><span class="line">    ldr r4, =_bss_end</span><br><span class="line">    movs r3, #0</span><br><span class="line">    b fill_zero_loop</span><br><span class="line"></span><br><span class="line">fill_zero:</span><br><span class="line">    str  r3, [r2]       // *(r2) = 0</span><br><span class="line">    adds r2, r2, #4     // r2 += 4</span><br><span class="line"></span><br><span class="line">fill_zero_loop:</span><br><span class="line">    cmp r2, r4</span><br><span class="line">    bcc fill_zero       // if(r2 != _bss_end) fill_zero</span><br><span class="line"></span><br><span class="line">    /* 调用 libc 的静态初始化 */</span><br><span class="line">    bl __libc_init_array</span><br><span class="line"></span><br><span class="line">    /* 调用应用入口点 */</span><br><span class="line">    bl  main</span><br><span class="line">    bx  lr</span><br><span class="line"></span><br><span class="line">/* 中断向量表段 */</span><br><span class="line">.section  .vectors, "a"</span><br><span class="line">    .word _estack</span><br><span class="line">    .word reset</span><br></pre></td></tr></tbody></table></figure>
+<p>main.c</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> aaa = <span class="number">12345</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *_sbrk(<span class="type">ptrdiff_t</span> incr)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">char</span> _end[];</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">char</span> _heap_end[];</span><br><span class="line">    <span class="type">static</span> <span class="type">char</span> *curbrk = _end;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((curbrk + incr &lt; _end) || (curbrk + incr &gt; _heap_end))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span> - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    curbrk += incr;</span><br><span class="line">    <span class="keyword">return</span> curbrk - incr;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">initialise_monitor_handles</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    initialise_monitor_handles();</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *data = <span class="built_in">malloc</span>(<span class="number">0x2000</span> - <span class="number">0x100</span>);</span><br><span class="line">    <span class="keyword">if</span> (data == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(data, <span class="string">"I am Jack"</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World, %s, aaa is %d\n"</span>, data, aaa);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _data_start;</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _data_end;</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _bss_start;</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _bss_end;</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _heap_start;</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">uint32_t</span> _init_data_start;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_data_start %p\n"</span>, &amp;_data_start);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_data_end %p\n"</span>, &amp;_data_end);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_bss_start %p\n"</span>, &amp;_bss_start);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_bss_end %p\n"</span>, &amp;_bss_end);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_heap_start %p\n"</span>, &amp;_heap_start);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"_init_data_start %p\n"</span>, &amp;_init_data_start);</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">64</span>];</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%s"</span>, buf);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, buf);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>link.ld</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">/* 程序入口 */</span><br><span class="line">ENTRY(reset)</span><br><span class="line"></span><br><span class="line">/* 栈指针初始位置 */</span><br><span class="line">_estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM);</span><br><span class="line"></span><br><span class="line">/* 用于预估堆栈大小 */</span><br><span class="line">_heap_size = 0x2000;</span><br><span class="line">_stack_size = 0x4000;</span><br><span class="line"></span><br><span class="line">/* 存储器分布 */</span><br><span class="line">MEMORY</span><br><span class="line">{</span><br><span class="line">    DTCMRAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 128K</span><br><span class="line">    FLASH (rx)          : ORIGIN = 0x8000000, LENGTH = 128K</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">/* 段组织 */</span><br><span class="line">SECTIONS</span><br><span class="line">{</span><br><span class="line">    /* 代码 */</span><br><span class="line">    .text :</span><br><span class="line">    {</span><br><span class="line">        KEEP(*(.vectors))</span><br><span class="line">        *(.text)</span><br><span class="line">        *(.text.*)</span><br><span class="line"></span><br><span class="line">        KEEP (*(.init))</span><br><span class="line">        KEEP (*(.fini))</span><br><span class="line"></span><br><span class="line">    } &gt;FLASH</span><br><span class="line"></span><br><span class="line">    /* 只读数据 */</span><br><span class="line">    .rodata :</span><br><span class="line">    {</span><br><span class="line">        . = ALIGN(4);</span><br><span class="line">        *(.rodata)</span><br><span class="line">        *(.rodata*)</span><br><span class="line">    } &gt;FLASH</span><br><span class="line"></span><br><span class="line">    /* 将读写数据段放到 data 段 */</span><br><span class="line">    .data : </span><br><span class="line">    {</span><br><span class="line">        . = ALIGN(4);</span><br><span class="line">        _data_start = .; </span><br><span class="line"></span><br><span class="line">        *(.data)</span><br><span class="line">        *(.data*)</span><br><span class="line"></span><br><span class="line">        . = ALIGN(4);</span><br><span class="line">        _data_end = .;</span><br><span class="line">    } &gt;DTCMRAM AT&gt; FLASH</span><br><span class="line"></span><br><span class="line">    /* 指向 flash 中用于初始化的 data */</span><br><span class="line">    _init_data_start = LOADADDR(.data);</span><br><span class="line"></span><br><span class="line">    /* 未初始化数据放到 bss 段 */</span><br><span class="line">    .bss :</span><br><span class="line">    {</span><br><span class="line">        . = ALIGN(4);</span><br><span class="line">        _bss_start = .;</span><br><span class="line">        __bss_start__ = _bss_start;</span><br><span class="line">        *(.bss)</span><br><span class="line">        *(.bss*)</span><br><span class="line">        *(COMMON)</span><br><span class="line"></span><br><span class="line">        . = ALIGN(4);</span><br><span class="line">        _bss_end = .;</span><br><span class="line">        __bss_end__ = _bss_end;</span><br><span class="line">    } &gt;DTCMRAM</span><br><span class="line"></span><br><span class="line">    /* 堆 */</span><br><span class="line">    .heap :</span><br><span class="line">    {</span><br><span class="line">        . = ALIGN(8);</span><br><span class="line">        _heap_start = .;</span><br><span class="line">        PROVIDE ( end = . );</span><br><span class="line">        PROVIDE ( _end = . );</span><br><span class="line">        . = . + _heap_size;</span><br><span class="line">        _heap_end = .;</span><br><span class="line">        . = . + _stack_size;</span><br><span class="line">        . = ALIGN(8);</span><br><span class="line">    } &gt;DTCMRAM</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>Makefile</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CC = arm-none-eabi-gcc</span><br><span class="line"></span><br><span class="line">LDFLAGS = -mcpu=cortex-m7 -lc -lrdimon -Tlink.ld -Wl,--gc-sections</span><br><span class="line"></span><br><span class="line">CFLAGS = -mcpu=cortex-m7 -g </span><br><span class="line"></span><br><span class="line"><span class="section">default:</span></span><br><span class="line">	@mkdir build -p</span><br><span class="line">	<span class="variable">$(CC)</span> -c  <span class="variable">$(CFLAGS)</span>   main.c -o build/main.o</span><br><span class="line">	<span class="variable">$(CC)</span> -c  <span class="variable">$(CFLAGS)</span>   start.s -o build/start.o</span><br><span class="line">	<span class="variable">$(CC)</span> build/start.o  build/main.o <span class="variable">$(LDFLAGS)</span> -Wl,-Map=build/output.map,--cref -o build/demo.elf</span><br><span class="line"></span><br><span class="line"><span class="section">openocd:</span></span><br><span class="line">	make default &amp;&amp; openocd</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm build -rf</span><br></pre></td></tr></tbody></table></figure>
+<p>openocd.cfg</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">source [find interface/stlink.cfg]</span><br><span class="line">source [find target/stm32h7x.cfg]</span><br><span class="line"></span><br><span class="line">reset_config none separate</span><br><span class="line"></span><br><span class="line">program  build/demo.elf verify</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="使用-c">1. 使用 C</h1>
+<h2 id="初始化栈">1.1 初始化栈</h2>
+<p>进入 C 的世界栈是必须的，在定义中断向量表时设置了第一个 word
+的值就是栈的初始地址 _estack，</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.section  .isr_vector</span><br><span class="line">    .word _estack</span><br><span class="line">    .word reset</span><br></pre></td></tr></tbody></table></figure>
+<p>_estack 在 ld 文件中被指向为 DTCMRAM 的末尾，因为 ARM
+体系中，栈是向低地址伸长，因此需要放在内存末尾处： </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_estack = ORIGIN(DTCMRAM) + LENGTH(DTCMRAM);</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>中断向量表会被连接到 FLASH 的最开始地址：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/* 段组织 */</span><br><span class="line">SECTIONS</span><br><span class="line">{</span><br><span class="line">    /* 代码 */</span><br><span class="line">    .text :</span><br><span class="line">    {</span><br><span class="line">        KEEP(*(.vectors))</span><br><span class="line">        *(.text)</span><br><span class="line">        *(.text.*)</span><br><span class="line"></span><br><span class="line">        KEEP (*(.init))</span><br><span class="line">        KEEP (*(.fini))</span><br><span class="line"></span><br><span class="line">    } &gt;FLASH</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>STM32 复位后，BOOT=0 时，CPU 会从 FLASH 地址的第一个 word 处加载 sp
+指针，从第二个 word 处加载 pc
+指针，从而转跳到用户代码，因此这里只需要在中断向量表的第一个 word
+填入栈地址，C 的环境便建立好了。</p>
+<p>但是一般来说，为了保险，在进入用户代码的第一时间，我们还是需要主动设置一下
+sp 地址，因为有可能 reset 函数不是通过硬件复位进去的，这时 sp
+可能已经更改，而且由于是软件调用复位， CPU 不会自动加载向量表中的 sp
+值，因此需要第一时间重写设置 sp 寄存器： </p><figure class="highlight as"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 代码段 */</span></span><br><span class="line">.section .text</span><br><span class="line">.type reset, %<span class="keyword">function</span></span><br><span class="line">.<span class="title function_">globl</span>  <span class="title function_">reset</span></span><br><span class="line"></span><br><span class="line">/* 程序入口 */</span><br><span class="line"><span class="title function_">reset</span>:</span><br><span class="line">    ldr <span class="title function_">sp</span>, =_<span class="title function_">estack</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<blockquote>
+<p>ldr 属于 THUMB 指令格式，需要在顶部指示 .syntax
+unified，说明下面的指令是 ARM 和 THUMB 通用格式的</p>
+</blockquote>
+<h2 id="初始化内存变量">1.2 初始化内存变量</h2>
+<p>虽然这时候可以进入 C 的环境了，但是 C
+中用到的内存和变量都还是随机，并没有进行初始化和赋值。这样一来，C
+中定义的一些全局变量可能无法正常使用，因此这一步需要在汇编中将变量进行初始化和赋值。</p>
+<p>一般来说，为了方便一次性对各个 C
+文件中的静态或全局变量进行初始化，在链接器中需要对它们进行合理的安排：</p>
+<ul>
+<li><p>首先是只读数据，只读数据在编译阶段就已经确定其值且不会再更改，因此我们可以把只读数据放到
+FLASH
+中，这样就不需要占用内存了，同时在启动代码中也不需要对其进行赋值和初始化：
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* 将声明为 const 的数据放到 FLASH */</span><br><span class="line">.rodata :</span><br><span class="line">{</span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">    *(.rodata)</span><br><span class="line">    *(.rodata*)</span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">} &gt;FLASH</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>对于有设置了非 0 初值的可读写数据需要同时放到内存以及
+FLASH，然后在启动代码中，将 FLASH
+中的初值赋值到内存，从而完成变量的初始化。</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/* 将读写数据段放到 data 段 */</span><br><span class="line">.data : </span><br><span class="line">{</span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">    _data_start = .; </span><br><span class="line"></span><br><span class="line">    *(.data)</span><br><span class="line">    *(.data*)</span><br><span class="line"></span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">    _data_end = .;</span><br><span class="line">} &gt;DTCMRAM AT&gt; FLASH</span><br><span class="line"></span><br><span class="line">/* 指向 flash 中用于初始化的 data */</span><br><span class="line">_init_data_start = LOADADDR(.data);</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>未初始化数据放到 bss 段</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/* 未初始化数据放到 bss 段 */</span><br><span class="line">.bss :</span><br><span class="line">{</span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">    _bss_start = .;</span><br><span class="line">    __bss_start__ = _bss_start;</span><br><span class="line">    *(.bss)</span><br><span class="line">    *(.bss*)</span><br><span class="line">    *(COMMON)</span><br><span class="line"></span><br><span class="line">    . = ALIGN(4);</span><br><span class="line">    _bss_end = .;</span><br><span class="line">    __bss_end__ = _bss_end;</span><br><span class="line">} &gt;DTCMRAM</span><br></pre></td></tr></tbody></table></figure>
+<p>在 ld 中确定好位置后在 start.s 中进行初始化。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">    /* 将 data 段从 flash 拷贝到 SRAM */</span><br><span class="line">    ldr r0, =_data_start</span><br><span class="line">    ldr r1, =_data_end</span><br><span class="line">    ldr r2, =_init_data_start</span><br><span class="line">    movs r3, #0</span><br><span class="line">    b copy_data_loop</span><br><span class="line"></span><br><span class="line">copy_data:</span><br><span class="line">    ldr r4, [r2, r3]    // r4 = *(_init_data_start + r3)</span><br><span class="line">    str r4, [r0, r3]    // *(_data_start + r3) = r4</span><br><span class="line">    adds r3, r3, #4     // r3 += 4</span><br><span class="line"></span><br><span class="line">copy_data_loop:</span><br><span class="line">    adds r4, r0, r3     // r4 = _data_start + r3</span><br><span class="line">    cmp r4, r1         </span><br><span class="line">    bcc copy_data       // if(r4 != r1) copy_data</span><br><span class="line"></span><br><span class="line">    /* 将 0 填充到 .bss 段中 */</span><br><span class="line">    ldr r2, =_bss_start</span><br><span class="line">    ldr r4, =_bss_end</span><br><span class="line">    movs r3, #0</span><br><span class="line">    b fill_zero_loop</span><br><span class="line"></span><br><span class="line">fill_zero:</span><br><span class="line">    str  r3, [r2]       // *(r2) = 0</span><br><span class="line">    adds r2, r2, #4     // r2 += 4</span><br><span class="line"></span><br><span class="line">fill_zero_loop:</span><br><span class="line">    cmp r2, r4</span><br><span class="line">    bcc fill_zero       // if(r2 != _bss_end) fill_zero</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="使用-libc">2. 使用 libc</h1>
+<p><a class="link" target="_blank" rel="noopener" href="https://llvm-gcc-renesas.com/wiki/index.php?title=How_does_Newlib_initialize_the_heap%3F">参考<i class="fas fa-external-link-alt"></i></a></p>
+<p>arm-none-eabi-gcc 默认使用的是 newlib, 前面已经初始化好 data 和 bss
+段，这里只需在 start 中调用 libc 的初始化函数即可</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* 调用 libc 的静态初始化 */</span><br><span class="line">bl __libc_init_array</span><br></pre></td></tr></tbody></table></figure>
+<p>__libc_init_array 函数开始时会调用 <em>.init 中的段，结束时调用
+</em>.fini 中的段，因此在 .text 中添加</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">KEEP (*(.init))</span><br><span class="line">KEEP (*(.fini))</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="使用堆">3. 使用堆</h1>
+<p>要使用标准库的 malloc, 需要指定堆内存地址，默认情况下标准库使用 _end
+作为堆的起始地址，_end 表示 data 和 bss 结束后的内存地址，即除了 data
+bss， 剩余的都分给了堆栈</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/* 堆 */</span><br><span class="line">.heap :</span><br><span class="line">{</span><br><span class="line">    . = ALIGN(8);</span><br><span class="line">    _heap_start = .;</span><br><span class="line">    PROVIDE ( end = . );</span><br><span class="line">    PROVIDE ( _end = . );</span><br><span class="line">    . = . + _heap_size;</span><br><span class="line">    _heap_end = .;</span><br><span class="line">    . = . + _stack_size;</span><br><span class="line">    . = ALIGN(8);</span><br><span class="line">} &gt;DTCMRAM</span><br></pre></td></tr></tbody></table></figure>
+<p>我们把栈放在堆后面，为防止堆栈重叠，或超过可用内存，可预先设置堆栈大小，随着应用变量的使用，堆的初始地址边界会随之向高地址移动，当超过了
+RAM 大小，链接时就会报错。</p>
+<p>malloc 会调用 _sbrk
+函数来确认内存大小，根据链接脚本中的堆地址和大小我们可以实现：
+</p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *_sbrk(<span class="type">ptrdiff_t</span> incr)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">char</span> _end[];</span><br><span class="line">    <span class="keyword">extern</span> <span class="type">char</span> _heap_end[];</span><br><span class="line">    <span class="type">static</span> <span class="type">char</span> *curbrk = _end;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((curbrk + incr &lt; _end) || (curbrk + incr &gt; _heap_end))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span> - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    curbrk += incr;</span><br><span class="line">    <span class="keyword">return</span> curbrk - incr;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="使用半主机模式进行调试">4. 使用半主机模式进行调试</h1>
+<p>要使用半主机，可链接到 <code>-lrdimon</code>，librdimon
+提供了一系列系统调用函数和 GDB
+进行通信，从而实现在调试时执行标准输入输出和文件读写。</p>
+<p>半主机模式使用前需进行初始化，使用 initialise_monitor_handles
+进行初始化，然后就可以愉快地使用 printf 和 fopen 等函数了。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">initialise_monitor_handles</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    initialise_monitor_handles();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>当然不要忘记在 GDB 中使能半主机调试，若是用 VSCode 可直接在
+setupCommands 中添加</p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span><span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"monitor arm semihosting enable"</span><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="map-文件">5. Map 文件</h1>
+<p><a class="link" target="_blank" rel="noopener" href="https://interrupt.memfault.com/blog/get-the-most-out-of-the-linker-map-file">参考<i class="fas fa-external-link-alt"></i></a></p>
+<p>map 文件包含了链接的各个 obj
+文件的输出情况以及各个段地址的详情信息等，在链接时通过参数
+<code>-Wl,-Map=build/output.map,--cref</code> 可输出 map 文件。 <a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/laifengyuan1/article/details/108662522">参考
+2<i class="fas fa-external-link-alt"></i></a></p>
+<p><code>--cref</code>
+可生成交叉引用列表（每个符号出自哪个目标文件，如果还有指定-Map，则会添加到
+map 文件中。否则，打印到标准输出）</p>
+<h1 id="glibc-中的特殊的段">6. Glibc 中的特殊的段</h1>
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 92%">
+</colgroup>
+<thead>
+<tr>
+<th>段名</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.init</td>
+<td>一个函数放到。init 段，在 main 函数执行前系统就会执行它</td>
+</tr>
+<tr>
+<td>.fini</td>
+<td>假如一个函数放到。fini 段，在 main 函数返回后该函数就会被执行</td>
+</tr>
+</tbody>
+</table>
+<h2 id="libc_init_array-这个函数中执行的关键过程如下">__libc_init_array
+这个函数中执行的关键过程如下：</h2>
+<p>调用 .preinit_array 段中的预初始化函数 调用 .init 段中的 _init 函数
+调用 .init_array 中的所有函数</p>
+<p>这里我需要解释下，在一个段中可能会存在多个函数，根据链接脚本的写法，链接器会在链接时将段名相同的函数指针放到同一个段中，然后通过在段的前后设定锚点来依次执行相应的函数，这样的方式在一些系统的驱动初始化中也能见到！</p>
+<p>与 __libc_init_array 对应的函数是 __libc_fini_array，这个函数是在
+main 函数执行完成后执行的。它首先会调用 .fini_array
+中的所有函数，然后调用 _fini 函数，在嵌入式中一般不会执行到
+__libc_fini_array 函数。</p>
+<p>在 pc 端也有类似的过程，_init 与 _fini 函数在 crti.o 中被定义。</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Embedded/ARM/ARMGNU/02UseLibc/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/libc/"><i class="icon fas fa-hashtag"></i>libc</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E5%8D%8A%E4%B8%BB%E6%9C%BA/"><i class="icon fas fa-hashtag"></i>半主机</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/04/29/auto/19/02Verilog%E8%AF%AD%E6%B3%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">02Verilog语法的基本概念</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/03/14/auto/5/02%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BB%98%E5%88%B6/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">02原理图绘制</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-c"><span class="nav-number">1.</span> <span class="nav-text">1. 使用 C</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A0%88"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 初始化栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 初始化内存变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-libc"><span class="nav-number">2.</span> <span class="nav-text">2. 使用 libc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%A0%86"><span class="nav-number">3.</span> <span class="nav-text">3. 使用堆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8A%E4%B8%BB%E6%9C%BA%E6%A8%A1%E5%BC%8F%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">4. 使用半主机模式进行调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map-%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">5. Map 文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#glibc-%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E7%9A%84%E6%AE%B5"><span class="nav-number">6.</span> <span class="nav-text">6. Glibc 中的特殊的段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#libc_init_array-%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B%E5%A6%82%E4%B8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">__libc_init_array
+这个函数中执行的关键过程如下：</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-c"><span class="nav-number">1.</span> <span class="nav-text">1. 使用 C</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A0%88"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 初始化栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 初始化内存变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-libc"><span class="nav-number">2.</span> <span class="nav-text">2. 使用 libc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%A0%86"><span class="nav-number">3.</span> <span class="nav-text">3. 使用堆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8A%E4%B8%BB%E6%9C%BA%E6%A8%A1%E5%BC%8F%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">4. 使用半主机模式进行调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map-%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">5. Map 文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#glibc-%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E7%9A%84%E6%AE%B5"><span class="nav-number">6.</span> <span class="nav-text">6. Glibc 中的特殊的段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#libc_init_array-%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B3%E9%94%AE%E8%BF%87%E7%A8%8B%E5%A6%82%E4%B8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">__libc_init_array
+这个函数中执行的关键过程如下：</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

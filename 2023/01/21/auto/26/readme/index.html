@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            GTK Base |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">GTK Base</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-01-21 16:20:15</span>
+                <span class="mobile">2023-01-21 16:20</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-03-13 14:57:44</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/GTK/">GTK</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%85%A5%E9%97%A8/">入门</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 <span id="more"></span></p>
+<p>GTK 是一个小部件 (Widget) 工具包. GTK
+创建的每个用户界面都由小部件组成. 这是使用 GObject 实现的，GObject 是 C
+的一个面向对象的框架.</p>
+<p>其中，窗口 (window) 小部件一般被作为主容器.
+然后，通过向窗口添加按钮、下拉菜单、输入字段和其他小部件来构建用户界面.</p>
+<p>如果你正在打算创建一个复杂的用户界面，建议使用 GtkBuilder
+及其特定于的 GTK 的标记描述语言，而不是手动组装界面.</p>
+<p>GTK 是事件驱动的.
+该工具包侦听事件，如点击按钮，并将事件传递给您的应用程序.</p>
+<p>为了开始我们对 GTK 的介绍，我们将从一个非常简单的应用程序开始.
+该程序将创建一个空的 200×200 像素的窗口.</p>
+<p>main.c </p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;gtk/gtk.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">activate</span> <span class="params">(GtkApplication *app, gpointer user_data)</span></span><br><span class="line">{</span><br><span class="line">  GtkWidget *window;</span><br><span class="line"></span><br><span class="line">  window = gtk_application_window_new (app);</span><br><span class="line">  gtk_window_set_title (GTK_WINDOW (window), <span class="string">"Window"</span>);</span><br><span class="line">  gtk_window_set_default_size (GTK_WINDOW (window), <span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line">  gtk_widget_show (window);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">  GtkApplication *app;</span><br><span class="line">  <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">  app = gtk_application_new (<span class="string">"org.gtk.example"</span>, G_APPLICATION_DEFAULT_FLAGS);</span><br><span class="line">  g_signal_connect (app, <span class="string">"activate"</span>, G_CALLBACK (activate), <span class="literal">NULL</span>);</span><br><span class="line">  status = g_application_run (G_APPLICATION (app), argc, argv);</span><br><span class="line">  g_object_unref (app);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> status;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>编译 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc `pkg-config --cflags gtk4` main.c `pkg-config --libs gtk4`</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>所有 GTK 应用程序都将包括 gtk/gtk.h, 它声明 GTK
+应用程序所需的函数、类型和宏. 即使 GTK
+安装了多个头文件，第三方代码也只能直接包含顶级 gtk/gtk.h 头文件.
+如果直接包含任何其他标头，则编译器将中止并返回错误.</p>
+<p>在 GTK 应用程序中，main () 函数的作用是创建一个 GtkApplication
+对象并运行它. 在本例中，声明了一个名为 app 的 GtkApplication
+指针，然后使用 gtk_application_new () 对其进行初始化.</p>
+<p>在创建 GtkApplication 时，您需要选择一个应用程序标识符 (名称),
+并将其作为参数传递给 gtk_application_new () . 在本例中，使用了
+org.gtk.Example</p>
+<p>最后，GApplicationFlages 提供了应用程序功能标志. 其枚举值如下:
+</p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">  G_APPLICATION_FLAGS_NONE <span class="title function_">GLIB_DEPRECATED_ENUMERATOR_IN_2_74_FOR</span> <span class="params">(G_APPLICATION_DEFAULT_FLAGS)</span>,</span><br><span class="line">  G_APPLICATION_DEFAULT_FLAGS GLIB_AVAILABLE_ENUMERATOR_IN_2_74 = <span class="number">0</span>,</span><br><span class="line">  G_APPLICATION_IS_SERVICE  =          (<span class="number">1</span> &lt;&lt; <span class="number">0</span>),</span><br><span class="line">  G_APPLICATION_IS_LAUNCHER =          (<span class="number">1</span> &lt;&lt; <span class="number">1</span>),</span><br><span class="line"></span><br><span class="line">  G_APPLICATION_HANDLES_OPEN =         (<span class="number">1</span> &lt;&lt; <span class="number">2</span>),</span><br><span class="line">  G_APPLICATION_HANDLES_COMMAND_LINE = (<span class="number">1</span> &lt;&lt; <span class="number">3</span>),</span><br><span class="line">  G_APPLICATION_SEND_ENVIRONMENT    =  (<span class="number">1</span> &lt;&lt; <span class="number">4</span>),</span><br><span class="line"></span><br><span class="line">  G_APPLICATION_NON_UNIQUE =           (<span class="number">1</span> &lt;&lt; <span class="number">5</span>),</span><br><span class="line"></span><br><span class="line">  G_APPLICATION_CAN_OVERRIDE_APP_ID =  (<span class="number">1</span> &lt;&lt; <span class="number">6</span>),</span><br><span class="line">  G_APPLICATION_ALLOW_REPLACEMENT   =  (<span class="number">1</span> &lt;&lt; <span class="number">7</span>),</span><br><span class="line">  G_APPLICATION_REPLACE             =  (<span class="number">1</span> &lt;&lt; <span class="number">8</span>)</span><br><span class="line">} GApplicationFlags;</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>接下来，将激活 (activate) 信号连接到 main () 函数上方的 activate ()
+函数. 当您的应用程序在下面的行中使用 g_application_run
+启动时，将发出激活信号. g_application_run () 调用还将命令行参数 (argc 和
+argv 字符串数组) 作为参数.
+您的应用程序可以覆盖命令行处理，例如打开在命令行上传递的文件.</p>
+<p>在 g_application_run () 中发送激活信号，然后进入应用程序的 activate
+() 函数. 这是我们构造 GTK 窗口的地方，以便在启动应用程序时显示一个窗口.
+调用 gtk_application_window_new () 将创建一个新的 GtkApplicationWindow
+并返回创建的窗口指针，根据平台的不同，窗口将具有 frame、标题栏 ( title
+bar) 和窗口控制 (window controls) 等功能属性.</p>
+<p>使用 gtk_window_set_title () 设置窗口标题. 此函数接受 GtkWindow
+指针和字符串作为输入. 因为我们的窗口指针是 GtkWidget
+指针，所以我们需要将其强制转换为 GtkWindow；不是通过典型的 C 强制转换
+(GtkWindow*) 来转换窗口，而是使用宏 GTK_WINDOW () 来转换窗口. GTK_WINDOW
+() 将在强制转换之前检查指针是否为 GtkWindow
+类的实例，如果检查失败则发出警告.</p>
+<p>最后，使用 gtk_window_set_default_size () 设置窗口大小，然后 GTK 通过
+gtk_widget_show () 显示窗口.</p>
+<p>当您关闭窗口时，例如，通过按下 [X] 按钮，g_application_run ()
+调用返回一个数字，该数字保存在一个名为 Status 的整型变量中. 然后，使用
+g_Object_unref () 从内存中释放 GtkApplication 对象.
+最后，返回状态整数并退出应用程序.</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Lib/GTK/01Base/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E5%85%A5%E9%97%A8/"><i class="icon fas fa-hashtag"></i>入门</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/01/21/auto/27/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">GTK BoxButton</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/01/18/auto/50/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">QEMU ARM64 仿真</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>
