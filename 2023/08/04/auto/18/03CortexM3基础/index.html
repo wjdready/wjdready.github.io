@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            03CortexM3基础 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">03CortexM3基础</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-08-04 23:18:07</span>
+                <span class="mobile">2023-08-04 23:18</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/Book/">Book</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/Book/CortexM3%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/">CortexM3权威指南</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ARM/">ARM</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 CortexM3 的基础知识</p>
+<span id="more"></span>
+<h1 id="简介">1. 简介</h1>
+<p>Cortex-M3 是 32 位处理器内核</p>
+<p>哈弗结构，指令和数据拥有独立的数据和地址总线
+（独立编址）。这样一来数据访问不再占用指令的总线，从而提升了性能</p>
+<p>不过指令总线和数据总线共享同一个存储空间，寻址空间不变，为 <span class="math inline">\(2^{32} = 4GB\)</span></p>
+<p>比较复杂的应用可能需要更多的存储系统功能，为此 CM3 提供一个可选的
+MPU，而且在需要的情况下也可以使用外部的 cache。另外在 CM3
+中，小端模式和大端模式都是支持的。</p>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/简化图.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<h1 id="寄存器组">2. 寄存器组</h1>
+<p>Cortex-M3 处理器拥有 R0-R15 的寄存器组。其中 R13 作为堆栈指针
+SP。</p>
+<p>SP 有两个，但在同一时刻只能有一个可以看到，这也就是所谓的 banked
+寄存器。</p>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/寄存器组.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<h2 id="r0---r12-通用寄存器">R0 - R12: 通用寄存器</h2>
+<p>R0-R12
+都是32位通用寄存器，用于数据操作。但是注意：绝大多数16位Thumb指令只能访间R0-R7，少部分可访问
+R8-R12。而32位Thumb-2指令可以访问所有寄存器。</p>
+<h2 id="banked-r13-两个堆栈指针">Banked R13: 两个堆栈指针</h2>
+<p>Cortex-M3拥有两个堆栈指针，然而它们是banked，因此任一时刻只能使用其中的一个。当引用R13（或写作SP）时，引用到的是当前正在使用的那一个，另一个必须用特殊的指令来访问（MRS,MSR指令）。
+*
+主堆栈指针（MSP）：复位后默认使用的堆栈指针，用于操作系统内核以及异常处理例程（包括中断服务例程）
+* 进程堆栈指针（PSP）：由用户的应用程序代码使用</p>
+<p>堆栈指针的最低两位永远是 0，这意味着堆栈总是4字节对齐的。</p>
+<blockquote>
+<p>在ARM编程领域中，凡是打断程序顺序执行的事件，都被称为异常（exception）。除了外部中断外，当有指令执行了“非法操作”，或者访问被禁的内存区间，因各种错误产生的fault，以及不可屏蔽中断发生时，都会打断程序的执行，这些情况统称为异常。在不严格的上下文中，异常与中断也可以混用：另外，程序代码也可以主动请求进入异常状态的（常用于系统调用）</p>
+</blockquote>
+<p>push 操作: sp--, 然后保存操作数 pop 操作: 先取出值，然后 sp++</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">push {r0}   ; 等价于  *(--r13) = R0</span><br><span class="line">pop {r0}    ; 等价于 r13 = *r13++</span><br><span class="line"></span><br><span class="line">也就说初始化一般让 sp 处于高内存地址，随着push的进行, 往低地址栈满</span><br><span class="line"></span><br><span class="line">      | Low  |                  | Low  |    </span><br><span class="line">      |      |                  |      | </span><br><span class="line">      |      |  [push]  sp -&gt;   |      | </span><br><span class="line">sp -&gt; | High |                  | High | </span><br></pre></td></tr></tbody></table></figure>
+<p>栈的使用</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">; 子程序举例</span><br><span class="line">.syntax unified          ; 注意 thumb 不支持操作 r8 以上寄存器, 因此使用 .syntax unified 表示支持 ARM, thumb 混合编程</span><br><span class="line">push {r0-r7, r12, r14}   ; 保存寄存器列表, 调试发现入栈顺序似乎是从后往前 r14, r12, r7-r0</span><br><span class="line">...                      ; 执行处理</span><br><span class="line">pop {r0-r7, r12, r14}    ; 恢复到寄存器列表, 出栈顺序自然是和入栈顺序相反的 r0-r7, r12, r14</span><br><span class="line">bx r14                   ; 函数返回, 或写作 bx lr</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="r14-连接寄存器-lr">R14: 连接寄存器 (LR)</h2>
+<p>当呼叫一个子程序时，由R14存储返回地址。</p>
+<blockquote>
+<p>不像大多数共它处理器，ARM为了减少访问内存的次数（防问内存的操作往往要3个以上指令周期，带
+MMU 和 cache 的就更加不确定了），把返回地址直接存储在寄存器中。</p>
+<p>这样足以使很多只有 1
+级子程序调用的代码无需访问内存（堆栈内存），从而提高了子程序调用的效率。如果多于1级，则需要把前一级的R14值压到堆栈里。[具体示例
+src/入栈和出栈测试.s]</p>
+<p>在ARM上编程时，应尽量只使用寄存器保存中间结果，迫不得以时才访问内存。</p>
+</blockquote>
+<p>历史原因, LR 的 LSB 是可读可写的的, 因为以前使用该 LSB 作为 ARM 和
+Thumb 状态的标识和切换, 而现在有 BLX
+指令可以转跳后自动切换，同时通过状态寄存器检查当前处理处于 ARM 还是
+Thumb 状态</p>
+<h2 id="r15-程序计数寄存器-pc">R15: 程序计数寄存器 (PC)</h2>
+<p>指向当前的程序地址。如果修改它的值，就能改变程序的执行流</p>
+<p>因为 CM3 内部使用了指令流水线，读 PC 时返回的值是当前指令的地址 + 4.
+比如说：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x1000: mov r0, pc  ; r0 = 0x1004</span><br></pre></td></tr></tbody></table></figure>
+<p>如果向PC中写数据，就会引起一次程序的分支（但是不更新LR寄存器）。</p>
+<p>CM3中的指令至少是半字对齐的，所以PC的LSB总是读回0。然而，在分支时，无论是直接写PC的值还是使用分支指令，都必须保证加载到PC的数值是奇数（即LSB=1），用以表明这是在
+Thumb
+状态下执行。倘若写了0，则视为企图转入ARM模式，CM3将产生一个fut异常。</p>
+<p>[具体示例 src/操作pc指针.s]</p>
+<h2 id="特殊功能寄存器">特殊功能寄存器</h2>
+<p><a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47447179/article/details/122884198">参考<i class="fas fa-external-link-alt"></i></a></p>
+<p>Cortex-M3中的特殊功能寄存器包括：</p>
+<ul>
+<li>程序状态寄存器组（PSRs或日xPSR）</li>
+<li>中断屏蔽寄存器组（PRIMASK, FAULTMASK, BASEPRI)</li>
+<li>控制寄存器（CONTROL）</li>
+</ul>
+<p>它们只能被专用的 MSR/MRS
+指令访问，而且它们也没有与之相关联的访问地址</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mrs r0, BASEPRI</span><br><span class="line">mrs BASEPRI, r0</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="程序状态寄存器">程序状态寄存器</h3>
+<p>在内部被分为三个子状态寄存器:</p>
+<ul>
+<li>应用程序 PSR (APSR)</li>
+<li>中断号 PSR (IPSR)</li>
+<li>执行 PSR (EPSR)</li>
+</ul>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/程序状态寄存器.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<p>单独访问，也可2个或3个 (这时直接 xPSR 或 PSR) 组合访问</p>
+<table>
+<thead>
+<tr>
+<th>位</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N</td>
+<td>负标志</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>零标志</td>
+</tr>
+<tr>
+<td>C</td>
+<td>进位(或非借位)标志</td>
+</tr>
+<tr>
+<td>V</td>
+<td>溢出标志</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>饱和标志</td>
+</tr>
+<tr>
+<td>ICI/IT</td>
+<td>中断继续指令(ICI)位, IF-THEN指令状态位用于条件执行</td>
+</tr>
+<tr>
+<td>T</td>
+<td>Thumb 状态, 总是 1, 清除此位会引起错误异常</td>
+</tr>
+<tr>
+<td>异常编号</td>
+<td>表示处理器正在处理的异常 (只读)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>无法使用MRS（读出为0）或MSR直接访问EPSR。IPSR为只读寄存器。</p>
+</blockquote>
+<h3 id="中断屏蔽寄存器组">中断屏蔽寄存器组</h3>
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 92%">
+</colgroup>
+<thead>
+<tr>
+<th>名字</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRIMASK</td>
+<td>1位宽寄存器。置位后关闭NMI（不可屏蔽中断和HardFault外的所有可屏蔽异常/中断</td>
+</tr>
+<tr>
+<td>FAULTMASK</td>
+<td>1位宽寄存器。置位后只有NMI可以响应（相比于PRIMASK，可屏蔽的中断/异常多了HardFault）。</td>
+</tr>
+<tr>
+<td>BASEPRI</td>
+<td>根据优先级屏蔽中断/异常，该寄存器最多有9位（由设计实现的优先级位数决定）。该寄存器定义了被屏蔽优先级的阈值。</td>
+</tr>
+<tr>
+<td></td>
+<td>当它被设置为某个值后，所有优先级号大于等于此值的中断都被关（注意：优先级号越大，优先级越低）；若设置成0，则不关断任何中断。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意：FAULTMASK和BASEPRI寄存器在ARMv6-M中不存在(如Cortex-M0)。</p>
+<p>只有特权状态才可以操作三个寄存器（非特权状态下的写操作会被忽略，读操作返回0）。三个寄存器默认值为0，即屏蔽（禁止异常/中断）不起作用。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MRS    R0, BASEPRI</span><br><span class="line">MSR    BASEPRI, R0</span><br><span class="line"></span><br><span class="line">; 可通过CSP（修改处理器状态）指令快速设置中断/异常的开关：</span><br><span class="line">CPSID    I    ;PRIMASK=1，关中断</span><br><span class="line">CPSIE    I    ;PRIMASK=0，开中断</span><br><span class="line">CPSID    F    ;FAULTMASK=1，关异常    </span><br><span class="line">CPSIE    F    ;FAULTMASK=0，开异常</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="控制寄存器">控制寄存器</h3>
+<p>控制寄存器有两个用途，其一用于定义特权级别，其二用于选择当前使用哪个堆栈指针。由两个比特来行使这两个职能。</p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 74%">
+</colgroup>
+<thead>
+<tr>
+<th>位</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONTROL[0] (nPRIV)</td>
+<td>用于定义线程模式中的特权等级：</td>
+</tr>
+<tr>
+<td></td>
+<td>0 (默认) 处于线程模式模式中的特权等级</td>
+</tr>
+<tr>
+<td></td>
+<td>1 处于线程模式模式中的非特权等级</td>
+</tr>
+<tr>
+<td>CONTROL[1] (SPSEL)</td>
+<td>0（默认）：线程模式使用主栈指针（MSP）</td>
+</tr>
+<tr>
+<td></td>
+<td>1：线程模式使用进程栈指针</td>
+</tr>
+<tr>
+<td></td>
+<td>handler 模式下只允许使用 MSP, 该位始终为0，且无法写入</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>该寄存器复位后默认为0</p>
+<p>只有特权状态才能修改（写操作）CONTROI寄存器。（读操作则不需要特权状态）</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MRS    R0, CONTROL            ;将CONTROL寄存器的值写入R0</span><br><span class="line">MSR    CONTROL, R0            ;将R0的值写入CONTROL寄存器</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="操作模式和特权级别">3. 操作模式和特权级别</h1>
+<ul>
+<li>两种模式: handler 模式 和 thread
+模式，用于区别普通应用程序的代码和异常服务例程的代码</li>
+<li>两级特权级别:
+特权级和用户级，提供了存储器访问的保护机制，使得普通的用户程序代码不能意外地，甚至是恶意地执行涉及到要害的操作。</li>
+</ul>
+<p>在CM3运行主应用程序时（线程模式），既可以使用特权级，也可以使用用户级：但是异常服务例程必须在特权级下执行。</p>
+<p>复位后，处理器默认进入线程模式，特权极访问。在特权级下，程序可以访问所有范围的存储器（如果有MPU，还要在MPU规定的禁地之外），并且可以执行所有指令。</p>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/操作模式转换.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<p>在线程模式+用户级下，对系统控制空间（SCS）的访问将被阻止一一该空间包含了配置寄存器组以及调试组件的寄存器组。</p>
+<p>除此之外，还禁止使用MRS/MSR访问刚才讲到的，除了APSRR之外的特殊功能寄存器。</p>
+<p>如果以身试法，则对于访问特殊功能寄存器的，访问操作被忽略：而对于访问SCS空间的，将fault同候。</p>
+<p>在特权级下的代码可以通过置位CONTROL[0]来进入用户级。而不管是任何原因产生了任何异常，处理器都将以特权级来运行其服务例程，异常返回后，系统将回到产生异常时所处的级别。</p>
+<p>用户级下的代码不能再试图修改CONTROL[0]来回到特权级。它必须通过一个
+SVC
+异常，由那个异常handler来修改CONTROL[0]，才能在返回到线程模式后拿到特权级。</p>
+<blockquote>
+<p>在异常服务中，通过读取PSP的值，OS就能够获取用户应用程序使用的堆栈，进一步地就知道了在发生异常时，被压入寄存器的内容，而且还可以把其它寄存器进一步压栈（使用SSTMDB和LDMIA的书写形式）。</p>
+<p>OS还可以修改PSP，用于实现多任务中的任务上下文切换。</p>
+</blockquote>
+<h1 id="内建的嵌套向量中断控制器">4. 内建的嵌套向量中断控制器</h1>
+<p>嵌套向量中断控制器（Nested Vectored Interrupt
+Controller）提供如下的功能：</p>
+<ul>
+<li>可嵌套中断支持 (高优先级中断可打断低优先级中断)</li>
+<li>向量中断支持 (中断来时自动根据中断号，从向量表中加载执行 ISR)</li>
+<li>动态优先级调整支持 (在 ISR 中更改了自身优先级, 要等离开 ISR了才生效,
+故不会自己打断自己)</li>
+<li>中断延迟大大缩短 (引入新特性来缩短中断嵌套时 ISR 间的延迟)</li>
+<li>中断可屏蔽 (既可以屏蔽优先级低于某个阈值的中断/异常
+(BASEPRI寄存器)，也可以全体封杀 (PRIMASK和FAULTMASK))</li>
+</ul>
+<h1 id="存储器映射">5. 存储器映射</h1>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/存储器映射.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<h1 id="总线接口">6. 总线接口</h1>
+<p>Cortex-M3内部有若干个总线接口，以使CM3能同时取址和访内（访问内存），它们是：</p>
+<ul>
+<li>指令存储区总线（I-Code 和 D-Code）</li>
+<li>系统总线 (AHB-Lite)</li>
+<li>私有外设总线 (诸如APB等的其它低速总线, 挂在 AHB)</li>
+</ul>
+<p>有两条代码存储区总线负责对代码存储区的访问，分别是I-Code总线和D-Code总线。前者用于取指，后者用于查表等操作，它们按最佳执行速度进行优化。</p>
+<p>系统总线用于访问内存和外设，覆盖的区域包括SRAM，片上外设，片外RAM，片外扩展设备，以及系统级存储区的部分空间。</p>
+<p>私有外设总线负责一部分私有外设的访问，主要就是访问调试组件。它们也在系统级存储区。</p>
+<h1 id="存储器保护单元">7. 存储器保护单元</h1>
+<p>可以对特权级访问和用户级访问分别施加不同的访问限制。当检测到犯规（violated）时，MPU就会产生一个fault异常，可以由fult异常的服务例程米分析该错误，并且在可能时改正它。</p>
+<p>最常见的就是由操作系统使用MPU，以使特权级代码的数据，包括操作系统本身的数据不被其它用户程序弄坏。</p>
+<p>MPU在保护内存时是按区管理的,它可以把某些内存 region
+设置成只读，从而避免了那里的内容意外被更改。</p>
+<p>还可以在多任务系统中把不同任务之间的数据区隔离。</p>
+<h1 id="指令集">8. 指令集</h1>
+<p>Cortex-M3只使用Thumb-2指令集。这是个了不起的突破，因为它允许32位指令和16位指令水乳交融，代码密度与处理性能两手抓，两手都硬。而且虽然它很强大，却依然易于使用。</p>
+<p>在过去，做AM开发必须处理好两个状态。这两个状态是井水不犯河水的，它们是：32位的ARM状态和16位的Thumb状态。</p>
+<p>当处理器在ARM状态下时，所有的指令均是32位的（哪怕只是个NOP指令），此时性能相当高。而在Thumb状态下，所有的指令均是16位的，代码密度提高了倍。</p>
+<p>不过，thumb状态下的指令功能只是ARM下的一个子集，结果可能需要更多条的指令去完成相同的工作，导致处理性能下降。</p>
+<p>为了取长补短，很多应用程序都混合使用ARM和Thumb代码段。然而，这种混合使用是有额外开销（overhead）的，时间上的和空间上的都有，主要发生在状态切换之时。</p>
+<p>另一方面，ARM代码和Thumb代码需要以不同的方式编译，这也增加了软件开发管理的复杂度。</p>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/状态切换示意图.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<p>如图通过 BLX 指令，转跳到 ARM 代码部分同时切换处理器为 ARM 状态,
+处理完后后返回继续以 Thumb 状态执行。</p>
+<p>伴随着Thumb-2指令集的横空出世，终于可以在单一的操作模式下搞定所有处理了，再也没有来回切换的事来烦你了。</p>
+<p>事实上，Cortex-M3内核干脆都不支持ARM指令，中断也在Thumb态下处理（以前的ARM总是在ARM状态下处理所有的中断和异常）。</p>
+<p>这可不是小便宜，它使CM3在好几个方面都比传统的ARM处理器更先进：</p>
+<ul>
+<li>消灭了状态切换的额外开销，节省了both执行时间和指令空间。</li>
+<li>不再需要把源代码文件分成按ARM编译的和按Thumb编译的，软件开发的管理大大减负。</li>
+<li>无需再反复地求证和测试：究竞该在何时何地切换到何种状态下，我的程序才最有效率。开发软件容易多了。</li>
+</ul>
+<p>不少有趣和强大的指令为Cortex-M3注入了新鲜的青春血液，下面给出几个例子：</p>
+<ul>
+<li>UBFX,BFI,BFC：位段提取，位段插入，位段清零。支持C位段，也简化了外设寄存器操作。</li>
+<li>CLZ,RBIT：
+计算前导零指令和位反转指令。二者组合使用能实现一些特技UDIV,SDIV：
+无符号除法和带符号除法指令。</li>
+<li>SEV,WFE,WFI：发送事件，等待事件以及等待中断指令。用于实现多处理器之间的任务同步，还可以进入不同的休眠模式。</li>
+<li>MSR,MRS：通向禁地一访问特殊功能寄存器。</li>
+</ul>
+<h1 id="中断和异常">9. 中断和异常</h1>
+<figure>
+<img src="/2023/08/04/auto/18/03CortexM3%E5%9F%BA%E7%A1%80/异常表.PNG" alt="alt">
+<figcaption aria-hidden="true">alt</figcaption>
+</figure>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Learn/BookToLearn/CortexM3权威指南/03CortexM3基础/03CortexM3基础.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/ARM/"><i class="icon fas fa-hashtag"></i>ARM</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/08/26/auto/39/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">快速搭建 linux 源码调试环境</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/08/04/auto/17/01%E4%BB%8B%E7%BB%8D/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">01介绍</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">1. 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">2. 寄存器组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#r0---r12-%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">R0 - R12: 通用寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#banked-r13-%E4%B8%A4%E4%B8%AA%E5%A0%86%E6%A0%88%E6%8C%87%E9%92%88"><span class="nav-number">2.2.</span> <span class="nav-text">Banked R13: 两个堆栈指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#r14-%E8%BF%9E%E6%8E%A5%E5%AF%84%E5%AD%98%E5%99%A8-lr"><span class="nav-number">2.3.</span> <span class="nav-text">R14: 连接寄存器 (LR)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#r15-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%AF%84%E5%AD%98%E5%99%A8-pc"><span class="nav-number">2.4.</span> <span class="nav-text">R15: 程序计数寄存器 (PC)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%8A%9F%E8%83%BD%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.</span> <span class="nav-text">特殊功能寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.1.</span> <span class="nav-text">程序状态寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%B1%8F%E8%94%BD%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84"><span class="nav-number">2.5.2.</span> <span class="nav-text">中断屏蔽寄存器组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.3.</span> <span class="nav-text">控制寄存器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%BC%8F%E5%92%8C%E7%89%B9%E6%9D%83%E7%BA%A7%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">3. 操作模式和特权级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%BB%BA%E7%9A%84%E5%B5%8C%E5%A5%97%E5%90%91%E9%87%8F%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">4. 内建的嵌套向量中断控制器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E6%98%A0%E5%B0%84"><span class="nav-number">5.</span> <span class="nav-text">5. 存储器映射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF%E6%8E%A5%E5%8F%A3"><span class="nav-number">6.</span> <span class="nav-text">6. 总线接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E4%BF%9D%E6%8A%A4%E5%8D%95%E5%85%83"><span class="nav-number">7.</span> <span class="nav-text">7. 存储器保护单元</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">8.</span> <span class="nav-text">8. 指令集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-number">9.</span> <span class="nav-text">9. 中断和异常</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">1. 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">2. 寄存器组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#r0---r12-%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">R0 - R12: 通用寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#banked-r13-%E4%B8%A4%E4%B8%AA%E5%A0%86%E6%A0%88%E6%8C%87%E9%92%88"><span class="nav-number">2.2.</span> <span class="nav-text">Banked R13: 两个堆栈指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#r14-%E8%BF%9E%E6%8E%A5%E5%AF%84%E5%AD%98%E5%99%A8-lr"><span class="nav-number">2.3.</span> <span class="nav-text">R14: 连接寄存器 (LR)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#r15-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%AF%84%E5%AD%98%E5%99%A8-pc"><span class="nav-number">2.4.</span> <span class="nav-text">R15: 程序计数寄存器 (PC)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%8A%9F%E8%83%BD%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.</span> <span class="nav-text">特殊功能寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.1.</span> <span class="nav-text">程序状态寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%B1%8F%E8%94%BD%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%84"><span class="nav-number">2.5.2.</span> <span class="nav-text">中断屏蔽寄存器组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.5.3.</span> <span class="nav-text">控制寄存器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%BC%8F%E5%92%8C%E7%89%B9%E6%9D%83%E7%BA%A7%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">3. 操作模式和特权级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%BB%BA%E7%9A%84%E5%B5%8C%E5%A5%97%E5%90%91%E9%87%8F%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">4. 内建的嵌套向量中断控制器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E6%98%A0%E5%B0%84"><span class="nav-number">5.</span> <span class="nav-text">5. 存储器映射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF%E6%8E%A5%E5%8F%A3"><span class="nav-number">6.</span> <span class="nav-text">6. 总线接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E4%BF%9D%E6%8A%A4%E5%8D%95%E5%85%83"><span class="nav-number">7.</span> <span class="nav-text">7. 存储器保护单元</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">8.</span> <span class="nav-text">8. 指令集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-number">9.</span> <span class="nav-text">9. 中断和异常</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

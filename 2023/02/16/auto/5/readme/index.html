@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            STM32 串口的使用 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">STM32 串口的使用</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-16 18:59:07</span>
+                <span class="mobile">2023-02-16 18:59</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/STM32/">STM32</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/STM32/%E4%B8%B2%E5%8F%A3/">串口</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%B8%B2%E5%8F%A3/">串口</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/STM32/">STM32</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 STM32 中串口的使用 <span id="more"></span></p>
+<p>串口是嵌入式中调试的好工具, 一般来说最先解决的应当是串口,
+只有串口调好了, 后面的开发和单元测试写起来才舒服.</p>
+<p>处理串口的一个比较经典的做法是采用
+<code>DMA + 中断 + 环形缓冲区</code> 的形式,
+环形缓冲区有一个读指针和一个写指针.</p>
+<p>两个指针保证了缓冲区的数据读写操作是安全的,
+即使在读的过程中触发了数据接收中断使程序进入写操作也不会影响到读指针.
+下面是一个通用的实现代码示例:</p>
+<p>uart_com.c</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"uart_com.h"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"lwrb.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UART_COM_MAX (sizeof(uart_coms) / sizeof(uart_com_dma_t))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 将 UART 绑定到标准输入输出 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UART_BIND_STDIO &amp;huart1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">    <span class="type">lwrb_t</span> rb;                 <span class="comment">/* 环形缓冲器 */</span></span><br><span class="line">    <span class="type">uint8_t</span> rbbuf[<span class="number">4096</span>];       <span class="comment">/* 环形缓冲器的 buffer */</span></span><br><span class="line">    <span class="type">uint8_t</span> dma_rxbuf[<span class="number">256</span>];    <span class="comment">/* DMA 接收 buffer */</span></span><br><span class="line">    <span class="type">uint8_t</span> dma_txbuf[<span class="number">4096</span>];   <span class="comment">/* DMA 发送 buffer */</span></span><br><span class="line">    <span class="type">size_t</span> old_pos;            <span class="comment">/* 保存 DMA 数据旧的位置信息 */</span></span><br><span class="line">    UART_HandleTypeDef *huart; <span class="comment">/* HAL 库串口句柄 */</span></span><br><span class="line">    <span class="type">uint8_t</span> dma_tx_ready;      <span class="comment">/* 用于检测串口是否可以发送数据 */</span></span><br><span class="line">} <span class="type">uart_com_dma_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 定义 uart_com 数组</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note 对于新增的串口, 比如 huart2</span></span><br><span class="line"><span class="comment"> *      只需往表中添加 { .huart = &amp;huart2 } 即可，</span></span><br><span class="line"><span class="comment"> *      然后就可以使用 uart_write 和 uart_read_from_rb 进行通信了</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">static</span> <span class="type">uart_com_dma_t</span> uart_coms[] = {</span><br><span class="line">    {.huart = &amp;huart1}</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">uart_com_dma_t</span> *<span class="title function_">get_uart_com</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; UART_COM_MAX; i++)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">if</span> (uart_coms[i].huart == huart)</span><br><span class="line">            <span class="keyword">return</span> uart_coms + i;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 接收处理 */</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">uart_rx_check</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uart_com_dma_t</span> *c = get_uart_com(huart);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 计算当前存储位置 */</span></span><br><span class="line">    <span class="type">size_t</span> pos = <span class="keyword">sizeof</span>(c-&gt;dma_rxbuf) - __HAL_DMA_GET_COUNTER(huart-&gt;hdmarx);</span><br><span class="line">    <span class="keyword">if</span> (pos &gt; c-&gt;old_pos)</span><br><span class="line">    {</span><br><span class="line">        lwrb_write(&amp;(c-&gt;rb), c-&gt;dma_rxbuf + c-&gt;old_pos, pos - c-&gt;old_pos);</span><br><span class="line">        c-&gt;old_pos = pos;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (pos &lt; c-&gt;old_pos)</span><br><span class="line">    {</span><br><span class="line">        lwrb_write(&amp;(c-&gt;rb), c-&gt;dma_rxbuf + c-&gt;old_pos, <span class="keyword">sizeof</span>(c-&gt;dma_rxbuf) - c-&gt;old_pos);</span><br><span class="line">        <span class="keyword">if</span> (pos &gt; <span class="number">0</span>)</span><br><span class="line">            lwrb_write(&amp;(c-&gt;rb), c-&gt;dma_rxbuf, pos);</span><br><span class="line">        c-&gt;old_pos = pos;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 串口初始化</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 该函数将所有声明在数组里的 uart_com 进行初始化,</span></span><br><span class="line"><span class="comment"> * 所有串口都初始化为:</span></span><br><span class="line"><span class="comment"> *      1. 已经准备好发送了</span></span><br><span class="line"><span class="comment"> *      2. 开 IDLE 中断</span></span><br><span class="line"><span class="comment"> *      2. 开始 DMA 循坏接收</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 循环接收的数据将通过中断自动写入环形缓冲区里面</span></span><br><span class="line"><span class="comment"> * 可通过 uart_read_from_rb 获取</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">uart_com_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; UART_COM_MAX; i++)</span><br><span class="line">    {</span><br><span class="line">        <span class="type">uart_com_dma_t</span> *c = uart_coms + i;</span><br><span class="line">        c-&gt;dma_tx_ready = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        lwrb_init(&amp;(c-&gt;rb), c-&gt;rbbuf, <span class="keyword">sizeof</span>(c-&gt;rbbuf));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 启动 IDLE 中断 */</span></span><br><span class="line">        __HAL_UART_ENABLE_IT(c-&gt;huart, UART_IT_IDLE);</span><br><span class="line">        __HAL_UART_CLEAR_IDLEFLAG(c-&gt;huart);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 开始 UART DMA 接收 */</span></span><br><span class="line">        HAL_UART_Receive_DMA(c-&gt;huart, c-&gt;dma_rxbuf, <span class="keyword">sizeof</span>(c-&gt;dma_rxbuf));</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 将数据写入到串口, 阻塞调用</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param huart 要写入的串口</span></span><br><span class="line"><span class="comment"> * @param dat 数据内容</span></span><br><span class="line"><span class="comment"> * @param len 数据长度</span></span><br><span class="line"><span class="comment"> * @param timeout 超时时间</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 实际写入的数量, 若 &lt;= 0 则写入失败</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">uart_write</span><span class="params">(UART_HandleTypeDef *huart, <span class="type">const</span> <span class="type">void</span> *dat, <span class="type">size_t</span> len, <span class="type">int</span> timeout)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uart_com_dma_t</span> *c = get_uart_com(huart);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="literal">NULL</span> || len &gt; <span class="keyword">sizeof</span>(c-&gt;dma_txbuf))</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">uint32_t</span> tick = HAL_GetTick();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 等待上一次发送完成 */</span></span><br><span class="line">    <span class="keyword">while</span> (c-&gt;dma_tx_ready == <span class="number">0</span> &amp;&amp; (HAL_GetTick() - tick) &lt; timeout)</span><br><span class="line">        ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (c-&gt;dma_tx_ready)</span><br><span class="line">    {</span><br><span class="line">        <span class="type">int</span> min = len &gt; <span class="keyword">sizeof</span>(c-&gt;dma_txbuf) ? <span class="keyword">sizeof</span>(c-&gt;dma_txbuf) : len;</span><br><span class="line">        <span class="built_in">memcpy</span>(c-&gt;dma_txbuf, dat, min);</span><br><span class="line">        HAL_UART_Transmit_DMA(c-&gt;huart, c-&gt;dma_txbuf, min);</span><br><span class="line">        c-&gt;dma_tx_ready = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> min;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 等待超时 */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 从串口缓冲区读取数据</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param huart 要读取的串口</span></span><br><span class="line"><span class="comment"> * @param dat 读取的数据</span></span><br><span class="line"><span class="comment"> * @param len 期望读取数据的数量</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 实际读取的数据数量, 若 &lt;= 0 则读取失败</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">uart_read_from_rb</span><span class="params">(UART_HandleTypeDef *huart, <span class="type">uint8_t</span> *dat, <span class="type">size_t</span> len)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uart_com_dma_t</span> *c = get_uart_com(huart);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> lwrb_read(&amp;(c-&gt;rb), dat, len);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------- 处理串口中断 -------------------------- */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 发送完成中断 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_TxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uart_com_dma_t</span> *c = get_uart_com(huart);</span><br><span class="line">    <span class="keyword">if</span> (c)</span><br><span class="line">        c-&gt;dma_tx_ready = <span class="number">1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 接收半满中断 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_RxHalfCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    uart_rx_check(huart);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 接收完成中断 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_RxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    uart_rx_check(huart);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* IDLE 中断, 需放到 USARTx_IRQHandler 中断入口函数中执行 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">UART_IDLE_Callback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">if</span> (__HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE) != RESET)</span><br><span class="line">    {</span><br><span class="line">        uart_rx_check(huart);</span><br><span class="line">        __HAL_UART_CLEAR_IDLEFLAG(huart);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------- 将串口绑定到标准输入输出 -------------------------- */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> UART_BIND_STDIO</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *fd)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uint8_t</span> dat = ch;</span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="built_in">stdout</span>)</span><br><span class="line">        HAL_UART_Transmit(UART_BIND_STDIO, &amp;dat, <span class="number">1</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fgetc</span><span class="params">(FILE *fd)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">uint8_t</span> ch;</span><br><span class="line">    <span class="keyword">while</span> (fd == <span class="built_in">stdin</span> &amp;&amp; uart_read_from_rb(UART_BIND_STDIO, &amp;ch, <span class="number">1</span>) &lt;= <span class="number">0</span>)</span><br><span class="line">        ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 如果不是使用 MicroLib 则需告知编译器不使用半主机模式</span></span><br><span class="line"><span class="comment"> * 以避免编译器默认使用半主机模式, 导致程序卡在初始化阶段无法退出</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __MICROLIB</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> __ARMCC_VERSION &gt;= 6000000</span></span><br><span class="line">__asm(<span class="string">".global __use_no_semihosting"</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">elif</span> __ARMCC_VERSION &gt;= 5000000</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> import(__use_no_semihosting)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">error</span> <span class="string">"Unsupported compiler"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 使用标准库但不使用半主机模式, 就需要自己实现一些标准库所依赖的系统函数 */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;rt_misc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;rt_sys.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> __stdin_name[] = <span class="string">":tt"</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">char</span> __stdout_name[] = <span class="string">":tt"</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">char</span> __stderr_name[] = <span class="string">":tt"</span>;</span><br><span class="line"></span><br><span class="line">FILEHANDLE _sys_open(<span class="type">const</span> <span class="type">char</span> *name, <span class="type">int</span> openmode)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> _sys_close(FILEHANDLE fh)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *_sys_command_string(<span class="type">char</span> *cmd, <span class="type">int</span> len)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> _sys_write(FILEHANDLE fh, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span> *buf, <span class="type">unsigned</span> len, <span class="type">int</span> mode)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> _sys_read(FILEHANDLE fh, <span class="type">unsigned</span> <span class="type">char</span> *buf, <span class="type">unsigned</span> len, <span class="type">int</span> mode)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> _ttywrch(<span class="type">int</span> ch)</span><br><span class="line">{</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> _sys_istty(FILEHANDLE fh)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> _sys_seek(FILEHANDLE fh, <span class="type">long</span> pos)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">long</span> _sys_flen(FILEHANDLE fh)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> _sys_exit(<span class="type">int</span> return_code)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">        ;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">clock_t</span> <span class="title function_">clock</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">clock_t</span> tmp;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> _clock_init(<span class="type">void</span>)</span><br><span class="line">{</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">time_t</span> <span class="title function_">time</span><span class="params">(<span class="type">time_t</span> *timer)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">time_t</span> tmp;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">system</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="built_in">string</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *<span class="title function_">getenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> _getenv_init(<span class="type">void</span>)</span><br><span class="line">{</span><br><span class="line">}</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __MICROLIB */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></tbody></table></figure>
+<p>我们在程序中使能了空闲 (IDLE) 中断,
+目的让串口能够在接收到任意字符后立刻做出反应.</p>
+<p>因为如果不使用空闲中断, 那么程序将一直等到 DMA 接收半满或全满才响应,
+这样的话如果用户只发几个字符, 我们的程序将无法及时处理.</p>
+<p>通过将串口绑定到标准输入输出后, 我们可以直接使用 stdio 的 scanf 和
+printf 来进行输入输出: </p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"uart_com.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    uart_com_init();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="type">int</span> aa;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;aa);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Your input is: %d\n"</span>, aa);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>裸机情况下, 结合 test_command 也可以实现简单的串口 shell
+</p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test_command_handler</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">static</span> <span class="type">char</span> input_string[<span class="number">1024</span>];</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> ofs;</span><br><span class="line">    <span class="type">uint8_t</span> ch;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 若有数据则一次性处理完 */</span></span><br><span class="line">    <span class="keyword">while</span> (uart_read_from_rb(&amp;huart1, &amp;ch, <span class="number">1</span>) &gt; <span class="number">0</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">if</span>(ch != <span class="string">'\n'</span>)</span><br><span class="line">        {</span><br><span class="line">            input_string[ofs++] = ch;</span><br><span class="line">            <span class="keyword">if</span>(ofs &gt;= <span class="keyword">sizeof</span>(input_string) - <span class="number">1</span>)</span><br><span class="line">                ofs = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        input_string[ofs] = <span class="string">'\0'</span>;</span><br><span class="line">        test_command(input_string);</span><br><span class="line">        ofs = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"\n#sh "</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    uart_com_init();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n#sh "</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    {</span><br><span class="line">        test_command_handler();</span><br><span class="line"></span><br><span class="line">        HAL_Delay(<span class="number">10</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="移植技巧-cubemx">移植技巧 (Cubemx)</h3>
+<p>要使用上面的串口驱动, 可在 Cubemx 中选中相应的串口, 比如 USART1</p>
+<ul>
+<li>Mode 选 Asynchronous 异步通信</li>
+<li>DMA Settings 添加 RX 和 TX, 注意 RX 的 DMA Mode 为 Circular,
+即循环接收</li>
+<li>NVIC Settings 里将 global interrupt 打勾, 这是给 IDLE 中断用的</li>
+<li>将 IDLE 中断处理函数放到 USARTx_IRQHandler 中断入口函数中执行,
+<strong>不要忘了</strong></li>
+</ul>
+<blockquote>
+<p>开 MPU 全局还会影响 DMA 接收问题, 哎调了半天.</p>
+</blockquote>
+<p>其他默认就行了, 但是需要注意的一点是,
+在最开始配置串口功能的时候要记得把 DMA 也配置了再输出工程,
+因为这里面有一个坑.</p>
+<p>如果是使能了串口功能但是不配置 DMA 就输出先输出工程,
+到后面才去添加串口 DMA, 输出的初始化函数顺序如下:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MX_USART1_UART_Init();</span><br><span class="line">MX_DMA_Init();</span><br></pre></td></tr></tbody></table></figure>
+<p>如果在使能串口功能的同时就把DMA 也配置了, 输出的初始化函数顺序如下:
+</p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MX_DMA_Init();</span><br><span class="line">MX_USART1_UART_Init();</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>你会发现, 只有第二种情况能工作, 因为 MX_USART1_UART_Init 函数里面依赖
+MX_DMA_Init 里面的 DMA handle, 第一种先初始化了串口, 而这时 DMA handle
+是不可用的, 因此 DMA 功能失效, 这应该是 Cubemx 的一个 BUG,
+我目前使用的版本 V6.6.0 仍有这个 BUG, 不知后面会不会更改.</p>
+<p>但是, 如果你真的不小心忘记配置 DMA
+就先输出工程也是可以重新设置初始化顺序的, 可在 Project Manager 下的
+Advanced Settings 中重新设置顺序.</p>
+<h1 id="section">2024-05-30 09:52:25</h1>
+<p>需要勾选 Use MicroLib ?</p>
+<h3 id="参考文献">参考文献</h3>
+<p>程序中使用到了开源的环形缓冲器的实现 <a class="link" target="_blank" rel="noopener" href="https://github.com/MaJerle/lwrb.git">lwrb<i class="fas fa-external-link-alt"></i></a></p>
+<p>另外, 禁用半主机模式的部分参考了 <a class="link" target="_blank" rel="noopener" href="https://mklimenko.github.io/english/2018/11/02/disable-semihosting/">Disable
+semihosting with ARM Compiler 5/6<i class="fas fa-external-link-alt"></i></a></p>
+<p>是否使用 MicroLib 的宏 <code>__MICROLIB</code> 参考了 ARM
+官方源码里面的 <a class="link" target="_blank" rel="noopener" href="https://github.com/ARM-software/Tool-Solutions/blob/main/docker/cmsis-models/Platforms/IPSS/ARMCM7/system_ARMCM7.c">ARM-software/Tool-Solutions<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://developer.arm.com/documentation/dui0472/k/Compiler-specific-Features/Predefined-macros">ARM官网<i class="fas fa-external-link-alt"></i></a>提供了更多
+ARMCC 的内置宏</p>
+<p>串口 MDA 初始化顺序问题参考了 <a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/hwytree/article/details/121659787">STM32 HAL
+UART DMA不通的问题解决及注意事项<i class="fas fa-external-link-alt"></i></a> 以及 <a class="link" target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68988109/why-does-the-sequence-of-init-calls-matter-in-stm32cubeide">Why
+does the sequence of init calls matter in STM32CubeIDE?<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Embedded/Board/STM32/General/串口通信/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E4%B8%B2%E5%8F%A3/"><i class="icon fas fa-hashtag"></i>串口</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/STM32/"><i class="icon fas fa-hashtag"></i>STM32</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/02/17/auto/15/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">通过 __attribute( (section(x)) ) 来对函数进行快速测试</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/02/15/auto/16/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">Python 文件批量操作模板</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E6%A4%8D%E6%8A%80%E5%B7%A7-cubemx"><span class="nav-number">1.</span> <span class="nav-text">移植技巧 (Cubemx)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number"></span> <span class="nav-text">2024-05-30 09:52:25</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.</span> <span class="nav-text">参考文献</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E6%A4%8D%E6%8A%80%E5%B7%A7-cubemx"><span class="nav-number">1.</span> <span class="nav-text">移植技巧 (Cubemx)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number"></span> <span class="nav-text">2024-05-30 09:52:25</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.</span> <span class="nav-text">参考文献</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

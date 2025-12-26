@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            LVGL 快速 demo |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">LVGL 快速 demo</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-01-17 21:15:30</span>
+                <span class="mobile">2023-01-17 21:15</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/%E5%BC%80%E6%BA%90%E5%BA%93/">开源库</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/%E5%BC%80%E6%BA%90%E5%BA%93/LVGL/">LVGL</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/%E5%BC%80%E6%BA%90%E5%BA%93/LVGL/%E4%BB%BF%E7%9C%9F/">仿真</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/LVGL/">LVGL</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 LVGL 的快速仿真示例 <span id="more"></span></p>
+<p>首先写一个通用的 main.c 调用 LVGL</p>
+<p>src/main.c</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// #define SDL_MAIN_HANDLED</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"lvgl/lvgl.h"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"lvgl/examples/lv_examples.h"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"lvgl/demos/lv_demos.h"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">"lv_drivers/sdl/sdl.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">hal_init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">  (<span class="type">void</span>)argc; <span class="comment">/*Unused*/</span></span><br><span class="line">  (<span class="type">void</span>)argv; <span class="comment">/*Unused*/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/*Initialize LVGL*/</span></span><br><span class="line">  lv_init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*Initialize the HAL (display, input devices, tick) for LVGL*/</span></span><br><span class="line">  hal_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">//  lv_example_switch_1();</span></span><br><span class="line"><span class="comment">//  lv_example_calendar_1();</span></span><br><span class="line"><span class="comment">//  lv_example_btnmatrix_2();</span></span><br><span class="line"><span class="comment">//  lv_example_checkbox_1();</span></span><br><span class="line"><span class="comment">//  lv_example_colorwheel_1();</span></span><br><span class="line"><span class="comment">//  lv_example_chart_6();</span></span><br><span class="line"><span class="comment">//  lv_example_table_2();</span></span><br><span class="line"><span class="comment">//  lv_example_scroll_2();</span></span><br><span class="line"><span class="comment">//  lv_example_textarea_1();</span></span><br><span class="line"><span class="comment">//  lv_example_msgbox_1();</span></span><br><span class="line"><span class="comment">//  lv_example_dropdown_2();</span></span><br><span class="line"><span class="comment">//  lv_example_btn_1();</span></span><br><span class="line"><span class="comment">//  lv_example_scroll_1();</span></span><br><span class="line"><span class="comment">//  lv_example_tabview_1();</span></span><br><span class="line"><span class="comment">//  lv_example_tabview_1();</span></span><br><span class="line"><span class="comment">//  lv_example_flex_3();</span></span><br><span class="line"><span class="comment">//  lv_example_label_1();</span></span><br><span class="line"></span><br><span class="line">    lv_demo_widgets();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>) {</span><br><span class="line">      <span class="comment">/* Periodically call the lv_task handler.</span></span><br><span class="line"><span class="comment">       * It could be done in a timer interrupt or an OS task too.*/</span></span><br><span class="line">      lv_timer_handler();</span><br><span class="line">      usleep(<span class="number">5</span> * <span class="number">1000</span>);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">hal_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">  <span class="comment">/* Use the 'monitor' driver which creates window on PC's monitor to simulate a display*/</span></span><br><span class="line">  sdl_init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*Create a display buffer*/</span></span><br><span class="line">  <span class="type">static</span> <span class="type">lv_disp_draw_buf_t</span> disp_buf1;</span><br><span class="line">  <span class="type">static</span> <span class="type">lv_color_t</span> buf1_1[SDL_HOR_RES * <span class="number">100</span>];</span><br><span class="line">  lv_disp_draw_buf_init(&amp;disp_buf1, buf1_1, <span class="literal">NULL</span>, SDL_HOR_RES * <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*Create a display*/</span></span><br><span class="line">  <span class="type">static</span> <span class="type">lv_disp_drv_t</span> disp_drv;</span><br><span class="line">  lv_disp_drv_init(&amp;disp_drv); <span class="comment">/*Basic initialization*/</span></span><br><span class="line">  disp_drv.draw_buf = &amp;disp_buf1;</span><br><span class="line">  disp_drv.flush_cb = sdl_display_flush;</span><br><span class="line">  disp_drv.hor_res = SDL_HOR_RES;</span><br><span class="line">  disp_drv.ver_res = SDL_VER_RES;</span><br><span class="line"></span><br><span class="line">  <span class="type">lv_disp_t</span> * disp = lv_disp_drv_register(&amp;disp_drv);</span><br><span class="line"></span><br><span class="line">  <span class="type">lv_theme_t</span> * th = lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK, LV_FONT_DEFAULT);</span><br><span class="line">  lv_disp_set_theme(disp, th);</span><br><span class="line"></span><br><span class="line">  <span class="type">lv_group_t</span> * g = lv_group_create();</span><br><span class="line">  lv_group_set_default(g);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Add the mouse as input device</span></span><br><span class="line"><span class="comment">   * Use the 'mouse' driver which reads the PC's mouse*/</span></span><br><span class="line">  <span class="type">static</span> <span class="type">lv_indev_drv_t</span> indev_drv_1;</span><br><span class="line">  lv_indev_drv_init(&amp;indev_drv_1); <span class="comment">/*Basic initialization*/</span></span><br><span class="line">  indev_drv_1.type = LV_INDEV_TYPE_POINTER;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*This function will be called periodically (by the library) to get the mouse position and state*/</span></span><br><span class="line">  indev_drv_1.read_cb = sdl_mouse_read;</span><br><span class="line">  <span class="type">lv_indev_t</span> *mouse_indev = lv_indev_drv_register(&amp;indev_drv_1);</span><br><span class="line"></span><br><span class="line">  <span class="type">static</span> <span class="type">lv_indev_drv_t</span> indev_drv_2;</span><br><span class="line">  lv_indev_drv_init(&amp;indev_drv_2); <span class="comment">/*Basic initialization*/</span></span><br><span class="line">  indev_drv_2.type = LV_INDEV_TYPE_KEYPAD;</span><br><span class="line">  indev_drv_2.read_cb = sdl_keyboard_read;</span><br><span class="line">  <span class="type">lv_indev_t</span> *kb_indev = lv_indev_drv_register(&amp;indev_drv_2);</span><br><span class="line">  lv_indev_set_group(kb_indev, g);</span><br><span class="line"></span><br><span class="line">  <span class="type">static</span> <span class="type">lv_indev_drv_t</span> indev_drv_3;</span><br><span class="line">  lv_indev_drv_init(&amp;indev_drv_3); <span class="comment">/*Basic initialization*/</span></span><br><span class="line">  indev_drv_3.type = LV_INDEV_TYPE_ENCODER;</span><br><span class="line">  indev_drv_3.read_cb = sdl_mousewheel_read;</span><br><span class="line">  <span class="type">lv_indev_t</span> * enc_indev = lv_indev_drv_register(&amp;indev_drv_3);</span><br><span class="line">  lv_indev_set_group(enc_indev, g);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*Set a cursor for the mouse*/</span></span><br><span class="line">  LV_IMG_DECLARE(mouse_cursor_icon); <span class="comment">/*Declare the image file.*/</span></span><br><span class="line">  <span class="type">lv_obj_t</span> * cursor_obj = lv_img_create(lv_scr_act()); <span class="comment">/*Create an image object for the cursor */</span></span><br><span class="line">  lv_img_set_src(cursor_obj, &amp;mouse_cursor_icon);           <span class="comment">/*Set the image source*/</span></span><br><span class="line">  lv_indev_set_cursor(mouse_indev, cursor_obj);             <span class="comment">/*Connect the image  object to the driver*/</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>然后写参照官方仿真例子写 CMakeLists.txt </p><figure class="highlight cmake"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(lvgl)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(SDL2 REQUIRED SDL2)</span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">        <span class="variable">${SDL2_INCLUDE_DIRS}</span></span><br><span class="line">        <span class="variable">${SDL2_INCLUDE_DIRS}</span>/../</span><br><span class="line">        <span class="variable">${PROJECT_SOURCE_DIR}</span></span><br><span class="line">        <span class="string">"src"</span></span><br><span class="line">        <span class="string">"lvgl"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE SOURCES  </span><br><span class="line">  <span class="string">"src/*.c"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE INCLUDES </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_subdirectory</span>(lvgl/lvgl)</span><br><span class="line"><span class="keyword">add_subdirectory</span>(lvgl/lv_drivers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS <span class="string">"-static"</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(main lvgl/mouse_cursor_icon.c <span class="variable">${SOURCES}</span> <span class="variable">${INCLUDES}</span>)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(main PRIVATE lvgl lvgl::examples lvgl::demos lvgl::drivers </span><br><span class="line">  SDL2::SDL2main SDL2::SDL2-static -lserialport -lpthread)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>最后写一个 Makefile 作为自动构建工具</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [MyProject]</span></span><br><span class="line"></span><br><span class="line"><span class="section">default:</span></span><br><span class="line">    <span class="keyword">ifeq</span> (<span class="string">"$(wildcard lvgl)"</span>, <span class="string">""</span>)</span><br><span class="line">	@echo <span class="string">"lvgl sim does not exist."</span></span><br><span class="line">	@echo <span class="string">"Perform download..."</span></span><br><span class="line">	@git clone https://github.com/lvgl/lv_port_pc_eclipse.git lvgl</span><br><span class="line">	@cd lvgl &amp;&amp; git submodule init &amp;&amp; git submodule update</span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line">	make cmake_build</span><br><span class="line"></span><br><span class="line"><span class="section">cmake_build:</span></span><br><span class="line">	mkdir -p build</span><br><span class="line">	cd build &amp;&amp; cmake .. -G <span class="string">"MSYS Makefiles"</span> &amp;&amp; make -j8 </span><br><span class="line"></span><br><span class="line"><span class="section">run:</span></span><br><span class="line">	cd build &amp;&amp; make -j8 &amp;&amp; start main.exe</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm  build -rf 2&gt; /dev/null || true</span><br></pre></td></tr></tbody></table></figure>
+<p>可以将 lvgl 下的 <code>lv_conf.h</code> 和 <code>lv_drv_conf.h</code>
+复制到 src 下而不用对 lvgl 源码进行任何修改</p>
+<h3 id="使用方法">使用方法</h3>
+<p>复制 quicksim 文件夹并重命名, 执行 make 即可.</p>
+<p>lv_config.h 中设置一些常用配置</p>
+<ul>
+<li><code>LV_USE_MEM_MONITOR</code> 是否显示内存统计</li>
+<li><code>LV_USE_PERF_MONITOR</code> 是否显示帧率</li>
+</ul>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Embedded/Lib/LVGL/quicksim/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/LVGL/"><i class="icon fas fa-hashtag"></i>LVGL</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/01/17/auto/43/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">Cmake 模板</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/01/17/auto/12/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">C语言相关博客模板</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">使用方法</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">使用方法</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            03USB鼠标的实现 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">03USB鼠标的实现</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-03-09 08:16:29</span>
+                <span class="mobile">2023-03-09 08:16</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/Book/">Book</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/Book/%E5%9C%88%E5%9C%88%E6%95%99%E4%BD%A0%E7%8E%A9USB/">圈圈教你玩USB</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/USB/">USB</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 <span id="more"></span></p>
+<h1 id="usb-中断的处理过程">USB 中断的处理过程:</h1>
+<p>一般来说当 USB
+接口芯片（或片内外设）完成一个操作后就会产生一个中断请求信号, 以通知 CPU
+来进行相关处理. 导致中断发生的事件有 USB 总线复位, 进入挂起状态,
+成功接收到数据和发送完成等，具体的中断类型可查询USB接口芯片的中断相关寄存器来判断。</p>
+<p><strong>例子</strong>:</p>
+<p>假设有一个USB接口芯片（或片内外设）的中断类型寄存器如下:</p>
+<table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">状态位</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">上电默认</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">中断类型</td>
+<td style="text-align: center;">挂起</td>
+<td style="text-align: center;">总线复位</td>
+<td style="text-align: center;">端点2输入</td>
+<td style="text-align: center;">端点2输出</td>
+<td style="text-align: center;">端点1输入</td>
+<td style="text-align: center;">端点1输入</td>
+<td style="text-align: center;">端点0输出</td>
+<td style="text-align: center;">端点0输出</td>
+</tr>
+</tbody>
+</table>
+<p>当其中某位的值为1，则表示该中断源发出了中断请求。由此可以在中断函数中对每一种中断源进行处理:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USB 中断处理 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">USB_IRQHandler</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// 获取中断类型</span></span><br><span class="line">    <span class="type">uint8_t</span> type = GET_USB_ISR_TYPE();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">7</span>)) usb_bus_suspend(); <span class="comment">// 总线挂起中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">6</span>)) usb_bus_reset();   <span class="comment">// 总线复位中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">5</span>)) usb_end2_in();     <span class="comment">// 端点2输入中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">4</span>)) usb_end2_out();    <span class="comment">// 端点2输出中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">3</span>)) usb_end1_in();     <span class="comment">// 端点1输入中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">2</span>)) usb_end1_out();    <span class="comment">// 端点1输出中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)) usb_end0_in();     <span class="comment">// 端点0输入中断处理</span></span><br><span class="line">    <span class="keyword">if</span>(type &amp; (<span class="number">1</span> &lt;&lt; <span class="number">0</span>)) usb_end0_out();    <span class="comment">// 端点0输出中断处理</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 中断标志位清空, 有些硬件会在读取寄存器后自动清空</span></span><br><span class="line">    USB_ISR_FLAG_CLEAR();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>根据前面介绍的 USB 枚举过程可知, USB
+主机在枚举过程会先对设备进行复位, 然后对设备的端点 0 进行控制传输,
+以获取设备描述符.</p>
+<p>这时会最先触发复位中断，之后再触发端点 0 的输出中断，表示 USB
+芯片接收到了主机发来的数据, 因此可以在端点 0
+的中断处理函数中将数据读取出来并做相应的处理:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">usb_end0_out</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// 将端点0的数据读取到内存</span></span><br><span class="line">    USB_READ_ENDP_BUF(ENDP0, buf);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里是对硬件缓冲区进行清理, 因为一些芯片若缓冲区不清理</span></span><br><span class="line">    <span class="comment">// 则下次接收数据包时 (一般 SETUP 包除外, 因为设备必须接收) </span></span><br><span class="line">    <span class="comment">// 硬件会直接向主机回复 NAK</span></span><br><span class="line">    USB_ENDP_BUF_CLEAR(ENDP0);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="usb-标准请求">USB 标准请求</h2>
+<p>USB协议定义了一个8字节的标准设备请求，主要用在设备的枚举过程中。这8字节的数据是在控制传输的建立过程通过默认控制端点0发出的。</p>
+<p>在这8字节的数据中，包含了数据过程所需要传输数据传输的方向、长度以及数据类型等信息。正是由于8字节标准请求的原因，USB协议规定，端点0的最大包长度至少为8字节。也就是说，任何一个USB设备都能够（而且必须要）接收8字节的标准请求。</p>
+<h3 id="usb-标准请求的结构">1. USB 标准请求的结构</h3>
+<table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">偏移</th>
+<th>域</th>
+<th style="text-align: center;">大小</th>
+<th style="text-align: center;">取值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0</td>
+<td>bmRequestType</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">位图</td>
+<td>请求的特性</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td>bRequest</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">数值</td>
+<td>请求代码</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>wValue</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">数值</td>
+<td>该域的意义由具体的请求决定</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>wIndex</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">索引或偏移量</td>
+<td>该域的意义由具体的请求决定</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>wLength</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">字节数</td>
+<td>数据过程(如果有)所需要传输的字节数</td>
+</tr>
+</tbody>
+</table>
+<p>其中 <code>bmRequestType</code> 请求特性字节各个位含义如下</p>
+<table>
+<thead>
+<tr>
+<th>D7 数据传输方向</th>
+<th>D[6:5] 请求的类型</th>
+<th>D[4:0] 请求的接收者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 = 主机到设备</td>
+<td>0 = 标准</td>
+<td>0 = 设备</td>
+</tr>
+<tr>
+<td>1 = 设备到主机</td>
+<td>1 = 类</td>
+<td>1 = 接口</td>
+</tr>
+<tr>
+<td></td>
+<td>2 = 厂商</td>
+<td>2 = 端点</td>
+</tr>
+<tr>
+<td></td>
+<td>3 = 保留</td>
+<td>3 = 其他</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>4 ~ 31 = 保留</td>
+</tr>
+</tbody>
+</table>
+<p>本节只介绍USB协议定义的标准请求，即 bmRequestType 的 D[6:5] 位为 00
+的请求。USB协议定义了11个标准请求（bRequest），其名字和请求代码如下表所示:</p>
+<table>
+<thead>
+<tr>
+<th>bRequest</th>
+<th>Value</th>
+<th></th>
+<th>bRequest</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET_STATUS</td>
+<td>0</td>
+<td></td>
+<td>GET_CONFIGURATION</td>
+<td>8</td>
+</tr>
+<tr>
+<td>CLEAR_FEATURE</td>
+<td>1</td>
+<td></td>
+<td>SET_CONFIGURATION</td>
+<td>9</td>
+</tr>
+<tr>
+<td>SET_FEATURE</td>
+<td>3</td>
+<td></td>
+<td>GET_INTERFACE</td>
+<td>10</td>
+</tr>
+<tr>
+<td>SET_ADDRESS</td>
+<td>5</td>
+<td></td>
+<td>SET_INTERFACE</td>
+<td>11</td>
+</tr>
+<tr>
+<td>GET_DESCRIPTOR</td>
+<td>6</td>
+<td></td>
+<td>SYNCH_FRAME</td>
+<td>12</td>
+</tr>
+<tr>
+<td>SET_DESCRIPTOR</td>
+<td>7</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>不同的请求对于其接收者、wValue和wIndex，其各字段的意义是不一样的。并且有的请求只能发送到设备，而有的请求可以发送到设备、接口和端点。</p>
+<p>下表是各个标准请求的结构以及数据过程需要传输的数据。其中第一列有的有多个，主要是最低5位不同，即表示接收者不同。</p>
+<p>(方向 类型 接收者)</p>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 20%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr>
+<th>bmRequestType</th>
+<th>bRequest</th>
+<th>wValue</th>
+<th>wIndex</th>
+<th>wLength</th>
+<th>数据过程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(0 00 00000)B</td>
+<td>CLEAR_FEATURE</td>
+<td>特性选择</td>
+<td>0</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>(0 00 00001)B</td>
+<td>..</td>
+<td>..</td>
+<td>接口号</td>
+<td>..</td>
+<td>..</td>
+</tr>
+<tr>
+<td>(0 00 00010)B</td>
+<td>..</td>
+<td>..</td>
+<td>端点号</td>
+<td>..</td>
+<td>..</td>
+</tr>
+<tr>
+<td>(1 00 00000)B</td>
+<td>GET_CONFIGURATION</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>配置值</td>
+</tr>
+<tr>
+<td>(1 00 00000)B</td>
+<td>GET_DESCRIPTOR</td>
+<td>描述符类型和索引</td>
+<td>0或者语言ID</td>
+<td>描述符长度</td>
+<td>描述符</td>
+</tr>
+<tr>
+<td>(1 00 00001)B</td>
+<td>GET_INTERFACE</td>
+<td>0</td>
+<td>接口号</td>
+<td>1</td>
+<td>备用接口号</td>
+</tr>
+<tr>
+<td>(1 00 00000)B</td>
+<td>GET_STATUS</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>设备状态</td>
+</tr>
+<tr>
+<td>(1 00 00001)B</td>
+<td>..</td>
+<td>..</td>
+<td>接口号</td>
+<td>..</td>
+<td>接口状态</td>
+</tr>
+<tr>
+<td>(1 00 00010)B</td>
+<td>..</td>
+<td>..</td>
+<td>端点号</td>
+<td>..</td>
+<td>端点状态</td>
+</tr>
+<tr>
+<td>(0 00 00000)B</td>
+<td>SET_ADDRESS</td>
+<td>设备地址</td>
+<td>0</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>(0 00 00000)B</td>
+<td>SET_CONFIGURATION</td>
+<td>配置值</td>
+<td>0</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>(0 00 00000)B</td>
+<td>SET_DESCRIPTOR</td>
+<td>描述符类型和索引</td>
+<td>0或者语言ID</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>(0 00 00000)B</td>
+<td>SET_FEATURE</td>
+<td>特性选择</td>
+<td>0</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>(0 00 00001)B</td>
+<td>..</td>
+<td>..</td>
+<td>接口号</td>
+<td>..</td>
+<td>..</td>
+</tr>
+<tr>
+<td>(0 00 00010)B</td>
+<td>..</td>
+<td>..</td>
+<td>端点号</td>
+<td>..</td>
+<td>..</td>
+</tr>
+<tr>
+<td>(0 00 00001)B</td>
+<td>SET_INTERFACE</td>
+<td>备用接口号</td>
+<td>接口号</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>(1 00 00010)B</td>
+<td>SYNCH_FRAME</td>
+<td>0</td>
+<td>端点号</td>
+<td>2</td>
+<td>帧号</td>
+</tr>
+</tbody>
+</table>
+<p>常用的几个请求为 GET_DESCRIPTOR, SET_ADDRESS 和 SET_CONFIGURATION</p>
+<h4 id="get_descriptor-请求">1) GET_DESCRIPTOR 请求</h4>
+<p>GET_DESCRIPTOR（获取描述符）请求是在枚举过程中用得最多的一个请求。主机通过发送获取描述符请求读取设备的各种描述符，从而可以获知设备类型、端点情况等众多重要信息。</p>
+<p>获取描述符的接收者只能是设备，从 bmRequestType 的第 7
+位可以看出，它是请求数据输入的。bRequest的值为Ox06（GET_DESCRIPTOR）。</p>
+<p>GET_DESCRIPTOR 请求的结构如下:</p>
+<table>
+<colgroup>
+<col style="width: 19%">
+<col style="width: 25%">
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr>
+<th>bmRequestType</th>
+<th>bRequest</th>
+<th>wValue</th>
+<th>wIndex</th>
+<th>wLength</th>
+<th>数据过程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10000000B (0x80)</td>
+<td>GET_DESCRIPTOR (0x06)</td>
+<td>描述符类型和索引</td>
+<td>0或者语言ID</td>
+<td>描述符长度</td>
+<td>描述符</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>wValue
+域的第一字节（低字节）表示的是索引号，用来选择同一种描述符（例如字符串描述符和配置描述符）中具体的某个描述符。</p></li>
+<li><p>wValue
+域的第二字节，表示描述符的类型编号。各种描述符的类型编号定义如下</p></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>描述符类型</th>
+<th>编号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设备描述符 (DEVICE)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>配置描述符 (CONFIGURATION)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>字符串描述符 (STRING)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>接口描述符 (INTERFACE)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>端点描述符 (ENDPOINT)</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>wIndex
+域只在获取字符串描述符中有用，它表示字符串的语言ID号，获取除字符串描述符的其他描述符时，wIndex的值为0.</p></li>
+<li><p>wLength域为请求设备返回数据的字节数，设备实际返回的字节数可以比该域指定的字节数少。设备在收到获取描述符的请求后，应该按照所请求的描述符类型编号，在数据过程中返回相应的描述符。</p></li>
+</ul>
+<p>对于全速模式和低速模式，获取描述符的标准请求只有三种：获取设备描述符、获取配置描述符和获取字符串描述符。</p>
+<p>另外的接口描述符和端点描述符是跟随配置描述符一并返回的，不能单独请求返回（如果单独返回，主机无法确认它们属于哪个配置）。</p>
+<blockquote>
+<p>需要注意的是wValue、wIndex、wLength这三个域都是两字节的，在USB协议中规定，使用的是小端结构，即低字节在先，高字节在后。</p>
+</blockquote>
+<h4 id="set_address-请求">2) SET_ADDRESS 请求</h4>
+<p>SET_ADDRESS（设置地址）请求是主机请求设备使用指定地址的请求，指定的地址就包含在8字节数据中的wValue字段中。</p>
+<p>每个连接在同一个主控制器上的USB设备都需要具有一个唯一的设备地址，这样主机才能区分每个不同的设备。当设备复位后，都使用默认的地址0.</p>
+<p>主机从地址为 0
+的设备获取设备描述符，一旦收到第一次设备描述符之后，主机就会发送设置地址的请求，以尽量减少设备使用公共地址
+0 的时间。</p>
+<p>设置地址请求是没有数据过程的，因而 wLength 的值为 0.
+wIndex也用不着，值为0.</p>
+<p>当设备收到设置地址请求后，就直接进入状态过程，等待主机读取0长度的状态数据包。主机成功读取到状态数据包（用ACK响应设备）后，设备将启用新的地址。这以后的传输中，主机都将使用新的地址与设备进行通信。</p>
+<p>SET_ADDRESS 请求的结构如下:</p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr>
+<th>bmRequestType</th>
+<th>bRequest</th>
+<th>wValue</th>
+<th>wIndex</th>
+<th>wLength</th>
+<th>数据过程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000000B (0x00)</td>
+<td>SET_ADDRESS (0x05)</td>
+<td>设备地址</td>
+<td>0</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+</tbody>
+</table>
+<h4 id="set_configuration-请求">3) SET_CONFIGURATION 请求</h4>
+<p>SET_CONFIGURATION（设置配置）请求和设置地址请求很类似。区别在于
+wValue域的意义。</p>
+<p>在设置地址请求中，wValue的第一字节（低字节）为设备的地址；而在设置配置请求中，wValue的第一字节为配置的值。</p>
+<p>当该值与某配置描述符中的配置编号一致时，表示选中该配置。该值通常为1，因为大多数USB设备只有一种配置，配置编号为1；</p>
+<p>如果该值为0，则会让设备进人设置地址状态。设备只有在收到非0的配置值后，才能启用它的非0端点。</p>
+<p>SET_CONFIGURATION 请求的结构如下:</p>
+<table>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 35%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr>
+<th>bmRequestType</th>
+<th>bRequest</th>
+<th>wValue</th>
+<th>wIndex</th>
+<th>wLength</th>
+<th>数据过程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000000B (0x00)</td>
+<td>SET_CONFIGURATION (0x09)</td>
+<td>配置值</td>
+<td>0</td>
+<td>0</td>
+<td>没有</td>
+</tr>
+</tbody>
+</table>
+<h3 id="设备描述符的实现">2. 设备描述符的实现</h3>
+<p>当主机请求设备返回设备描述符时，设备应该在数据过程中返回设备的设备描述符。</p>
+<p>已知每个设备都必须有且仅有一个设备描述符，它的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度 (18 字节)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 (设备描述符为 0x01)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bcdUSB</td>
+<td>2</td>
+<td>本设备所使用的 USB 协议版本</td>
+</tr>
+<tr>
+<td>4</td>
+<td>dDeviceClass</td>
+<td>1</td>
+<td>类代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td>bDeviceSubClass</td>
+<td>1</td>
+<td>子类代码</td>
+</tr>
+<tr>
+<td>6</td>
+<td>bDeviceProtocol</td>
+<td>1</td>
+<td>设备所使用的协议</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bMaxPackeSize0</td>
+<td>1</td>
+<td>端点0最大包长</td>
+</tr>
+<tr>
+<td>8</td>
+<td>iVender</td>
+<td>2</td>
+<td>厂商 ID</td>
+</tr>
+<tr>
+<td>10</td>
+<td>idProduct</td>
+<td>2</td>
+<td>产品 ID</td>
+</tr>
+<tr>
+<td>12</td>
+<td>bcdDevice</td>
+<td>2</td>
+<td>设备版本号</td>
+</tr>
+<tr>
+<td>14</td>
+<td>iManufacturer</td>
+<td>1</td>
+<td>描述厂商的字符串的索引</td>
+</tr>
+<tr>
+<td>15</td>
+<td>iProduct</td>
+<td>1</td>
+<td>描述产品的字符串的索引</td>
+</tr>
+<tr>
+<td>16</td>
+<td>iSerialNumber</td>
+<td>1</td>
+<td>产品序列号字符串的索引</td>
+</tr>
+<tr>
+<td>17</td>
+<td>bNumConfigurations</td>
+<td>1</td>
+<td>可能的配置数</td>
+</tr>
+</tbody>
+</table>
+<h5 id="blength">1) bLength</h5>
+<p>长度为1字节，表示该描述符的长度。设备描述符的长度为18字节，写成十六进制就是0x12。</p>
+<h5 id="bdescriptortype">2) bDescriptorType</h5>
+<p>描述符的类型，长度为1字节。具体的取值如表3.5.5所列。设备描述符的编号为0x01。</p>
+<h5 id="bcdusb">3) bcdUSB</h5>
+<p>该设备所使用的USB协议的版本，长度为2字节。可以取2.0或者1.1等版本号。</p>
+<blockquote>
+<p>注意，它是用BCD码来表示的</p>
+<p>例如USB2.0协议就是0x0200，而USB1.1协议就是0x0110.前面说过，USB协议中使用的是小端结构，所以实际数据在传输时，是低字节在先的</p>
+<p>也就是说，USB2.0协议的bcdUSB拆成两个字节就是0x00和0x02.而USB1.1的bcdUSB拆成两个字节就是0x10和0x01。</p>
+</blockquote>
+<h5 id="bdeviceclass">4) bDeviceClass</h5>
+<p>长度为1字节，是设备所使用的类代码。设备的类代码由USB协会规定，具体的类代码可查阅USB相关文档。对于大多数标准的USB设备类，该字段通常设置为0，而在接口描述符中的bInterfaceClass中指定接口所实现的功能。当bDeviceClass为0时，下面的bDeviceSubClass也必须为0.如果bDeviceClass为OxFF，表示是厂商自定义的设备类。</p>
+<h5 id="bdevicesubclass">5) bDeviceSubClass</h5>
+<p>长度为1字节，是设备所使用的子类代码。当类代码不为0和OxFF时，子类代码由USB协议规定。当bDeviceClass为0时，bDeviceSubClass也必须为0。</p>
+<h5 id="bdeviceprotocol">6) bDeviceProtocol</h5>
+<p>长度为1字节，是设备所使用的协议，协议代码由USB协会规定。当该字段为0时，表示设备不使用类所定义的协议。当该字段为OxFF时，表示设备使用厂商自定义的协议。bDeviceProtocol必须要结合设备类和设备子类联合使用才有意义，因此当类代码为0时，bDeviceProtocol应该也要为0。</p>
+<h5 id="bmaxpackesizeo">7) bMaxPackeSizeo</h5>
+<p>长度为1字节，是端点0的最大包长。它的取值可以为8、16、32、64。</p>
+<h5 id="idvender">8) idVender</h5>
+<p>长度为2字节，它是厂商的ID号。该ID号由USB协会分配，不能随意使用。可以跟USB协会申请一个厂商D号，但是这是需要交“保护费”的。在实验中，选取了一个0x8888作为厂商ID号。这个ID号是随便选的，也许它已经被某个公司购买了。</p>
+<p>只是拿来学习使用是没关系的，如果要做真正的产品设计，就要注意了，必须要使用公司自己的ID号，以避免侵权。另外，主机通常是靠厂商ID号、产品ID号以及产品序列号来安装和加载驱动的，如果使用了别人的ID号，可能会导致驱动程序安装或加载错误，从而导致设备无法工作。跟bcdUSB一样，要注意小端结构的问题。</p>
+<h5 id="idproduct">9) idProduct</h5>
+<p>长度为2字节，是产品ID号。与厂商ID号不一样，它是由生产厂商自己根据产品来编号的，比较自由。</p>
+<p>USB鼠标，可以给它分配产品ID为0x0001；USB键盘，可以分配产品ID为0x0002，而厂商ID则使用同一个0x8888.通常主机会根据厂商ID、产品ID以及设备的序列号来加载对应的驱动。</p>
+<p>调试时很容易犯的一个错误是在修改描述符之后，重新测试，却没有修改上述三个中的任何一个，结果加载的还是旧驱动，从而工作不正常。这时如果没有想到这一点，一个劲地在那查找固件的问题，恐怕是找不出问题的。</p>
+<p>如果不想修改这些ID号和序列号，还有另外一个方法就是去设备管理器里，将原先的驱动卸载，然后扫描新硬件或者拔下重新插上，让它重新安装驱动。不过有时卸载了还是会有残留信息在注册表中，所以还是改ID比较保险。</p>
+<h5 id="bcddevice">10) bcdDevice</h5>
+<p>长度为2字节，是设备的版本号。当同一个产品升级后（例如修改了固件增加了某些功能），可以通过修改设备的版本号来区别。
+##### 11) iManufacturer</p>
+<p>长度为1字节，是描述厂商的字符串的索引值。当该值为0时，表示没有厂商字符串。主机获取设备描述符时，会将索引值放在wValue的第一字节中，用来选择不同的字符串。</p>
+<h5 id="iproduct">12) iProduct</h5>
+<p>长度为1字节，是描述产品的字符串的索引值。</p>
+<p>当该值为0时，表示没有产品字符串。当第一次插上某个USB设备时，会在Windows的右下角弹出一个对话框，显示发现新硬件，并且会显示该设备的名称。</p>
+<p>其实这里显示的信息就是从产品字符串里获取来的。如果想让它显示出所需要的信息，应该修改产品字符串。</p>
+<h5 id="iserialnumber">12) iSerialNumber</h5>
+<p>长度为1字节，是设备的序列号字符串索引值。</p>
+<p>最好给你的每个产品指定一个唯一的序列号，好比每个英特尔的奔四处理器都有一个ID号一样。设备序列号可能被主机联合VID和PID用来区别不同的设备，有时同时连接多个具有相同VID、PID以及设备序列号的设备，可能会导致设备无法正确识别。当该值为0时，表示没有序列号字符串。</p>
+<h5 id="bnumconfigurations">13) bNumConfigurations</h5>
+<p>长度为1字节，表示设备有多少种配置。每种配置都会有一个配置描述符，主机通过发送设置配置来选择某一种配置。大部分的USB设备只有一个配置，即该字段的值为1。</p>
+<p>通过上面的描述，就可以构造一个设备描述符了。</p>
+<p>下面给出USB鼠标实例的设备描述符。这里使用数组来实现，使用数组的好处是可移植性好，但是可读性稍差点。如果使用结构体，可读性会好一些；但是在不同位数的处理器中移植时，可能存在着字节对齐、大小端问题和结构体填充等问题。</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度 (18 字节)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 (设备描述符为 0x01)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bcdUSB</td>
+<td>2</td>
+<td>本设备所使用的 USB 协议版本</td>
+</tr>
+<tr>
+<td>4</td>
+<td>dDeviceClass</td>
+<td>1</td>
+<td>类代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td>bDeviceSubClass</td>
+<td>1</td>
+<td>子类代码</td>
+</tr>
+<tr>
+<td>6</td>
+<td>bDeviceProtocol</td>
+<td>1</td>
+<td>设备所使用的协议</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bMaxPackeSize0</td>
+<td>1</td>
+<td>端点0最大包长</td>
+</tr>
+<tr>
+<td>8</td>
+<td>iVender</td>
+<td>2</td>
+<td>厂商 ID</td>
+</tr>
+<tr>
+<td>10</td>
+<td>idProduct</td>
+<td>2</td>
+<td>产品 ID</td>
+</tr>
+<tr>
+<td>12</td>
+<td>bcdDevice</td>
+<td>2</td>
+<td>设备版本号</td>
+</tr>
+<tr>
+<td>14</td>
+<td>iManufacturer</td>
+<td>1</td>
+<td>描述厂商的字符串的索引</td>
+</tr>
+<tr>
+<td>15</td>
+<td>iProduct</td>
+<td>1</td>
+<td>描述产品的字符串的索引</td>
+</tr>
+<tr>
+<td>16</td>
+<td>iSerialNumber</td>
+<td>1</td>
+<td>产品序列号字符串的索引</td>
+</tr>
+<tr>
+<td>17</td>
+<td>bNumConfigurations</td>
+<td>1</td>
+<td>可能的配置数</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint8_t</span> device_descriptor[<span class="number">0x12</span>] = {</span><br><span class="line">    <span class="number">0x12</span>,           <span class="comment">// bLength          设备描述符的长度 (18 字节)</span></span><br><span class="line">    <span class="number">0x01</span>,           <span class="comment">// bDescriptorType  设备描述符的编号 0x01</span></span><br><span class="line">    <span class="number">0x010</span>, <span class="number">0x01</span>,    <span class="comment">// bcdUSB           USB 协议版本 0x0110 (USB1.1)</span></span><br><span class="line">    <span class="number">0x00</span>,           <span class="comment">// dDeviceClass     设备类我们是在接口描述符中定义, 不在设备描述符定义, 所以为 0</span></span><br><span class="line">    <span class="number">0x00</span>,           <span class="comment">// bDeviceSubClass  dDeviceClass 为 0 时, 该字段也为 0</span></span><br><span class="line">    <span class="number">0x00</span>,           <span class="comment">// bDeviceProtocol  dDeviceClass 为 0 时, 该字段也为 0</span></span><br><span class="line">    <span class="number">0x10</span>,           <span class="comment">// bMaxPackeSize0   端点0最大包长, 由 USB 芯片端点的缓冲区大小决定</span></span><br><span class="line">    <span class="number">0x88</span>, <span class="number">0x88</span>,     <span class="comment">// iVender          厂商 ID, 这里 0x8888 仅实验用</span></span><br><span class="line">    <span class="number">0x01</span>, <span class="number">0x00</span>,     <span class="comment">// idProduct        产品 ID, 0x0001</span></span><br><span class="line">    <span class="number">0x00</span>, <span class="number">0x01</span>,     <span class="comment">// bcdDevice        设备版本号, 0x0100, 把它定位为 V1.0 版本</span></span><br><span class="line">    <span class="number">0x01</span>,           <span class="comment">// iManufacturer    描述厂商的字符串的索引，为了方便管理, 这里就从 1 开始</span></span><br><span class="line">    <span class="number">0x02</span>,           <span class="comment">// iProduct         描述产品的字符串的索引, 刚才用了 1, 这里就取 2</span></span><br><span class="line">    <span class="number">0x03</span>,           <span class="comment">// iSerialNumber    产品序列号字符串的索引, 按顺序下来, 这里取 3 即可</span></span><br><span class="line">    <span class="number">0x01</span>,           <span class="comment">// bNumConfigurations 该设备所具有的配置数, 这里只要一种配置即可</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="设备描述符的返回">3. 设备描述符的返回</h3>
+<p>在端点0的输出中断处理函数中，我们已经接收到了标准请求的数据,
+这时可先对接收到的建立过程的数据进行判断，如果是获取设备描述符的请求，那么将设备描述符数组的内容写人到端点0输入缓冲区中，并使能端点发送。</p>
+<p>当主机在下一次发送IN令牌后，USB
+接口芯片将会自动将端点0输入缓冲区中的数据返回给主机，这样就实现了获取设备描述符的请求。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">uint8_t</span> *p_send_data;</span><br><span class="line"><span class="type">static</span> <span class="type">uint16_t</span> send_length;</span><br><span class="line"><span class="type">static</span> <span class="type">uint8_t</span> need_zero_package = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">usb_end0_out</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// 将端点0的数据读取到内存</span></span><br><span class="line">    USB_READ_ENDP_BUF(ENDP0, buf);</span><br><span class="line"></span><br><span class="line">    <span class="type">uint8_t</span>  bmRequestType  = buf[<span class="number">0</span>];</span><br><span class="line">    <span class="type">uint8_t</span>  bRequest       = buf[<span class="number">1</span>];</span><br><span class="line">    <span class="type">uint16_t</span> wValue         = buf[<span class="number">2</span>] + (buf[<span class="number">3</span>] &lt;&lt; <span class="number">8</span>);</span><br><span class="line">    <span class="type">uint16_t</span> wIndex         = buf[<span class="number">4</span>] + (buf[<span class="number">5</span>] &lt;&lt; <span class="number">8</span>);</span><br><span class="line">    <span class="type">uint8_t</span>  wLength        = buf[<span class="number">6</span>] + (buf[<span class="number">7</span>] &lt;&lt; <span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输入请求</span></span><br><span class="line">    <span class="keyword">if</span>(bmRequestType &amp; (<span class="number">1</span> &lt;&lt; <span class="number">8</span>)) </span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// D[6:5] 为请求的类型, 其中 00 为标准请求</span></span><br><span class="line">        <span class="keyword">if</span>(bmRequestType &amp; <span class="number">0x60</span> == <span class="number">0</span>) </span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">switch</span>(bRequest)  </span><br><span class="line">            {</span><br><span class="line">                <span class="comment">// 获取配置请求</span></span><br><span class="line">                <span class="keyword">case</span> GET_CONFIGURATION:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 获取描述符请求</span></span><br><span class="line">                <span class="keyword">case</span> GET_DESCRIPTOR:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 处理更多标准输入请求 ...</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// 未定义的标准输入请求</span></span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 请求长度和实际数据长度之间取最小值</span></span><br><span class="line">        <span class="keyword">if</span>(wLength &lt; send_length)</span><br><span class="line">            send_length = wLength;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 刚好是整数个数据包, 需发一个空包表示结束传输</span></span><br><span class="line">        <span class="keyword">if</span>(send_length % device_descriptor[<span class="number">7</span>] == <span class="number">0</span>)</span><br><span class="line">            need_zero_package = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 立即向端点 0 写数据, 若数据未发完, 会在中断处理函数 usb_end0_in 中继续发送 */</span></span><br><span class="line">        usb_end0_write_data();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    USB_ENDP_BUF_CLEAR(ENDP0);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面是对上述代码框架获取描述符部分的填充:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取描述符请求</span></span><br><span class="line"><span class="keyword">case</span> GET_DESCRIPTOR:</span><br><span class="line">    <span class="comment">// 根据 wValue 的高字节, 检查请求的描述符类型</span></span><br><span class="line">    <span class="keyword">switch</span> ((wValue &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// 获取设备描述符</span></span><br><span class="line">        <span class="keyword">case</span> DEVICE_DESCRIPTOR:</span><br><span class="line"></span><br><span class="line">        p_send_data = device_descriptor;</span><br><span class="line">        send_length = device_descriptor[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取配置描述符</span></span><br><span class="line">        <span class="keyword">case</span> CONFIGURATION_DESCRIPTOR:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取字符串描述符</span></span><br><span class="line">        <span class="keyword">case</span> STRING_DESCRIPTOR:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>其中向端点 0 写数据的函数定义如下:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">usb_end0_write_data</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// 剩余要发的数据大于端点包大小, 则发送一个最大包长的数据</span></span><br><span class="line">    <span class="keyword">if</span>(send_length &gt; device_descriptor[<span class="number">7</span>])</span><br><span class="line">    {</span><br><span class="line">        USB_WRITE_ENDP_BUF(ENDP0, p_send_data, device_descriptor[<span class="number">7</span>]);</span><br><span class="line">        send_length -= device_descriptor[<span class="number">7</span>];</span><br><span class="line">        p_send_data += device_descriptor[<span class="number">7</span>];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(send_length != <span class="number">0</span>)</span><br><span class="line">    {</span><br><span class="line">        USB_WRITE_ENDP_BUF(ENDP0, p_send_data, send_length);</span><br><span class="line">        send_length = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 要发的数据和端点包大小刚好整除, 还需发最后一个空包来结束发送</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(need_zero_package == <span class="number">1</span>)</span><br><span class="line">    {</span><br><span class="line">        USB_WRITE_ENDP_BUF(ENDP0, p_send_data, <span class="number">0</span>);</span><br><span class="line">        need_zero_package = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 端点0输入中断处理</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">usb_end0_in</span><span class="params">()</span></span><br><span class="line">{</span><br><span class="line">    usb_end0_write_data();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>到此程序已经能够自动返回设备描述符了.</p>
+<h3 id="设置地址请求的处理">4. 设置地址请求的处理</h3>
+<p>每个USB设备都具有一个唯一的设备地址，这个地址是主机在设置地址请求时分配给设备的。设备在收到设置地址请求后，应该返回一个0长度的状态数据包（因为设置地址请求是没有数据过程的），然后等待主机确认这个数据包（即用ACK应答设备）。设备在正确接收到状态数据包的ACK之后，就开始使用新的设备地址了。</p>
+<p>一般 USB 接口芯片会提供一个寄存器用来设置设备地址, 我们这里假设宏
+<code>USB_SET_ADDR(addr)</code> 可完成该功能:</p>
+<p>因此只需在处理标准请求框架中填充设置地址的相关代码, 如下:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取描述符请求</span></span><br><span class="line"><span class="keyword">case</span> SET_ADDRESS:</span><br><span class="line">    <span class="comment">// wValue 中的低8位是设置的地址值</span></span><br><span class="line">    USB_SET_ADDR(wValue &amp; <span class="number">0xff</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置没有数据过程, 直接进入到状态过程, 因此返回一个 0 长度的数据包</span></span><br><span class="line">    send_length = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>在设置设备地址成功后, 主机会再次获取设备描述符,
+但这次将会是完整地获取。</p>
+<p>获取完设备描述符之后，主机接着又发了一个请求：获取配置描述符的请求，请求长度为9字节。标准配置描述符的长度就是9字节的。</p>
+<p>通常主机第一次先获取9字节长度的配置描述符，然后根据配置描述符中的配置集合长度，再次获取配置描述符。</p>
+<p>第二次获取配置描述符时，会将配置描述符、接口描述符、类特殊描述符（如果有）、端点描述符等一并读回。</p>
+<p>因此接下来就是实现配置描述符及接口描述符、类特殊描述符、端点描述符这个大集合----配置描述符集合。</p>
+<h3 id="配置描述符集合">5. 配置描述符集合</h3>
+<p>每个USB设备至少都要有一个配置描述符，在设备描述符中规定了该设备有多少种配置，每种配置都有一个描述符。在本USB实例中，只有一个配置描述符。</p>
+<h4 id="配置描述符的结构">1) 配置描述符的结构</h4>
+<p>如下是USB协议规定的标准配置描述符的结构。</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度 (9 字节)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 (配置描述符为 0x02)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>wTotalLength</td>
+<td>2</td>
+<td>配置描述符集合总长度</td>
+</tr>
+<tr>
+<td>4</td>
+<td>bNumInterfaces</td>
+<td>1</td>
+<td>该配置所支持的接口数</td>
+</tr>
+<tr>
+<td>5</td>
+<td>bConfigurationValue</td>
+<td>1</td>
+<td>该配置的值</td>
+</tr>
+<tr>
+<td>6</td>
+<td>iConfiguration</td>
+<td>1</td>
+<td>描述该配置的字符串的索引值</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bmAttributes</td>
+<td>1</td>
+<td>该设备的属性</td>
+</tr>
+<tr>
+<td>8</td>
+<td>bMaxPower</td>
+<td>1</td>
+<td>设备所需要的电流 (单位 2 mA)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>bLength</strong>
+大小为1字节，表示该描述符的长度。标准的USB配置描述符的长度为9字节。</li>
+<li><strong>bDescriptorType</strong>
+大小为1字节，表示描述符的类型。配置描述符的类型编码为0x02。</li>
+<li><strong>wTotalLength</strong>
+大小为2字节，表示整个配置描述符集合的总长度，包括配置描述符、接口描述符、类特殊描述符（如果有）和端点描述符。注意低字节在先。</li>
+<li><strong>bNumInterfaces</strong>
+大小为1字节，表示该配置所支持的接口数量。通常，功能单一的设备只具有一个接口（例如鼠标），而复合设备则具有多个接口（例如音频设备）。</li>
+<li><strong>bConfigurationValue</strong>
+大小为1字节，表示该配置的值。通常一个USB设备可以支持多个配置，bConfigurationValue就是每个配置的标识。设置配置请求时会发送一个配置值，如果某个配置的bConfigurationValue值与它相匹配，就表示该配置被激活，为当前配置。</li>
+<li><strong>iConfiguration</strong>
+大小为1字节，是描述该配置的字符串的索引值。如果该值为0，则表示没有字符串。</li>
+<li><strong>bmAttributes</strong>
+大小为1字节，用来描述设备的一些特性。其中，D7是保留的，必须要设置为1.
+D6表示供电方式，当D6为1时，表示设备是自供电的；当D6为0时，表示设备是总线供电的。D5表示是否支持远程唤醒，当D5为1时，支持远程唤醒。D4～DO保留，设置为0。</li>
+<li><strong>bMaxPower</strong>
+大小为1字节，表示设备需要从总线获取的最大电流量，单位为2mA。例如、如果需要200mA的最大电流，则该字节的值为100。</li>
+</ul>
+<h4 id="接口描述符的结构">2) 接口描述符的结构</h4>
+<p>如下是 USB
+协议规定的标准接口描述符的结构。接口描述符不能单独返回，必须附着在配置描述符后一并返回。</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度 (9 字节)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 (接口描述符为 0x04)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>blnterfaceNumber</td>
+<td>1</td>
+<td>该接口的编号 (从0开始)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>bAlternateSetting</td>
+<td>1</td>
+<td>该接口的备用编号</td>
+</tr>
+<tr>
+<td>4</td>
+<td>bNumEndpoints</td>
+<td>1</td>
+<td>该接口所使用的端点数</td>
+</tr>
+<tr>
+<td>5</td>
+<td>bInterfaceClass</td>
+<td>1</td>
+<td>该接口所使用的类</td>
+</tr>
+<tr>
+<td>6</td>
+<td>bInterfaceSubClass</td>
+<td>1</td>
+<td>该接口所使用的子类</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bInterfaceProtocol</td>
+<td>1</td>
+<td>该接口所使用的协议</td>
+</tr>
+<tr>
+<td>8</td>
+<td>iInterface</td>
+<td>1</td>
+<td>描述该接口的字符串的索引值</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>bLength</strong>
+大小为1字节，表示该描述符的长度。标准的USB接口描述符的长度为9字节。</li>
+<li><strong>bDeseriptorType</strong>
+大小为1字节，是描述符的类型。接口描述符的类型编码为0x04。</li>
+<li><strong>blnterfaceNumber</strong>
+大小为1字节，表示该接口的编号。当一个配置具有多个接口时，每个接口的编号都不相同。从0开始依次递增对一个配置的接口进行编号。</li>
+<li><strong>bAlternateSetting</strong>
+大小为1字节，是该接口的备用编号。编号规则与bInter-faceNumber一样，很少会使用该字段，设置为0。</li>
+<li><strong>bNumEndpoints</strong>
+大小为1字节，是该接口所使用的端点数（不包括0端点）。如果该字段为0，则表示没有非0端点，只使用默认的控制端点。</li>
+<li><strong>bInterfaceClass、bInterfaceSubClass、bInterfaceProtocol</strong>
+分别是接口所使用的类、子类以及协议，它们的代码由USB协会定义，跟设备描述符中的意义类似。通常在接口中定义设备的功能，而在设备描述符中将类、子类以及协议字段的值设置为0。</li>
+<li><strong>iInterface</strong>
+大小为1字节，是描述该接口的字符串的索引值。如果该值为0，则表示没有字符串。</li>
+</ul>
+<h4 id="端点描述符的结构">3) 端点描述符的结构</h4>
+<p>如下是USB协议规定的标准端点描述符的结构。端点描述符不能单独返回，必须附着在配置描述符后一并返回。</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度 (7 字节)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 (端点描述符为 0x05)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bEndpointAddress</td>
+<td>1</td>
+<td>该端点的地址</td>
+</tr>
+<tr>
+<td>3</td>
+<td>bmAttributes</td>
+<td>1</td>
+<td>该端点的属性</td>
+</tr>
+<tr>
+<td>4</td>
+<td>wMaxPackeSize</td>
+<td>2</td>
+<td>该端点支持的最大包长度</td>
+</tr>
+<tr>
+<td>6</td>
+<td>bInterval</td>
+<td>1</td>
+<td>端点的查询时间</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>bLength</strong>
+大小为1字节，表示该描述符的长度。标准的USB端点描述符的长度为7字节。</li>
+<li><strong>bDescriptorType</strong>
+大小为1字节，表示描述符的类型。端点描述符的类型编码为0x05。</li>
+<li><strong>bEndpointAddress</strong>
+大小为1字节，表示该端点的地址。最高位D7为该端点的传输方向，1
+为输入（有点像Input的第一个字母），0为输出（有点像Output的第一个字母）。D[3:0]为端点号。D[6:4]保留，设为0。</li>
+<li><strong>bmAttributes</strong>
+大小为1字节，是该端点的属性。最低两位D[1:0]表示该端点的传输类型，0为控制传输，1为等时传输，2为批量传输，3为中断传输。如果该端点是非等时传输的端点，那么D[7:2]为保留值，设为0.如果该端点是等时传输的，则D[3:2]表示同步的类型，0为无同步，1为异步，2为适配，3为同步；D[5:4]表示用途，0为数据端点，1为反馈端点，2为暗含反馈的数据端点，3是保留值。D[7:6]保留。</li>
+<li><strong>wMaxPackeSize</strong>
+大小为2字节，是该端点所支持的最大包长度。注意低字节在先。对于全速模式和低速模式，D[10:0]表示端点的最大包长，其他位保留为0.对于高速模式，D[12:11]为每个帧附加的传输次数，具体请参看USB2.0协议。</li>
+<li><strong>bInterval</strong>
+大小为1字节，表示该端点查询的时间。对于中断端点，表示查询的帧间隔数。对于等时传输以及高速模式的中断、批量传输，该字段的意义请参看USB2.0协议。</li>
+</ul>
+<h4 id="hid-描述符的结构">4) HID 描述符的结构</h4>
+<p>我们知道，USB鼠标是属于 USB HID 类的。通过查看 USB HID
+类的官方文档，HID类的设备在配置描述符中还需要一个HID描述符。它是一个类描述符，应该跟在接口描述符后面。HID描述符的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th>偏移量</th>
+<th>域</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>该描述符的长度</td>
+</tr>
+<tr>
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>描述符类型 ( HID 描述符为 0x21)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bcdHID</td>
+<td>2</td>
+<td>HID 协议的版本</td>
+</tr>
+<tr>
+<td>4</td>
+<td>bCountyCode</td>
+<td>1</td>
+<td>国家代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td>bNumDescriptors</td>
+<td>1</td>
+<td>下级描述符的数量</td>
+</tr>
+<tr>
+<td>6</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>下级描述符的类型</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bDescriptorLength</td>
+<td>2</td>
+<td>下级描述符的长度</td>
+</tr>
+<tr>
+<td>9</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>下级描述符的类型 (可选)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>bDescriptorLength</td>
+<td>2</td>
+<td>下级描述符的长度 (可选)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>...</td>
+<td>1</td>
+<td>... 可选</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>bLength</strong>
+大小为1字节，是该描述符的总长度。它的大小与该描述符中下级描述符的个数有关。例如，只有一个下级描述符时，总长度为
+1+1+2+1+1+1+2 = 9 字节。</li>
+<li><strong>bDescriptorType</strong>
+大小为1字节，是该描述符的编号。HID描述符的编号为0x21。</li>
+<li><strong>bedHID</strong>
+大小为2字节，是该设备所使用的HID协议的版本号。这里使用的HID协议是USB
+HID1.1协议，因此这里为0x0110。</li>
+<li><strong>bCountyCode</strong>
+大小为1字节，是设备所适用的国家。通常我们的键盘是美式键盘，代码为33，即0x21。</li>
+<li><strong>bNumDescriptors</strong>
+大小为1字节，是下级描述符的数量。该值至少为1，即至少要有一个报告描述符。下级描述符可以是报告描述符或物理描述符。</li>
+<li><strong>bDescriptorType</strong>
+大小为l字节，是下级描述符的类型。报告描述符的编号为0x22，物理描述符编号为0x23。</li>
+<li><strong>bDescriptorLength</strong>
+大小为2字节，是下级描述符的长度。当有多个下级描述符时，bDescritpor
+Type和bDescriptorLength交替重复下去。</li>
+</ul>
+<h3 id="配置描述符集合的实现以及返回">6.
+配置描述符集合的实现以及返回</h3>
+<p>通过前面的分析知道了配置描述符集合的结构，接下来就要用代码来实现一个配置描述符集合，并在主机的获取配置描述符请求中返回。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 报告描述符暂时空着</span></span><br><span class="line"><span class="type">uint8_t</span> report_descriptor[] = {</span><br><span class="line">    <span class="number">0x00</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> configuration_descriptor[<span class="number">9</span> + <span class="number">9</span> + <span class="number">9</span> + <span class="number">7</span>] = {</span><br><span class="line">    <span class="comment">/*************** 配置描述符 *********************/</span></span><br><span class="line">    <span class="number">0x09</span>,         <span class="comment">// bLength              配置描述符的长度为 9</span></span><br><span class="line">    <span class="number">0x02</span>,         <span class="comment">// bDescriptorType      配置描述符编号为 0x02</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// wTotalLength 配置描述符集合的总长度, 包括配置描述符本身, 接口描述符、类描述符、端点描述符等</span></span><br><span class="line">    <span class="keyword">sizeof</span>(configuration_descriptor) &amp; <span class="number">0xff</span>,</span><br><span class="line">    (<span class="keyword">sizeof</span>(configuration_descriptor) &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>,</span><br><span class="line">    <span class="number">0x01</span>,         <span class="comment">// bNumInterfaces       该配置包含的接口数, 这里只有一个接口</span></span><br><span class="line">    <span class="number">0x01</span>,         <span class="comment">// bConfigurationValue  该配置的值, 作为配置的标识</span></span><br><span class="line">    <span class="number">0x00</span>,         <span class="comment">// iConfiguration       该配置的字符串索引, 这里没有, 故为0</span></span><br><span class="line">    <span class="number">0x80</span>,         <span class="comment">// bmAttributes         该设备的属性, 这里0x80为: 总线供电, 禁止唤醒功能</span></span><br><span class="line">    <span class="number">0x32</span>,         <span class="comment">// bMaxPower            设备所需要的电流 (单位 2mA), 这里为 0x32 (50) 即 100mA</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*************** 接口描述符 *********************/</span></span><br><span class="line">    <span class="number">0x09</span>,         <span class="comment">// bLength              接口描述符长度为 9 字节</span></span><br><span class="line">    <span class="number">0x04</span>,         <span class="comment">// bDescriptorType      接口描述符的编号为 0x04</span></span><br><span class="line">    <span class="number">0x00</span>,         <span class="comment">// blnterfaceNumber     该接口描述符的编号，第一个接口编号为 0</span></span><br><span class="line">    <span class="number">0x00</span>,         <span class="comment">// bAlternateSetting    该接口的备用编号为 0</span></span><br><span class="line">    <span class="number">0x01</span>,         <span class="comment">// bNumEndpoints        该接口非 0 端点的数目. 由于USB鼠标只需一个中断输入端点, 故为1</span></span><br><span class="line">    <span class="number">0x03</span>,         <span class="comment">// bInterfaceClass      该接口所使用的类, USB鼠标是HID类, 编码为 0x03</span></span><br><span class="line">    <span class="number">0x01</span>,         <span class="comment">// bInterfaceSubClass   该接口所使用的子类, 0x01 支持BIOS引导启动的子类</span></span><br><span class="line">    <span class="number">0x02</span>,         <span class="comment">// bInterfaceProtocol   该接口所使用的协议, 若子类为 0x01, 则协议可选键盘(0x01)或鼠标(0x02)</span></span><br><span class="line">    <span class="number">0x00</span>,         <span class="comment">// iInterface           该接口的字符串的索引，这里没有, 故为0</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*************** HID 描述符 *********************/</span></span><br><span class="line">    <span class="number">0x09</span>,         <span class="comment">// bLength              该 HID 描述符下只有一个下级描述符, 故长度为 9 字节</span></span><br><span class="line">    <span class="number">0x21</span>,         <span class="comment">// bDescriptorType      HID 描述符的编号为 0x21</span></span><br><span class="line">    <span class="number">0x10</span>, <span class="number">0x01</span>,   <span class="comment">// bcdHID               该 HID 使用的协议版本, 这里为 0x0110 (HID1.1)</span></span><br><span class="line">    <span class="number">0x21</span>,         <span class="comment">// bCountyCode          该 HID 适用的国家代码, 这里为 0x21 (美国)</span></span><br><span class="line"></span><br><span class="line">    <span class="number">0x01</span>,         <span class="comment">// bNumDescriptors      该 HID 下级描述符的数量, 这里只有一个报告描述符, 故为 1</span></span><br><span class="line">    <span class="number">0x22</span>,         <span class="comment">// bDescriptorType      该 HID 下级描述符的类型, 这里为 0x22 (报告描述符)</span></span><br><span class="line">    <span class="comment">// bDescriptorLength 该 HID 下级描述符的长度</span></span><br><span class="line">    <span class="keyword">sizeof</span>(report_descriptor) &amp; <span class="number">0xff</span>,</span><br><span class="line">    (<span class="keyword">sizeof</span>(report_descriptor) &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*************** 端点描述符 *********************/</span></span><br><span class="line">    <span class="number">0x07</span>,         <span class="comment">// bLength              端点描述符长度为 7 字节</span></span><br><span class="line">    <span class="number">0x05</span>,         <span class="comment">// bDescriptorType      端点描述符编号为 0x05</span></span><br><span class="line">    <span class="number">0x81</span>,         <span class="comment">// bEndpointAddress     该端点的地址, 这里为 0x81 (D7 为 1 表示输入, D[3:0] 为 1 表示地址)</span></span><br><span class="line">    <span class="number">0x03</span>,         <span class="comment">// bmAttributes         该端点的属性, 这里为 0x03 (D[1:0] 为 11B 表示中断传输, 其他位保留为 0)</span></span><br><span class="line">    <span class="number">0x01</span>, <span class="number">0x00</span>    <span class="comment">// wMaxPackeSize        该端点的最大包长, 这里为 0x0010 (16 字节)</span></span><br><span class="line">    <span class="number">0x0A</span>          <span class="comment">// bInterval            该端点查询的时间, 这里设为 0x0A (10个帧时间, 即 10ms)</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>然后在获取描述符请求中增加对配置描述符返回的代码即可,
+修改端点0输出中断处理函数中获取配置描述符的代码如下:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取配置描述符</span></span><br><span class="line"><span class="keyword">case</span> CONFIGURATION_DESCRIPTOR:</span><br><span class="line">    p_send_data = configuration_descriptor;</span><br><span class="line">    send_length = configuration_descriptor[<span class="number">3</span>] * <span class="number">256</span> + configuration_descriptor[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>到此完成配置描述符集合的返回. 不过报告描述符还没有实现,
+但在次之前先来看看字符串描述符.</p>
+<p>主机可能会在获取 9 字节的配置描述符后,
+先获取设备描述符中的字符串描述符索引，而我们还也没有实现该部分。 ### 7.
+字符串及语言ID请求的实现</p>
+<p>在USB协议中，字符串描述符是可选的。当某个描述符中的字符串索引值为非0时，就表示它具有那个字符串描述符，注意索引值不能重复。</p>
+<p>上文在设备描述符中，申请了3个非0的索引值，分别是厂商字符串、产品字符串以及产品序列号；其索引值分别为1,2,3.</p>
+<p>USB主机使用获取字符串描述符和索引值来获取对应的字符串。当索引值为0时，表示获取语言ID。语言ID是一个描述该设备支持的语言种类的数组，每个ID号占2字节。</p>
+<p>字符串描述符的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">偏移</th>
+<th>域</th>
+<th style="text-align: center;">大小</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0</td>
+<td>bLength</td>
+<td style="text-align: center;">1</td>
+<td>该描述符的长度</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td>bDescriptorType</td>
+<td style="text-align: center;">1</td>
+<td>描述符的类型 (字符串为 0x03)</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>bString</td>
+<td style="text-align: center;">N</td>
+<td>Unicode 编码的字符串</td>
+</tr>
+</tbody>
+</table>
+<p>语言 ID 描述符的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">偏移</th>
+<th>域</th>
+<th style="text-align: center;">大小</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0</td>
+<td>bLength</td>
+<td style="text-align: center;">1</td>
+<td>该描述符的长度</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td>bDescriptorType</td>
+<td style="text-align: center;">1</td>
+<td>描述符的类型 (字符串为 0x03)</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>wLANGID[0]</td>
+<td style="text-align: center;">2</td>
+<td>语言 ID 号 0</td>
+</tr>
+<tr>
+<td style="text-align: center;">...</td>
+<td>...</td>
+<td style="text-align: center;">...</td>
+<td>...</td>
+</tr>
+<tr>
+<td style="text-align: center;">2 * n + 2</td>
+<td>wLANGID[n]</td>
+<td style="text-align: center;">2</td>
+<td>语言 ID 号 n</td>
+</tr>
+</tbody>
+</table>
+<p>语言ID，这里只使用美式英语一种，即0x0409.不同国家地区的语言ID号，可以查看USB_LANGIDs.PDF文档，可直接上http://www.usb.org下载。</p>
+<p>字符串描述符中的 bString 字段是使用 Unicode.</p>
+<p>下面是语言 ID、厂商字符串、产品字符串以及产品序列号的定义:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint8_t</span> language_id[<span class="number">4</span>] = {</span><br><span class="line">     <span class="comment">/*************** 语言 ID 描述符 *********************/</span></span><br><span class="line">    <span class="number">0x04</span>,         <span class="comment">// bLength              该语言 ID 描述符长度为 4 字节</span></span><br><span class="line">    <span class="number">0x03</span>,         <span class="comment">// bDescriptorType      语言 ID 描述符和字符串描述符编号为 0x03</span></span><br><span class="line">    <span class="number">0x09</span>, <span class="number">0x04</span>    <span class="comment">// wLANGID              该语言 ID 号, 0x0409 (美式英语)</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> manufacturer_string <span class="string">"测试厂商字符串描述符"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> product_string <span class="string">"测试产品字符串描述符"</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> serial_number_string <span class="string">"测试V1.0"</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> manufacturer_string_descriptor[<span class="number">2</span> + <span class="keyword">sizeof</span>(manufacturer_string) - <span class="number">1</span>] = {</span><br><span class="line">     <span class="comment">/*************** 制造商字符串描述符 *********************/</span></span><br><span class="line">    <span class="number">2</span> + <span class="keyword">sizeof</span>(manufacturer_string) - <span class="number">1</span>,   <span class="comment">// bLength          该字符串描述符的长度</span></span><br><span class="line">    <span class="number">0x03</span>,                                  <span class="comment">// bDescriptorType  字符串描述符编号为 0x03</span></span><br><span class="line">    <span class="comment">// ... 这里实际的字符串先空着不写, 等需要上传时再拷贝进来, 其他部分同理</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> product_string_descriptor[<span class="number">2</span> + <span class="keyword">sizeof</span>(product_string) - <span class="number">1</span>] = {</span><br><span class="line">     <span class="comment">/*************** 产品字符串描述符 *********************/</span></span><br><span class="line">    <span class="number">2</span> + <span class="keyword">sizeof</span>(product_string) - <span class="number">1</span>,       </span><br><span class="line">    <span class="number">0x03</span>,</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> serial_number_string_descriptor[<span class="number">2</span> + <span class="keyword">sizeof</span>(serial_number_string) - <span class="number">1</span>] = {</span><br><span class="line">     <span class="comment">/*************** 产品序列号字符串描述符 *********************/</span></span><br><span class="line">    <span class="number">2</span> + <span class="keyword">sizeof</span>(serial_number_string) - <span class="number">1</span>,</span><br><span class="line">    <span class="number">0x03</span>,</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>在获取描述符请求中增加对字符串描述符的返回:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取字符串描述符</span></span><br><span class="line"><span class="keyword">case</span> STRING_DESCRIPTOR:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据 wValue 的低字节, 检查字符串描述符类型</span></span><br><span class="line">    <span class="keyword">switch</span> (wValue &amp; <span class="number">0xff</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// 获取语言 ID</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        p_send_data = language_id;</span><br><span class="line">        send_length = language_id[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 厂商字符串索引值设为1, 所以这里为厂商字符串</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        p_send_data = manufacturer_string_descriptor;</span><br><span class="line">        send_length = manufacturer_string_descriptor[<span class="number">0</span>];</span><br><span class="line">        <span class="built_in">memcpy</span>(manufacturer_string_descriptor + <span class="number">2</span>, manufacturer_string, send_length);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 产品字符串索引值设为2, 所以这里为产品字符串</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        p_send_data = product_string_descriptor;</span><br><span class="line">        send_length = product_string_descriptor[<span class="number">0</span>];</span><br><span class="line">        <span class="built_in">memcpy</span>(product_string_descriptor + <span class="number">2</span>, product_string, send_length);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 产品序列号字符串索引值设为3, 所以这里为产品序列号字符串</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">        p_send_data = serial_number_string_descriptor;</span><br><span class="line">        send_length = serial_number_string_descriptor[<span class="number">0</span>];</span><br><span class="line">        <span class="built_in">memcpy</span>(serial_number_string_descriptor + <span class="number">2</span>, serial_number_string, send_length);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 未知索引值</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">        send_length = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>主机获取字符串描述符后就会去获取之前实现的配置描述符集合,
+然后会发出一个标准的设置配置请求，因此接下来是对设置配置请求的实现。</p>
+<h3 id="设置配置请求的实现">8. 设置配置请求的实现</h3>
+<p>设置配置请求的实现比较简单，它是一个输出请求，只要根据所请求的配置值，使能相应的端点即可。</p>
+<p>由于我们的鼠标只有一个配置，所以连配置值都可以忽略，直接使能端点，然后返回一个0长度的状态数据包即可。</p>
+<blockquote>
+<p>注意，只有收到非0的配置值之后才可以使能非0端点，否则要禁用非0端点。</p>
+</blockquote>
+<p>实现标准请求处理中的设置配置请求:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> SET_CONFIGURATION:</span><br><span class="line">    <span class="comment">// 使能端点 1</span></span><br><span class="line">    USB_ENABLE_ENDP(ENDP1);</span><br><span class="line">    <span class="comment">// 发送空包</span></span><br><span class="line">    send_length = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="报告描述符的实现">9. 报告描述符的实现</h3>
+<p>USB
+HID设备是通过报告（report）来传送数据的，报告有输入报告和输出报告。</p>
+<p>输入报告是USB设备发送给主机的，例如：USB鼠标将鼠标移动和鼠标点击等信息返回给计算机，键盘将按键数据返回给计算机等。</p>
+<p>输出报告是主机发送给USB设备的，例如：键盘上的数字键盘锁定灯和大写字母锁定灯的控制等。</p>
+<p>报告里面包含的是所要传送的数据，数量为整数字节，被划分成一个个域。通常，输入报告是通过中断输入端点返回的，而输出报告有点区别，当没有中断输出端点时，可以通过控制输出端点0发送，当有中断输出端点时，通过中断输出端点发出。</p>
+<p>当然，不管设备是否具有中断输出端点（中断输入端点是必须要的），主机都可以通过获取报告和设置报告的请求从端点0来获取或者发送报告。</p>
+<p>而报告描述符（report
+descriptor），是用来描述一个报告的结构以及该报告里面的数据是用来干什么用的。通过报告描述符，USB主机就可以分析出报告里面的数据所表示的意义。报告描述符与普通描述符一样，都是通过控制输入端点0来返回，主机使用获取报告描述符请求来获取报告描述符，注意这个请求是<strong>发送到接口的，而不是到设备</strong>。</p>
+<p>一个报告描述符可以描述多个报告，不同的报告通过报告ID来识别。报告ID放在报告的最前面，即第一个字节。当报告描述符中没有规定报告ID时，报告中就没有ID字段，开始就是数据。</p>
+<p>报告描述符与前面所遇到的描述符结构不一样，它并没有描述符长度和描述符类型等信息，而是由一个个条目（item）组成的。通常，在写报告描述符时，一个条目占据一行。这样看起来清晰一些。
+HID协议中规定了两种条目：短条日和长条目。长条日很少使用，这里不介绍，只介绍短条目的结构。</p>
+<p><strong>短条目</strong>由1字节的前缀后面跟上可选的数据字节组成。可选的数据字节可以为0字节、1字节、2字节或者4字节。实际所使用的条目，大部分是只有1字节可选数据的，少数会使用0字节或2字节数据。条目的前缀结构如下:</p>
+<table>
+<colgroup>
+<col style="width: 37%">
+<col style="width: 26%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr>
+<th>D[7:4]</th>
+<th>D[3:2]</th>
+<th>D[1:0]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bTag</td>
+<td>bType</td>
+<td>bSize</td>
+</tr>
+<tr>
+<td>表示该条目的功能</td>
+<td>表示条目的类型</td>
+<td>用来表示后面所跟数据的字节数</td>
+</tr>
+<tr>
+<td>具体请参看HID协议以及HID用途表</td>
+<td>0 为主条目</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>1 为全局（global）条目</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>2 为局部（local）条目</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>3 是保留值</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="主条目">1) 主条目</h4>
+<p>总共有5个，分别为Input（输入）、Output（输出）、Feature（特性）、Collection（集合开始）和EndCollection（集合结束）。主条目用来定义或者分组报告的数据域。</p>
+<p>例如，可以使用输人主条目将输人报告划分为不同的数据域，以及指定该域的属性。对于Input、Output、Feature三个主条目，后面跟的第一字节数据每个位的数据表示一种属性，例如：位0表示该数据域是变量还是常量，位1表示是数组还是单一变量，位2表示是相对值还是绝对值等。</p>
+<h4 id="全局条目">2) 全局条目</h4>
+<p>全局条目主要用来选择用途页，定义数据域的长度、数量、报告ID等。全局条目在出现后对接下来的所有主条目都有效，除非遇到另外一个全局条目来改变它。</p>
+<p>常用的全局条目有：UsagePage（用途页）、LogicalMinimum（逻辑最小值）、Logical
+Maximum（逻辑最大值）、PhysicalMinimum（物理最小值）、PhysicalMaximum（物理最大值）、ReportSize（数据域大小）、ReportCount（数据域数量）和ReportID（报告ID）。</p>
+<p>其中，ReportSize用来描述某个数据域有多少个位：ReportCount用来描述这样的数据域有多少个；LogicalMinimum和LogicalMaximum用来描述数据域的取值范围。</p>
+<h4 id="局部条目">3) 局部条目</h4>
+<p>局部条目用来定义控制的特性，例如，该数据域的用途、用途最小值、用途最大值等。局部条目只在局部有效，遇到一个主条目后，它的效用就结束了。</p>
+<p>常用的局部条目有：Usage（用途）、UsageMinimum（用途最小值）和UsageeMaximum（用途最大值）。</p>
+<p>各种条目的功能值在此就不一一列举了，大家可以对照协议来设计报告描述符，也可以使用USB官方网站提供的HID描述符工具来生成：还可以使用现成的报告描述符进行修改，例如，在HID协议以及用途表文档中，就有很多现成的例子。
+下面给出USB鼠标报告描述符的实际代码，并在代码中增加注释来说明这个报告描述符的意义。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报告描述符</span></span><br><span class="line"><span class="type">uint8_t</span> report_descriptor[] = {</span><br><span class="line">    <span class="comment">/* 前缀: bTag[7:4] bType[3:2] bSize[1:0] */</span></span><br><span class="line">    <span class="number">0x05</span>, <span class="number">0x01</span>,             <span class="comment">// 全局条目, bTag = 0x0 (UsagePage), 0x01 (Generic Desktop)</span></span><br><span class="line">    <span class="number">0x09</span>, <span class="number">0x02</span>,             <span class="comment">// 局部条目, Usage (Mouse)</span></span><br><span class="line">    <span class="number">0xa1</span>, <span class="number">0x01</span>,             <span class="comment">// 主条目  , Collection (Application), 说明应用集合开始</span></span><br><span class="line">        <span class="number">0x09</span>, <span class="number">0x01</span>,         <span class="comment">// 局部条目, Usage (Pointer) 说明用途为指针集合</span></span><br><span class="line">        <span class="number">0xa1</span>, <span class="number">0x00</span>,         <span class="comment">// 主条目  , Collection (Physical) 说明物理集合开始</span></span><br><span class="line">            <span class="number">0x05</span>, <span class="number">0x09</span>,     <span class="comment">// 局部条目, UsagePage (Button) 说明用途页为按键</span></span><br><span class="line">            <span class="number">0x19</span>, <span class="number">0x01</span>,     <span class="comment">// 局部条目, UsageMinium (Button 1 鼠标左键)</span></span><br><span class="line">            <span class="number">0x29</span>, <span class="number">0x03</span>,     <span class="comment">// 局部条目, UsageMaxium (Button 3 鼠标中键)</span></span><br><span class="line">            <span class="number">0x15</span>, <span class="number">0x00</span>,     <span class="comment">// 全局条目, LogicMinium (0)</span></span><br><span class="line">            <span class="number">0x25</span>, <span class="number">0x01</span>,     <span class="comment">// 全局条目, LogicMaxium (1)</span></span><br><span class="line">            <span class="number">0x95</span>, <span class="number">0x03</span>,     <span class="comment">// 全局条目, ReportCount (3)</span></span><br><span class="line">            <span class="number">0x75</span>, <span class="number">0x01</span>,     <span class="comment">// 全局条目, ReportSize (1)</span></span><br><span class="line"></span><br><span class="line">            <span class="number">0x81</span>, <span class="number">0x02</span>,     <span class="comment">// 主条目  , Input (Data, Var, Abs)</span></span><br><span class="line">            <span class="number">0x95</span>, <span class="number">0x01</span>,     <span class="comment">// 全局条目, ReportCount (1)</span></span><br><span class="line">            <span class="number">0x75</span>, <span class="number">0x05</span>,     <span class="comment">// 全局条目, ReportSize (5)</span></span><br><span class="line">            <span class="number">0x81</span>, <span class="number">0x03</span>,     <span class="comment">// 主条目  , Input (cnst, Var, Abs)</span></span><br><span class="line">            <span class="number">0x05</span>, <span class="number">0x01</span>,     <span class="comment">// 全局条目, UsagePage (Generic Desktop)</span></span><br><span class="line">            <span class="number">0x09</span>, <span class="number">0x30</span>,     <span class="comment">// 局部条目, Usage(X)</span></span><br><span class="line">            <span class="number">0x09</span>, <span class="number">0x31</span>,     <span class="comment">// 局部条目, Usage(Y)</span></span><br><span class="line">            <span class="number">0x09</span>, <span class="number">0x38</span>,     <span class="comment">// 局部条目, Usage(Wheel)</span></span><br><span class="line">            <span class="number">0x15</span>, <span class="number">0x81</span>,     <span class="comment">// 全局条目, LogicMinium (-127)</span></span><br><span class="line">            <span class="number">0x25</span>, <span class="number">0x7f</span>,     <span class="comment">// 全局条目, LogicMaxium (127)</span></span><br><span class="line">            <span class="number">0x75</span>, <span class="number">0x08</span>,     <span class="comment">// 全局条目, ReportSize (8)</span></span><br><span class="line">            <span class="number">0x95</span>, <span class="number">0x03</span>,     <span class="comment">// 全局条目  , ReportCount (3)</span></span><br><span class="line">            <span class="number">0x81</span>, <span class="number">0x06</span>,     <span class="comment">// 主条目, Input (Data, Var, Rel)</span></span><br><span class="line">        <span class="number">0xc0</span>,               <span class="comment">// CollectionEnd</span></span><br><span class="line">    <span class="number">0xc0</span>                    <span class="comment">// CollectionEnd</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>通过上面的报告描述符的定义可知，返回的输入报告具有4字节。</p>
+<ul>
+<li>第一字节的低3位用来表示按键是否按下，高5位为常数0，无用；</li>
+<li>第二字节表示X轴的改变量；</li>
+<li>第三字节表示Y轴的改变量；</li>
+<li>第四字节表示滚轮的改变量。</li>
+</ul>
+<p>在中断输入端点1中应该要按照上面的格式返回实际的鼠标数据。</p>
+<p>在描述符获取请求中添加报告描述符的请求:</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> REPORT_DESCRIPTOR:</span><br><span class="line">    p_send_data = report_descriptor;</span><br><span class="line">    send_length = <span class="keyword">sizeof</span>(report_descriptor);</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>至此, HID 设备才算枚举成功.
+之后主机应该就会一直在查询端点1，以读取鼠标返回的报告，下面就对 HID
+类的相关请求进行实现。</p>
+<h3 id="hid-类请求的实现">11. HID 类请求的实现</h3>
+<p>在 HID 协议文档中, 定义了一些类请求, 例如 SET_IDLE, GET_IDLE,
+GET_REPORT, SET_REPORT 等，下面是对这些请求的实现.</p>
+<p>bmRequestType 中的 D[6:5] 为 01B 时即为类请求.</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类请求</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(bmRequestType &amp; <span class="number">0x60</span> == <span class="number">0x20</span>) </span><br><span class="line">{</span><br><span class="line">    <span class="keyword">switch</span>(bRequest)</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// 设置空闲请求</span></span><br><span class="line">        <span class="keyword">case</span> SET_IDLE:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取报告描述符请求</span></span><br><span class="line">        <span class="keyword">case</span> GET_REPORT:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理更多 HID 类请求 ...</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 未定义的 HID 类请求</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="set_idle">1) SET_IDLE</h4>
+<p>SET_IDLE 的编码为 0x0A,
+这个请求告诉设备，在没有新的事件发生时，不要从中断端点返回数据。对于我们的USB鼠标来说，收到这个请求可以什么都不用干，直接返回一个0长度的状态数据包即可。修改端点0输出中断函数中的类输出请求部分代码如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置空闲请求</span></span><br><span class="line"><span class="keyword">case</span> SET_IDLE:</span><br><span class="line">    <span class="comment">// 发送空包</span></span><br><span class="line">    send_length = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="报告的返回">12. 报告的返回</h3>
+<p>通过前面报告描述符的定义知道要返回4字节的报告数据。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 端点1输入中断处理</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">usb_end1_in</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="comment">// 接收过配置请求</span></span><br><span class="line">    <span class="keyword">if</span>(config_value == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">4</span>];</span><br><span class="line">    <span class="comment">// 获取鼠标当前状态</span></span><br><span class="line">    <span class="comment">// buf[0] 的 D0 就是左键, D1 就是右键, D2 就是中键</span></span><br><span class="line">    <span class="comment">// buf[1] 为X轴, buf[2] 为Y轴, buf[3] 为滚轮</span></span><br><span class="line">    get_mouse_status(buf);</span><br><span class="line">    <span class="comment">// 发送鼠标状态</span></span><br><span class="line">    USB_WRITE_ENDP_BUF(ENDP0, buf, <span class="number">4</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>至此, 这个 USB 实例就算完成了. 但还有很多请求没有实现, 如 GET_REPORT
+等, 这可在后续自行完善.</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Learn/BookToLearn/圈圈教你玩USB/03USB鼠标的实现/03USB鼠标的实现.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/USB/"><i class="icon fas fa-hashtag"></i>USB</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/03/12/auto/19/04%E5%87%BD%E6%95%B0/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">04 函数</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/03/04/auto/8/JTAG%E6%8E%A5%E5%8F%A3/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">JTAG接口知识</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#usb-%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">USB 中断的处理过程:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#usb-%E6%A0%87%E5%87%86%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">USB 标准请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#usb-%E6%A0%87%E5%87%86%E8%AF%B7%E6%B1%82%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. USB 标准请求的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get_descriptor-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1) GET_DESCRIPTOR 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set_address-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2) SET_ADDRESS 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set_configuration-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3) SET_CONFIGURATION 请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 设备描述符的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#blength"><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">1) bLength</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdescriptortype"><span class="nav-number">1.1.2.0.2.</span> <span class="nav-text">2) bDescriptorType</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bcdusb"><span class="nav-number">1.1.2.0.3.</span> <span class="nav-text">3) bcdUSB</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdeviceclass"><span class="nav-number">1.1.2.0.4.</span> <span class="nav-text">4) bDeviceClass</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdevicesubclass"><span class="nav-number">1.1.2.0.5.</span> <span class="nav-text">5) bDeviceSubClass</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdeviceprotocol"><span class="nav-number">1.1.2.0.6.</span> <span class="nav-text">6) bDeviceProtocol</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bmaxpackesizeo"><span class="nav-number">1.1.2.0.7.</span> <span class="nav-text">7) bMaxPackeSizeo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#idvender"><span class="nav-number">1.1.2.0.8.</span> <span class="nav-text">8) idVender</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#idproduct"><span class="nav-number">1.1.2.0.9.</span> <span class="nav-text">9) idProduct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bcddevice"><span class="nav-number">1.1.2.0.10.</span> <span class="nav-text">10) bcdDevice</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iproduct"><span class="nav-number">1.1.2.0.11.</span> <span class="nav-text">12) iProduct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iserialnumber"><span class="nav-number">1.1.2.0.12.</span> <span class="nav-text">12) iSerialNumber</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bnumconfigurations"><span class="nav-number">1.1.2.0.13.</span> <span class="nav-text">13) bNumConfigurations</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 设备描述符的返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%9C%B0%E5%9D%80%E8%AF%B7%E6%B1%82%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 设置地址请求的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E9%9B%86%E5%90%88"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 配置描述符集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">1) 配置描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">2) 接口描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AB%AF%E7%82%B9%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">3) 端点描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hid-%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">4) HID 描述符的结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E9%9B%86%E5%90%88%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%BB%A5%E5%8F%8A%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.
+配置描述符集合的实现以及返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%85%8D%E7%BD%AE%E8%AF%B7%E6%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.7.</span> <span class="nav-text">8. 设置配置请求的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.8.</span> <span class="nav-text">9. 报告描述符的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">1) 主条目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">2) 全局条目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">3) 局部条目</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hid-%E7%B1%BB%E8%AF%B7%E6%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.9.</span> <span class="nav-text">11. HID 类请求的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#set_idle"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">1) SET_IDLE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.10.</span> <span class="nav-text">12. 报告的返回</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#usb-%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">USB 中断的处理过程:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#usb-%E6%A0%87%E5%87%86%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">USB 标准请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#usb-%E6%A0%87%E5%87%86%E8%AF%B7%E6%B1%82%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. USB 标准请求的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get_descriptor-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1) GET_DESCRIPTOR 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set_address-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2) SET_ADDRESS 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set_configuration-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3) SET_CONFIGURATION 请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 设备描述符的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#blength"><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">1) bLength</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdescriptortype"><span class="nav-number">1.1.2.0.2.</span> <span class="nav-text">2) bDescriptorType</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bcdusb"><span class="nav-number">1.1.2.0.3.</span> <span class="nav-text">3) bcdUSB</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdeviceclass"><span class="nav-number">1.1.2.0.4.</span> <span class="nav-text">4) bDeviceClass</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdevicesubclass"><span class="nav-number">1.1.2.0.5.</span> <span class="nav-text">5) bDeviceSubClass</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bdeviceprotocol"><span class="nav-number">1.1.2.0.6.</span> <span class="nav-text">6) bDeviceProtocol</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bmaxpackesizeo"><span class="nav-number">1.1.2.0.7.</span> <span class="nav-text">7) bMaxPackeSizeo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#idvender"><span class="nav-number">1.1.2.0.8.</span> <span class="nav-text">8) idVender</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#idproduct"><span class="nav-number">1.1.2.0.9.</span> <span class="nav-text">9) idProduct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bcddevice"><span class="nav-number">1.1.2.0.10.</span> <span class="nav-text">10) bcdDevice</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iproduct"><span class="nav-number">1.1.2.0.11.</span> <span class="nav-text">12) iProduct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iserialnumber"><span class="nav-number">1.1.2.0.12.</span> <span class="nav-text">12) iSerialNumber</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bnumconfigurations"><span class="nav-number">1.1.2.0.13.</span> <span class="nav-text">13) bNumConfigurations</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 设备描述符的返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%9C%B0%E5%9D%80%E8%AF%B7%E6%B1%82%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 设置地址请求的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E9%9B%86%E5%90%88"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 配置描述符集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">1) 配置描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">2) 接口描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AB%AF%E7%82%B9%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">3) 端点描述符的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hid-%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">4) HID 描述符的结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%E7%AC%A6%E9%9B%86%E5%90%88%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%BB%A5%E5%8F%8A%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.
+配置描述符集合的实现以及返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%85%8D%E7%BD%AE%E8%AF%B7%E6%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.7.</span> <span class="nav-text">8. 设置配置请求的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.8.</span> <span class="nav-text">9. 报告描述符的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">1) 主条目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">2) 全局条目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9D%A1%E7%9B%AE"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">3) 局部条目</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hid-%E7%B1%BB%E8%AF%B7%E6%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.9.</span> <span class="nav-text">11. HID 类请求的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#set_idle"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">1) SET_IDLE</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="nav-number">1.1.10.</span> <span class="nav-text">12. 报告的返回</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

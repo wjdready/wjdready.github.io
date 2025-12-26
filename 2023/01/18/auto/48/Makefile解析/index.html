@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            Makefile解析 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">Makefile解析</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-01-18 00:03:56</span>
+                <span class="mobile">2023-01-18 00:03</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/">构建工具</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/Makefile/">Makefile</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/">构建工具</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍Makefile的常用功能 <span id="more"></span></p>
+<h4 id="最简约的">最简约的</h4>
+<p>Makefile 文件如下 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SRCS = main.c src/add.c</span><br><span class="line"></span><br><span class="line">OBJS = $(SRCS:%.c=%.o)</span><br><span class="line"></span><br><span class="line">CFLAGS = -Iinc</span><br><span class="line"></span><br><span class="line">all: $(OBJS)</span><br><span class="line">	CC $(CFLAGS) $(OBJS) -o a.exe</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">	CC $(CFLAGS) -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm $(OBJS)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<blockquote>
+<p>只要列出详细的源文件路径, OBJ 直接从 SRC 替换 .c 得来,
+然后直接在以OBJ作为依赖, 假设已经得到所有 OBJ文件, 即可直接使用 CC
+进行链接即可, 而 OBJ 列表中的内容则由 %.o: %.c 一个一个匹配生成.
+最后清除所有中间文件也十分的简单, 直接 rm $(OBJS) 即可.</p>
+</blockquote>
+<h4 id="改进版-把输出中间文件都放到指定目录">改进版,
+把输出中间文件都放到指定目录</h4>
+<p>Makefile 文件如下 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SRCS = main.c src/add.c</span><br><span class="line"></span><br><span class="line">OBJS = $(addprefix build/, $(SRCS:%.c=%.o))</span><br><span class="line"></span><br><span class="line">CFLAGS = -Iinc</span><br><span class="line"></span><br><span class="line">all: $(OBJS)</span><br><span class="line">	CC $(CFLAGS) $(OBJS) -o build/a.exe</span><br><span class="line"></span><br><span class="line">build/%.o: %.c</span><br><span class="line">	@mkdir -p $(dir $@)</span><br><span class="line">	CC $(CFLAGS) -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm -fR build</span><br></pre></td></tr></tbody></table></figure><p></p>
+<blockquote>
+<p>使用addprefix命令将src列表转obj时在每一项添加build/, 当然,
+在推导时不要忘了前缀 build/%.c:%.o</p>
+</blockquote>
+<h4 id="更进一步-自动扫描源文件">更进一步, 自动扫描源文件</h4>
+<p>Makefile 文件如下 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SRCS +=  $(wildcard src/*.c *.c)</span><br><span class="line"></span><br><span class="line">OBJS = $(addprefix build/, $(SRCS:%.c=%.o))</span><br><span class="line"></span><br><span class="line">CFLAGS = -Iinc</span><br><span class="line"></span><br><span class="line">all: $(OBJS)</span><br><span class="line">	CC $(CFLAGS) $(OBJS) -o build/a.exe</span><br><span class="line"></span><br><span class="line">build/%.o: %.c</span><br><span class="line">	@mkdir -p $(dir $@)</span><br><span class="line">	CC $(CFLAGS) -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm -fR build</span><br></pre></td></tr></tbody></table></figure><p></p>
+<blockquote>
+<p>使用 wildcard 命令可以帮我们自动收集指定目录下的源文件,
+就不需要一个一个输入了</p>
+</blockquote>
+<h4 id="多文件构建">多文件构建</h4>
+<p>这里以 LVGL 模拟器仿真工程为例, Makefile 文件如下 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">LVGL_DIR = .</span><br><span class="line">LVGL_DIR_NAME = lvgl</span><br><span class="line"></span><br><span class="line">include lv_drivers/lv_drivers.mk</span><br><span class="line">include lvgl/lvgl.mk</span><br><span class="line">include lv_examples/lv_demo.mk</span><br><span class="line"></span><br><span class="line">CSRCS +=  $(wildcard main/*.c *.c)</span><br><span class="line"></span><br><span class="line">INCS += -I. -Imain -Ilvgl </span><br><span class="line"></span><br><span class="line">OBJS = $(addprefix build/, $(CSRCS:%.c=%.o))</span><br><span class="line"></span><br><span class="line">CFLAGS += -DLV_CONF_INCLUDE_SIMPLE -DLV_LVGL_H_INCLUDE_SIMPLE -DLV_DEMO_CONF_INCLUDE_SIMPLE $(INCS)</span><br><span class="line"></span><br><span class="line">all: $(OBJS)</span><br><span class="line">	CC $(CFLAGS) $(OBJS) -o a.exe -lSDL2 -lm -mwindows</span><br><span class="line"></span><br><span class="line">build/%.o: %.c</span><br><span class="line">	@mkdir -p $(dir $@)</span><br><span class="line">	CC $(CFLAGS) -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm -fR build</span><br></pre></td></tr></tbody></table></figure> &gt;
+需要用到3个模块, lv_drivers、lvgl、lv_examples
+而这些模块的编译信息都在模块的根目录下.mk 文件里, 比如 lv_drivers.mk
+文件内容如下： &gt; <figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LV_DRIVERS_DIR_NAME ?= lv_drivers</span><br><span class="line"></span><br><span class="line">CSRCS += <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(LVGL_DIR)</span>/<span class="variable">$(LV_DRIVERS_DIR_NAME)</span>/*.c)</span></span><br><span class="line">CSRCS += <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(LVGL_DIR)</span>/<span class="variable">$(LV_DRIVERS_DIR_NAME)</span>/wayland/*.c)</span></span><br><span class="line">CSRCS += <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(LVGL_DIR)</span>/<span class="variable">$(LV_DRIVERS_DIR_NAME)</span>/indev/*.c)</span></span><br><span class="line">CSRCS += <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(LVGL_DIR)</span>/<span class="variable">$(LV_DRIVERS_DIR_NAME)</span>/gtkdrv/*.c)</span></span><br><span class="line">CSRCS += <span class="variable">$(<span class="built_in">wildcard</span> <span class="variable">$(LVGL_DIR)</span>/<span class="variable">$(LV_DRIVERS_DIR_NAME)</span>/display/*.c)</span></span><br></pre></td></tr></tbody></table></figure> &gt; 它帮我们导入了该模块必要的 C
+文件, 添加到全局变量 CSRCS 中, 同理 lvgl, lv_drivers 也一样, 我们只要
+include 该make文件就可以了, 源文件有了, 头文件路径怎么解决呢？LVGL
+的方案是在模块根目录有一个头文件, 该头文件 里面 #include
+了必要的头各种必要的头文件, 因此要用到该模块时的任何函数接口, 只要
+#include 模块的根头文件就可以了.
+这样我们写程序只要关注自己的头文件路径就可以了。<p></p>
+<h4 id="cubemx-生成的-stm32-项目">Cubemx 生成的 STM32 项目</h4>
+<p>先列出所有源文件，再根据源文件生成目标文件列表,
+对目标文件自动推导即可完成。但是需要注意的是,
+这里的目标文件缺失了源文件的路径信息, 因此
+<code>$(BUILD_DIR)/%.o : %.c</code> 这一句中, make 推导时
+<code>%</code>.o 已经是非完整路径的文件名, 这导致相应的需求文档中
+<code>%.c</code> 也没有路径信息,
+那么make如何确定是哪个源文件生成的呢？没错,
+<code>vpath %.c $(sort $(dir $(SOURCES)))</code> 起到了关键作用,
+他将告诉make在哪些目录查找源文件。 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">BUILD_DIR = build</span><br><span class="line"></span><br><span class="line"># 1. 手工生成源文件列表</span><br><span class="line">SOURCES += src/add.c</span><br><span class="line">SOURCES += src/main.c</span><br><span class="line"></span><br><span class="line"># 2. 源文件列表 -&gt; 目标文件列表, 并且目标文件重定向到 build </span><br><span class="line">OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.c=.o)))</span><br><span class="line"># 3. 设置 vpath, 对所有源文件的 '所在目录' 进行注册</span><br><span class="line">vpath %.c $(sort $(dir $(SOURCES)))</span><br><span class="line"></span><br><span class="line"># 4. $(OBJECTS) 作为需求, make 将自动推导如何生成</span><br><span class="line">all: $(OBJECTS)</span><br><span class="line">	cc $(OBJECTS)</span><br><span class="line"></span><br><span class="line">$(BUILD_DIR)/%.o : %.c | $(BUILD_DIR)</span><br><span class="line">	cc -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">$(BUILD_DIR) :</span><br><span class="line">	@mkdir $@</span><br><span class="line"></span><br><span class="line">clean :</span><br><span class="line">	rm -rf build</span><br></pre></td></tr></tbody></table></figure> &gt; make 自动推导原理,
+先看目标文件是否匹配, 然后看需求文件是否匹配,
+如果目标文件匹配OK，将目标文件的 % 带到需求文件中去，如果有文件能够匹配,
+则可以顺利生成。<p></p>
+<h4 id="lvgl-官方-example">LVGL 官方 Example</h4>
+<p>其原理是利用 shell 命令 find 查找来获取所有源文件列表,
+然后利用源文件生成目标文件列表，目标文件都放到build目录下，而且对源文件的目录信息进行保留。因为源文件和目标文件的名称只相差一个
+build目录, 因此直接使用 <code>$(BUILD_DIR)/%.o : %.c</code> 让 make
+自行推导生成。关于保留目录信息，只需对目标文件所在文件夹进行 -p 的 mkdir
+即可实现。 </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">SRC_DIR = src</span><br><span class="line">BUILD_DIR = build</span><br><span class="line"></span><br><span class="line"># 1. 递归查找 'SRC_DIR' 下所有源文件</span><br><span class="line">SOURCES 		:= $(shell find $(SRC_DIR) -type f -name '*.c' -not -path '*/\.*')</span><br><span class="line"># 2. 源文件列表 -&gt; 目标文件列表, 并且目标文件重定向到 build, SOURCES 是包含路径的</span><br><span class="line">OBJECTS    	:= $(addprefix $(BUILD_DIR)/, $(SOURCES:.c=.o))</span><br><span class="line"></span><br><span class="line"># 3. $(OBJECTS) 作为需求, make 将自动推导如何生成</span><br><span class="line">all: $(OBJECTS)</span><br><span class="line">	@echo $(OBJECTS)</span><br><span class="line"></span><br><span class="line">$(BUILD_DIR)/%.o : %.c</span><br><span class="line">	@mkdir -p $(dir $@)</span><br><span class="line">	cc -c $&lt; -o $@ </span><br><span class="line"></span><br><span class="line">clean :</span><br><span class="line">	rm -rf build</span><br></pre></td></tr></tbody></table></figure> &gt; 值得注意的是, 上面的 SRC_DIR
+变量是可以多目录指定的, 并且还可以精确控制参加编译的目录。 &gt;
+可以看到，这里不需要指定 vpath 是因为需求文件的路径是完整的,
+也就是顺利匹配的。<p></p>
+<h1 id="多-makefile-文件">多 Makefile 文件</h1>
+<h2 id="include">include</h2>
+<p>有很多项目的构建框架都是使用 include 的方式来实现 SDK 与应用分离,
+其原理是在应用代码处的 Makefile 通过 include SDK_PATH 下的 Makefile
+框架来提供统一的构建功能，从而实现在应用目录下进行的代码编译。</p>
+<h3 id="tinyusb">1) TinyUSB</h3>
+<p>TinyUSB 的每一个 example 就相当于一个完整的工程项目，每个 example 的
+Makefile 基本内容如下:</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> ../../make.mk</span><br><span class="line"></span><br><span class="line">INC += \</span><br><span class="line">	src \</span><br><span class="line">	<span class="variable">$(TOP)</span>/hw \</span><br><span class="line"></span><br><span class="line"><span class="comment"># Example source</span></span><br><span class="line">EXAMPLE_SOURCE += <span class="variable">$(<span class="built_in">wildcard</span> src/*.c)</span></span><br><span class="line">SRC_C += <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(CURRENT_PATH)</span>/, <span class="variable">$(EXAMPLE_SOURCE)</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> ../../rules.mk</span><br></pre></td></tr></tbody></table></figure>
+<p>在开头处添加一个 include 来导入一些环境和变量,
+然后对给出当前工程的相关编译信息, 这里主要是向变量 INC
+中添加头文件路径，向 SRC_C 中添加源文件信息， 这其中包含了 main
+函数。</p>
+<p>最后在结尾处添加一个 include 来完成真正的编译。</p>
+<h1 id="模板">模板</h1>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">TARGET = awa_pc</span><br><span class="line">BUILD_DIR = build</span><br><span class="line"></span><br><span class="line">SRCS +=  <span class="variable">$(<span class="built_in">wildcard</span> src/*.c port/*.c test/*.c)</span></span><br><span class="line">SRCS +=  cJSON/cJSON.c</span><br><span class="line"></span><br><span class="line">OBJS = <span class="variable">$(<span class="built_in">addprefix</span> <span class="variable">$(BUILD_DIR)</span>/, $(<span class="built_in">notdir</span> $(SRCS:.c=.o)</span>))</span><br><span class="line"><span class="keyword">vpath</span> %.c <span class="variable">$(<span class="built_in">sort</span> $(<span class="built_in">dir</span> <span class="variable">$(SRCS)</span>)</span>)</span><br><span class="line"></span><br><span class="line">CFLAGS += -Isrc -IcJSON -Iport -Itest</span><br><span class="line">CFLAGS += -g -O0 -Werror -Wall</span><br><span class="line"></span><br><span class="line">LDFLAGS += -lpthread -static</span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/<span class="variable">$(TARGET)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">	@gcc <span class="variable">$(OBJS)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$@</span> </span><br><span class="line">	@echo Output <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span>/%.o: %.c | <span class="variable">$(BUILD_DIR)</span></span><br><span class="line">	@gcc <span class="variable">$(CFLAGS)</span> -c <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br><span class="line">	@echo CC <span class="variable">$&lt;</span></span><br><span class="line"></span><br><span class="line"><span class="section">run:</span></span><br><span class="line">	cd build &amp;&amp; start awa_pc.exe</span><br><span class="line"></span><br><span class="line"><span class="variable">$(BUILD_DIR)</span> :</span><br><span class="line">	@mkdir <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -fR build</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="vpath-的使用">VPATH 的使用</h2>
+<p>VPATH 直接指定一个搜索目录, 而 vpath
+可以对搜索路径加入指定的过滤器，用于筛选指定文件名</p>
+<p>src/Makefile</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRCS += a.c</span><br></pre></td></tr></tbody></table></figure>
+<p>顶层 Makefile</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> src/Makefile</span><br><span class="line"></span><br><span class="line"><span class="comment"># VPATH = ./src</span></span><br><span class="line"><span class="keyword">vpath</span> %.c ./src</span><br><span class="line"></span><br><span class="line">SRCS += main.c</span><br><span class="line">OBJS = $(SRCS:%.c=%.o)</span><br><span class="line"></span><br><span class="line">CFLAGS += -I./src</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJS)</span></span></span><br><span class="line">	CC <span class="variable">$(OBJS)</span> -o a.exe</span><br></pre></td></tr></tbody></table></figure>
+<p>OBJS 中的对象由 Makefile 自动推导，自动推导时 CFLAGS 可用于指定生成
+.o 文件时的编译器参数</p>
+<p>当然也可以自定义生成 OBJS 目标, 这时 CFLAGS 就可有可无了</p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> src/Makefile</span><br><span class="line"></span><br><span class="line"><span class="comment"># VPATH = ./src</span></span><br><span class="line"><span class="keyword">vpath</span> %.c ./src</span><br><span class="line"></span><br><span class="line">SRCS += main.c</span><br><span class="line">OBJS = $(SRCS:%.c=%.o)</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(OBJS)</span></span></span><br><span class="line">	CC <span class="variable">$(OBJS)</span> -o a.exe</span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -I./src -c <span class="variable">$&lt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Other/Makefile/Makefile解析.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/"><i class="icon fas fa-hashtag"></i>构建工具</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/01/18/auto/51/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">QEMU ARM64 仿真</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/01/17/auto/13/%E5%B8%B8%E8%A7%81%E9%80%89%E9%A1%B9/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">GCC常见选项</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E7%BA%A6%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">最简约的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%89%88-%E6%8A%8A%E8%BE%93%E5%87%BA%E4%B8%AD%E9%97%B4%E6%96%87%E4%BB%B6%E9%83%BD%E6%94%BE%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">改进版,
+把输出中间文件都放到指定目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E8%BF%9B%E4%B8%80%E6%AD%A5-%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">更进一步, 自动扫描源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E6%9E%84%E5%BB%BA"><span class="nav-number">4.</span> <span class="nav-text">多文件构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cubemx-%E7%94%9F%E6%88%90%E7%9A%84-stm32-%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.</span> <span class="nav-text">Cubemx 生成的 STM32 项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lvgl-%E5%AE%98%E6%96%B9-example"><span class="nav-number">6.</span> <span class="nav-text">LVGL 官方 Example</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A-makefile-%E6%96%87%E4%BB%B6"><span class="nav-number"></span> <span class="nav-text">多 Makefile 文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number"></span> <span class="nav-text">include</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tinyusb"><span class="nav-number"></span> <span class="nav-text">1) TinyUSB</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF"><span class="nav-number"></span> <span class="nav-text">模板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vpath-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">VPATH 的使用</span></a>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E7%BA%A6%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">最简约的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%89%88-%E6%8A%8A%E8%BE%93%E5%87%BA%E4%B8%AD%E9%97%B4%E6%96%87%E4%BB%B6%E9%83%BD%E6%94%BE%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">改进版,
+把输出中间文件都放到指定目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E8%BF%9B%E4%B8%80%E6%AD%A5-%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">更进一步, 自动扫描源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E6%9E%84%E5%BB%BA"><span class="nav-number">4.</span> <span class="nav-text">多文件构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cubemx-%E7%94%9F%E6%88%90%E7%9A%84-stm32-%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.</span> <span class="nav-text">Cubemx 生成的 STM32 项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lvgl-%E5%AE%98%E6%96%B9-example"><span class="nav-number">6.</span> <span class="nav-text">LVGL 官方 Example</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A-makefile-%E6%96%87%E4%BB%B6"><span class="nav-number"></span> <span class="nav-text">多 Makefile 文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number"></span> <span class="nav-text">include</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tinyusb"><span class="nav-number"></span> <span class="nav-text">1) TinyUSB</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF"><span class="nav-number"></span> <span class="nav-text">模板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vpath-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">VPATH 的使用</span></a>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            SDL2 Hello World |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">SDL2 Hello World</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-01-17 22:07:42</span>
+                <span class="mobile">2023-01-17 22:07</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/SDL2/">SDL2</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/SDL2/%E5%85%A5%E9%97%A8/">入门</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/SDL2/">SDL2</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 SDL2 库的基本使用. <span id="more"></span></p>
+<p>一个简单的 SDL2 程序 main.c </p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #define SDL_MAIN_HANDLED</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SDL2/SDL.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    SDL_Window *window = SDL_CreateWindow(<span class="string">"demo"</span>, SDL_WINDOWPOS_CENTERED, </span><br><span class="line">        SDL_WINDOWPOS_CENTERED, <span class="number">640</span>, <span class="number">480</span>, SDL_WINDOW_SHOWN);</span><br><span class="line">    SDL_Renderer *renderer = SDL_CreateRenderer(window, <span class="number">-1</span>, SDL_RENDERER_ACCELERATED);</span><br><span class="line">    <span class="type">bool</span> quit = <span class="literal">false</span>;</span><br><span class="line">    SDL_Event event;</span><br><span class="line"></span><br><span class="line">    SDL_SetRenderDrawColor(renderer, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>);</span><br><span class="line">    <span class="keyword">while</span> (!quit)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">while</span> (SDL_PollEvent(&amp;event))</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">switch</span> (event.type)</span><br><span class="line">            {</span><br><span class="line">            <span class="keyword">case</span> SDL_QUIT:</span><br><span class="line">                quit = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SDL_MOUSEMOTION:</span><br><span class="line">                <span class="keyword">if</span> (SDL_GetMouseState(<span class="literal">NULL</span>, <span class="literal">NULL</span>) &amp; SDL_BUTTON(<span class="number">1</span>))</span><br><span class="line">                    SDL_RenderDrawPoint(renderer, event.motion.x, event.motion.y);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        SDL_RenderPresent(renderer);</span><br><span class="line">        SDL_Delay(<span class="number">1000</span> / <span class="number">60</span>);</span><br><span class="line">    }</span><br><span class="line">    SDL_DestroyWindow(window);</span><br><span class="line">    SDL_DestroyRenderer(renderer);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>编译 </p><figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c -lmingw32 -lSDL2main -lSDL2</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>若去掉 <code>-lmingw32 -lSDL2main</code> 则需要在
+<code>#include &lt;SDL2/SDL.h&gt;</code> 之前添加
+<code>#define SDL_MAIN_HANDLED</code> 以避免找不到
+<code>WinMain</code></p>
+<p>因为 SDL_MAIN_HANDLED 在 sdl_main.h 中有如下定义</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SDL_MAIN_HANDLED</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> defined(__WIN32__)</span></span><br><span class="line"><span class="comment">/* On Windows SDL provides WinMain(), which parses the command line and passes</span></span><br><span class="line"><span class="comment">   the arguments to your main function.</span></span><br><span class="line"><span class="comment">   If you provide your own WinMain(), you may define SDL_MAIN_HANDLED</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SDL_MAIN_AVAILABLE</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">//...........</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></tbody></table></figure>
+<p>并且 </p><figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> defined(SDL_MAIN_NEEDED) || defined(SDL_MAIN_AVAILABLE)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> main    SDL_main</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  The prototype for the application's main() function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">extern</span> C_LINKAGE <span class="type">int</span> <span class="title function_">SDL_main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>;</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>也就是说默认情况下没有定义 <code>SDL_MAIN_HANDLED</code> 的话,
+<code>#include &lt;SDL2/SDL.h&gt;</code> 就会把 main 宏替换成 SDL_main,
+而宏在编译链接之前替换, 所以在链接时就会发现找不到 main 函数(或说
+WinMain), 而如果链接到 <code>-lmingw32 -lSDL2main</code>
+则不存在该问题(需要放在 -lSDL2 前面)，因为 -lSDL2main 提供了 main 函数.
+这时候实际的 man 函数其实不是在自己定义源文件里, 而是在 libSDL2main
+里.</p>
+<p>而如果我们定义了 SDL_MAIN_HANDLED 就是要求使用我们自己的 main
+函数就，不要发生宏替换，这种情况可以直接使用 <code>-lSDL2</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c -lSDL2</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>使用 pkg-config, 如果通过包管理器安装 sdl2, 在下载的同时一般都会附加
+pkg-config 的 .pc 配置文件, 比如 MSYS2 下</li>
+</ul>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载 ucrt64 的 SDL2 包</span></span><br><span class="line">pacman -S mingw-w64-ucrt-x86_64-SDL2</span><br><span class="line"><span class="comment"># 则有</span></span><br><span class="line">find /ucrt64/lib -name <span class="string">"*sdl2*pc*"</span></span><br><span class="line"><span class="comment"># 输出: /ucrt64/lib/pkgconfig/sdl2.pc</span></span><br></pre></td></tr></tbody></table></figure>
+<p>这时, 使用 pkg-config 查看包配置的输出</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pkg-config sdl2 --cflags --libs</span><br><span class="line"><span class="comment"># 输出: -IC:/ProgramFiles/msys64/ucrt64/include/SDL2 -Dmain=SDL_main -lmingw32 -mwindows -lSDL2main -lSDL2 </span></span><br></pre></td></tr></tbody></table></figure>
+<p><code>-lmingw32 -lSDL2main</code> 和上面直接编译的一样, pkg-config
+默认还附加的 <code>-mwindows</code> 用于启动时禁止终端弹出</p>
+<p>于是</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c `pkg-config sdl2 --cflags --libs`</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>使用 cmake</li>
+</ul>
+<p>同样的通过包管理器安装的 sdl2 还附加了 cmake 包的配置, 也是在 lib
+下,</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">find /ucrt64/lib -name <span class="string">"*SDL2*"</span></span><br><span class="line"><span class="comment"># 输出:</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2Config.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2ConfigVersion.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2mainTargets-release.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2mainTargets.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2staticTargets-release.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2staticTargets.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2Targets-release.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2Targets.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2testTargets-release.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/cmake/SDL2/SDL2testTargets.cmake</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/libSDL2.a</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/libSDL2.dll.a</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/libSDL2main.a</span></span><br><span class="line"><span class="comment"># /ucrt64/lib/libSDL2_test.a</span></span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>可以看到 Cmake 的话有多种配置可供选择</p>
+</blockquote>
+<p>直接使用默认配置的 CmakeLists.txt 如下:</p>
+<figure class="highlight cmake"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(temp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可执行文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(a main.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接库和依赖</span></span><br><span class="line"><span class="keyword">find_package</span>(SDL2 REQUIRED SDL2)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(a <span class="variable">${SDL2_LIBRARIES}</span>)</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>通过 find_package 查找包, 然后通过 ${&lt;包名&gt;_LIBRARIES} 进行引用</p>
+</blockquote>
+<p>使用 <code>message(${SDL2_LIBRARIES})</code> 查看 cmake 变量,
+可以看到 <code>${SDL2_LIBRARIES}</code> 值为
+<code>SDL2::SDL2mainSDL2::SDL2</code>, 默认链接到了 SDL2main</p>
+<ul>
+<li>静态链接</li>
+</ul>
+<p>通过 <code>find /ucrt64/lib -name "*SDL2*"</code> 可以看到 .a 文件,
+说明下载的 SDL2 包是包含静态链接库的, 我们试图直接使用 -static 来编译,
+发现出现很多 <code>undefined reference to __imp</code> 说明除了
+libSDL2.a 外还需要其他依赖库才能进行静态编译, 而具体需要哪些,
+我们目前无法得知.</p>
+<p>于是尝试通过 <code>pkg-config sdl2 --cflags --libs --static</code>
+发现可以得到所有依赖库, 即</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pkg-config sdl2 --cflags --libs --static</span><br><span class="line"><span class="comment"># 输出: -IC:/ProgramFiles/msys64/ucrt64/include/SDL2 -Dmain=SDL_main -lmingw32 </span></span><br><span class="line"><span class="comment"># -mwindows -lSDL2main -lSDL2 -lmingw32 -mwindows -lSDL2main -lSDL2 -lm -luser32 </span></span><br><span class="line"><span class="comment"># -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lversion -luuid -ladvapi32 -lsetupapi -lshell32 -ldinput8</span></span><br></pre></td></tr></tbody></table></figure>
+<p>于是静态编译指令为</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c `pkg-config sdl2 --cflags --libs --static` -static</span><br></pre></td></tr></tbody></table></figure>
+<p>Cmake 静态链接在 SDL 配置规则里也已经集成, 只需将 SDL2 库换成
+<code>SDL2::SDL2-static</code>:</p>
+<figure class="highlight cmake"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(temp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可执行文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(a main.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接库和依赖</span></span><br><span class="line"><span class="keyword">find_package</span>(SDL2 REQUIRED SDL2)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(a SDL2::SDL2main SDL2::SDL2-static)</span><br></pre></td></tr></tbody></table></figure>
+<p>如果不使用 <code>SDL2::SDL2main</code> 即只链接到
+<code>SDL2::SDL2-static</code>:
+<code>target_link_libraries(a SDL2::SDL2-static)</code> 则需要在
+<code>#include &lt;SDL2/SDL.h&gt;</code> 之前定义
+<code>#define SDL_MAIN_HANDLED</code> 以禁止宏替换.</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Lib/SDL2/Demo/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/SDL2/"><i class="icon fas fa-hashtag"></i>SDL2</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/01/17/auto/13/%E5%B8%B8%E8%A7%81%E9%80%89%E9%A1%B9/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">GCC常见选项</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/01/17/auto/43/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">Cmake 模板</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

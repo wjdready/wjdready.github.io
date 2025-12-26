@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            02原理图绘制 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">02原理图绘制</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-03-14 23:27:50</span>
+                <span class="mobile">2023-03-14 23:27</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/Tools/">Tools</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/Tools/Candence/">Candence</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Candence/">Candence</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍 OrCad Capture CIS 中原理图绘制 <span id="more"></span></p>
+<h1 id="界面默认布局">界面默认布局</h1>
+<p>最顶层是一个菜单栏，菜单栏下面是一个个独立的小工具栏。</p>
+<p>再往下左边是项目管理窗口集合，右边较大的窗口就是一个个文件的窗口集合，文件窗口下方是包含各种信息输出和命令窗口集合。</p>
+<p>最右边有一个工具栏窗口，在原理图绘制时可执行一些快捷命令。</p>
+<figure>
+<img src="/2023/03/14/auto/6/02%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BB%98%E5%88%B6/默认主界面.PNG" alt="默认主界面">
+<figcaption aria-hidden="true">默认主界面</figcaption>
+</figure>
+<h2 id="原理图绘制">2. 原理图绘制</h2>
+<p>放置功能有三种使用方法:</p>
+<ul>
+<li>第一种是在菜单栏中选择
+<code>Place</code>，然后在下拉框中选中要放置的内容</li>
+<li>第二种是直接在左侧工具栏种选中要放置的内容</li>
+<li>第三种是直接使用快捷键进行放置，根据快捷键的不同，放置的内容不同</li>
+</ul>
+<p>放置功能在原理图绘制中占据非常重要的地位，以至于很多单字母的快捷键都是为它们准备的。</p>
+<h5 id="放置元件-part">1) 放置元件 (Part)</h5>
+<p>快捷键 P,
+放置元件命令执行后会弹出一个选择框，需要从元件库中选中一个元件然后放到原理图中。可在
+Libraries 栏中新增或删除一个元件库。</p>
+<p><img src="/2023/03/14/auto/6/02%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BB%98%E5%88%B6/PlacePart.png" width="20%" height="20%"></p>
+<h6 id="内置库">内置库</h6>
+<p>一般来说放置一些常规的如电容电阻元件，电源和地符号等，直接使用内置的元件库就可以了，内置的元件库有很多，一般放置在安装目录下的
+<code>tools\capture\library</code>
+文件夹中。选择添加元件库时，默认打开的文件路径就是该文件夹，因此可以非常方便地选择添加内置库文件。</p>
+<p>以下是列出 <code>tools\capture\library</code>
+文件夹中包含的一些常用的内置元件或符号库:</p>
+<table>
+<colgroup>
+<col style="width: 22%">
+<col style="width: 7%">
+<col style="width: 69%">
+</colgroup>
+<thead>
+<tr>
+<th>库名</th>
+<th>零件个数</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>capsym.olb</td>
+<td>35 个</td>
+<td>存放一些常用的电源和地符号 (注: 电源、地仅是一些电气符号,
+不属于真实元件)</td>
+</tr>
+<tr>
+<td>Discrete.olb</td>
+<td>872个</td>
+<td>存放分立式元件，如电阻，电容，电感，开关，变压器等常用零件</td>
+</tr>
+<tr>
+<td>Counter.olb</td>
+<td>816个</td>
+<td>存放连接器，如4 HEADER，CON AT62，RCA JACK等</td>
+</tr>
+<tr>
+<td>Transistor.olb</td>
+<td>210个</td>
+<td>存放晶体管（含FET，UJT，PUT等），如 2N2222A，2N2905等</td>
+</tr>
+<tr>
+<td>Amplifier.olb</td>
+<td>182个</td>
+<td>存放模拟放大器IC，如CA3280，TL027C，EL4093等</td>
+</tr>
+<tr>
+<td>Arithmetic.olb</td>
+<td>182个</td>
+<td>存放逻辑运算IC，如TC4032B，74LS85等</td>
+</tr>
+<tr>
+<td>ATOD.OLB</td>
+<td>618个</td>
+<td>存放A/D转换IC，如ADC0804，TC7109等</td>
+</tr>
+<tr>
+<td>BusDriverTransceiver.olb</td>
+<td>632个</td>
+<td>存放汇流排驱动IC，如74LS244，74LS373等数字IC</td>
+</tr>
+<tr>
+<td>Counter.olb</td>
+<td>182个</td>
+<td>存放计数器IC，如74LS90，CD4040B</td>
+</tr>
+<tr>
+<td>DRAM.OLB</td>
+<td>623个</td>
+<td>存放动态存储器，如TMS44C256，MN41100-10等</td>
+</tr>
+<tr>
+<td>ElectroMechanical.olb</td>
+<td>6个</td>
+<td>存放马达，断路器等电机类元件。 MICROPHONE，蜂鸣器也在里面</td>
+</tr>
+<tr>
+<td>FIFO.OLB</td>
+<td>177个</td>
+<td>存放先进先出资料暂存器，如40105，SN74LS232</td>
+</tr>
+<tr>
+<td>Filter.olb</td>
+<td>80个</td>
+<td>存放滤波器类元件，如MAX270，LTC1065等</td>
+</tr>
+<tr>
+<td>FPGA.OLB</td>
+<td></td>
+<td>存放可编程逻辑器件，如XC6216/LCC</td>
+</tr>
+<tr>
+<td>Gate.olb</td>
+<td>691个</td>
+<td>存放逻辑门（含CMOS和TLL）</td>
+</tr>
+<tr>
+<td>Latch.olb</td>
+<td>305个</td>
+<td>存放锁存器，如4013，74LS73，74LS76等</td>
+</tr>
+<tr>
+<td>LineDriverReceiver.olb</td>
+<td>380个</td>
+<td>共380个零件，存放线控驱动与接收器。如SN75125，DS275等</td>
+</tr>
+<tr>
+<td>Mechanical.olb</td>
+<td>110个</td>
+<td>共110个零件，存放机构图件，如M HOLE 2，PGASOC-15-F等</td>
+</tr>
+<tr>
+<td>MicroController.olb</td>
+<td>523个</td>
+<td>存放单晶片微处理器，如68HC11，AT89C51等</td>
+</tr>
+<tr>
+<td>MicroProcessor.olb</td>
+<td>288个</td>
+<td>存放微处理器，如80386，Z80180等</td>
+</tr>
+<tr>
+<td>Misc.olb</td>
+<td>1567个</td>
+<td>存放杂项图件，如电表（METER
+MA），微处理器周边（Z80-DMA）等未分类的零件</td>
+</tr>
+<tr>
+<td>Misc2.olb</td>
+<td>772个</td>
+<td>存放杂项图件，如TP3071，ZSD100等未分类零件</td>
+</tr>
+<tr>
+<td>Misc3.olb</td>
+<td>365个</td>
+<td>存放线性杂项图件（未分类），如14573，4127，VFC32等</td>
+</tr>
+<tr>
+<td>MiscMemory.olb</td>
+<td>278个</td>
+<td>存放记忆体杂项图件（未分类），如28F020，X76F041等</td>
+</tr>
+<tr>
+<td>MiscPower.olb</td>
+<td>222个</td>
+<td>存放高功率杂项图件（未分类），如REF-01，PWR505，TPS67341等</td>
+</tr>
+<tr>
+<td>MuxDecoder.olb</td>
+<td>449个</td>
+<td>存放解码器，如4511，4555，74AC157等</td>
+</tr>
+<tr>
+<td>OPAmp.olb</td>
+<td>610个</td>
+<td>存放运放，如101，1458，UA741等</td>
+</tr>
+<tr>
+<td>PassiveFilter.olb</td>
+<td>14个</td>
+<td>存放被动式滤波器，如DIGNSFILTER，RS1517T，LINE FILTER等</td>
+</tr>
+<tr>
+<td>PLD.OLB</td>
+<td>355个</td>
+<td>存放可编程逻辑器件，如22V10，10H8等</td>
+</tr>
+<tr>
+<td>PROM.OLB</td>
+<td>811个</td>
+<td>存放只读记忆体运算放大器，如18SA46，XL93C46等</td>
+</tr>
+<tr>
+<td>Regulator.olb</td>
+<td>549个</td>
+<td>存放稳压IC，如78xxx，79xxx等</td>
+</tr>
+<tr>
+<td>ShiftRegister.olb</td>
+<td>610个</td>
+<td>存放移位寄存器，如4006，SNLS91等</td>
+</tr>
+<tr>
+<td>SRAM.OLB</td>
+<td>691个</td>
+<td>存放静态存储器，如MCM6164，P4C116等</td>
+</tr>
+</tbody>
+</table>
+<h6 id="design-cache">Design Cache</h6>
+<p>Design Cache
+列出当前放置到原理图中的所有元件，使用起来非常方便。即使导入的元件库都清空了，Design
+Cache 中的元件依然存在。</p>
+<h6 id="从元件库中筛查元件技巧">从元件库中筛查元件技巧</h6>
+<ul>
+<li><p>当在 Libraries 栏里选中一个元件库，在 Part
+栏中就会只列出当前选中的元件库，在输入栏中输入想要查找的元件即可筛查。</p></li>
+<li><p>可以通过在 Libraries 栏中按 Ctrl
+进行复选多个库，如果要选中全部，则按 <code>Ctrl + A</code>，这时 Part
+栏中就会列出所有选中的库元件，并且以 <code>元件名/库名</code>
+的形式列出。</p></li>
+<li><p>输入栏支持通配符查找，例如要查找 51 单片机, 输入
+<code>*89*51*</code>，若库中有，则将可匹配出 <code>AT89C51</code> 或者
+<code>STC89S51</code> 等。</p></li>
+<li><p>在最下方有一个 <code>+ Search for</code>,
+点击加号展开后可用用于在指定的库文件夹中查找某个元件，并将元件所在的库列出来，非常方便。</p></li>
+</ul>
+<blockquote>
+<p>放置完后可以直接把元件选择框 ×
+掉的，因为下次再点放置还会弹出，不用担心找不到</p>
+</blockquote>
+<h5 id="放置基本">2) 放置基本</h5>
+<p>选择菜单栏的 Place 可以看到每一种放置的快捷键, 以下只是列出...</p>
+<table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 6%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr>
+<th>放置类型</th>
+<th>快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连线</td>
+<td>W</td>
+<td>默认走直角。若想走任意角度，画线过程按 Shitf, 也可以在画完后拖动时按
+Shitf</td>
+</tr>
+<tr>
+<td>连接点</td>
+<td>J</td>
+<td>要去除某个连接点，再点一次放置连接点即可</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>N</td>
+<td>放置网络 (Net Alias 只在同一个原理图中有效?)</td>
+</tr>
+<tr>
+<td>不连接</td>
+<td>X</td>
+<td>放置 NC (从而识别该引脚悬空，电气检查时就不会报错)</td>
+</tr>
+<tr>
+<td>电源</td>
+<td>F</td>
+<td></td>
+</tr>
+<tr>
+<td>地</td>
+<td>G</td>
+<td></td>
+</tr>
+<tr>
+<td>总线</td>
+<td>B</td>
+<td>放置总线, 总线网络标签可使用 NAME[0..7] 或 NAME[0:7] 或
+NAME[0-7]</td>
+</tr>
+<tr>
+<td>总线入口</td>
+<td>E</td>
+<td>放置总线引出线, 总线引出线必须使用 Entry 不能直接使用 NET Alias</td>
+</tr>
+<tr>
+<td>跨原理图网络</td>
+<td>无</td>
+<td>跨原理图不能直接使用 Net Alias 连接, 需使用 Off-page connector</td>
+</tr>
+</tbody>
+</table>
+<h6 id="画线技巧">画线技巧</h6>
+<ul>
+<li>一个引脚引出网络已经绘制完成, 可按住 Ctrl
+并选中该网络往下拖会自带复制线和网络,
+如果网络以数字结尾，则会自动递增数字</li>
+<li><strong>F4
+可复刻上一个步骤所进行的操作</strong>，因此在拖动完后可直接按 F4
+重复上一次操作，这样就可以快速添加网络
+例如添加总线入口时只需添加第一个，然后按Ctrl +
+拖动入口线到第二个，随后按F4，系统会自动添加入口线</li>
+<li>画线没有设置网络系统会默认分配网络,
+可通过鼠标悬停在线上查看实际某根线连接到的网络</li>
+</ul>
+<h2 id="编辑原理图">3. 编辑原理图</h2>
+<p>绘制完原理图后可能需要进行修改和检查。</p>
+<p>菜单栏下的 Edit 选项有很多</p>
+<h3 id="edit-browse">1) Edit-&gt;Browse</h3>
+<p>Browse 功能可对原理图整体进行概览 (先在工程栏中选中要预览的 dsn 文件,
+否则该功能可能为灰色),
+包括所有元器件，网络等。可通过对原理图的概览中快速发现问题, 例如</p>
+<ul>
+<li><p>Parts 可对元件进行概览,
+将列出所有元件，发现未命名元件可直接双击，软件会自动转到该元件。</p></li>
+<li><p>Nets 可对网络概览,
+将列出所有网络，包括软件自动命名的。通过浏览，可以很快发现比如电源网络没设置问题
+(这在电气检查不出, 因为默认 电源 VCC_BAR,
+它本身也是一个合法的网络，只是我们根本没在那个网络连接电源)</p></li>
+<li><p>FlatNetlist：扁平的网络连接，包括不用页面的连接，在平坦式原理图中，所有的网络都是Flat
+Netlist，只有在层次化原理图中，部分的网络才是Schematic Net；</p></li>
+<li><p>Port与Off-page：这两个都是查看原理图中的分页连接符；</p></li>
+<li><p>TitleBlocks：浏览原理图中的的标题栏；</p></li>
+<li><p>Bookmarks：浏览原理图中的的书签标记；</p></li>
+<li><p>DRCMarkers：浏览原理图中的DRC的标记符号；可定位 DRC
+检查中的错误.</p></li>
+<li><p>Powerpins：浏览原理图中的电源管脚管脚。</p></li>
+</ul>
+<p>常规操作:</p>
+<ul>
+<li><p>重新设置所有元件标号为 ?: 只需在 Tools-&gt;Annotate 选中 Reset
+part reference to "?" 全部设为 ？ 后再在同样的设置界面选中 Unconditional
+reference update 即可更新元件标号.</p></li>
+<li><p>DRC 检查, 对原理图进行 DRC 检查 17.4 版本后怎么放在 PCB
+菜单栏下了?</p></li>
+</ul>
+<h3 id="edit-find">2) Edit-&gt;Find</h3>
+<p>快捷键直接 <code>Ctrl + F</code></p>
+<p>可在多个原理图 (弹出查找窗口后可选中工程栏中的多个原理图进行多个查找)
+中快速查找某个元件，网络，Text 等内容。</p>
+<p>支持正则表达式, 非常不错. 比如查找 xxV 电源, 那么只需输入
+<code>[0-9].*V</code>，下面查找类型为 Power/GND 则可以查找如 3.3V, 3V3,
+12V 等电源网络.</p>
+<p>Flat Net
+会列出和该网络相连的引脚都高亮，这样可以有一个整体的概念，知道该网络都连接到哪个地方...</p>
+<h3 id="design-cache-操作">3) Design Cache 操作</h3>
+<p><strong>替换</strong>: 可通过对 Cache
+中列出的元件进行替换来实现对整个工程一些元件的批量替换，例如将 R
+电阻的风格 (默认美标）全部替换成国标的, 只需替换 Cache 中 R 为 R2。</p>
+<p>此外替换还可以改变元件和原理图库的连接关系。</p>
+<p><strong>更新</strong> 在原理图库中更改了元件可通过 update
+来进行更新</p>
+<p>注意替换时更新属性和不更新属性的区别, 如果需要更新元件的 PCB 封装,
+不能通过更新来完成，而是需要使用替换并更新属性?
+我感觉直接更改元件的封装并更新后是可以更改封装的。</p>
+<p><strong>Cleanup</strong> (右击Designe Cache 文件夹)
+没放一个元件都会在 Cache 中创建副本,
+即在原理与中删除了也依然存在，CLeanup
+可以清除哪些在原理中已经被删除的元件副本。</p>
+<h3 id="原理图编辑的一些小技巧">4) 原理图编辑的一些小技巧</h3>
+<ul>
+<li>拖动元件时一般都会粘连网络连接，要拖动时断开这种连接，可按 Alt</li>
+<li>点击对象后按 R 旋转</li>
+<li>点击对象后按 V 垂直镜像，H 水平镜像, 两个方向都同时镜像
+Edit-&gt;Mirror-&gt;Both (文本对象无法镜像操作)</li>
+<li>拖动时按 Ctrl 可直接拷贝出副本</li>
+</ul>
+<h2 id="编辑元件属性">编辑元件属性</h2>
+<h3 id="pcb-封装属性">PCB 封装属性</h3>
+<h4 id="原理图中单个添加或更改">1) 原理图中单个添加或更改</h4>
+<p>双击原理图后会弹出属性编辑界面 (如果是横排的, 可以右击属性栏，选择
+Piovt)， 然后更改封装属性</p>
+<h4 id="通过更改元件库来添加或更改">2）通过更改元件库来添加或更改</h4>
+<p>对元件库中元件的封装信息进行更改，然后在原理图 Cache
+中更新即可添加或更改封装信息，但是 Replace 才行 ?</p>
+<h4 id="原理图中选中后批量修改">3) 原理图中选中后批量修改</h4>
+<p>原理图中框选多个元件(可按 Ctrl 重复框选)
+右击修改属性。(单击一个元件后，再按住 Shift 单机另一个元件可完成多选)
+。</p>
+<p>注意在属性栏列表下面可以选择 Object 类型，如果直接框选会带有很多
+Object, 选择 part 对象即可。</p>
+<h4 id="右击原理图文件后通过-edit-object-properties-来批量修改">4)
+右击原理图文件后通过 Edit Object Properties 来批量修改</h4>
+<p>整个原理图肯定包含多个对象，元件只是其中一个，可以在下方选择 part
+来显示所有元件对象，这时就可以批量修改了。</p>
+<p>可以单独查看和检查某一个原理图元件的封装情况，也可以整个工程所有元件一起检查...</p>
+<p>封装添加完后检查 DRC 就不会报错了，至于封装实际是否存在 DRC
+并不检查这些。因为添加封装属性只是为了导出网表时包含有元件的封装属性。</p>
+<p>绘制 PCB 时，PCB
+绘制工具通过网表中的封装信息，从封装库中导入实际的封装。而 PCB 工具可是
+AD, PADS 或其他第三方工具。因此原理图 DRC
+确实没必要检查封装是否存在。只要有个封装的名字即可。</p>
+<h2 id="生成网表">生成网表</h2>
+<p>原理图最终目的就是要生成网表给 PCB 绘制软件。</p>
+<p>原理图 DRC 检查 OK 后菜单栏中选择 Tools-&gt;Create NetList
+来生成网表。</p>
+<p>网表类型有很多选择，可生成 PCB, Verilog，SPICE
+网表，这也是为什么很多人都喜欢用 OrCad 绘制原理图的原因。</p>
+<h2 id="生成元器件清单-bom">生成元器件清单 (BOM)</h2>
+<p>导出功能居然要选择 OrCad + CIS 功能才有，否则 Report 选项.</p>
+<p>选中dsn 文件后，在菜单中选择 Report--&gt;CIS Bill of Materials</p>
+<p>弹出的对话框中，有一个输出选择栏，左边选择想要选择输出哪些属性，右边是哪些属性已经被选择。</p>
+<p>Tools下面的 Bill of Materials 也可以生成 BOM 有什么不同?</p>
+<h2 id="打印原理图">打印原理图</h2>
+<p>设置原理图属性页面属性, 点击单张原理图， 右击--&gt;原理图属性</p>
+<p>在这里可以设置纸张大小, 打印属性等</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Embedded/Hardware/Tools/Candence/02原理图绘制/02原理图绘制.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Candence/"><i class="icon fas fa-hashtag"></i>Candence</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/03/21/auto/3/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">02UseLibc</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/03/12/auto/19/04%E5%87%BD%E6%95%B0/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">04 函数</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%95%8C%E9%9D%A2%E9%BB%98%E8%AE%A4%E5%B8%83%E5%B1%80"><span class="nav-number">1.</span> <span class="nav-text">界面默认布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BB%98%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">2. 原理图绘制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BE%E7%BD%AE%E5%85%83%E4%BB%B6-part"><span class="nav-number">1.1.0.0.1.</span> <span class="nav-text">1) 放置元件 (Part)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%BA%93"><span class="nav-number">1.1.0.0.1.1.</span> <span class="nav-text">内置库</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#design-cache"><span class="nav-number">1.1.0.0.1.2.</span> <span class="nav-text">Design Cache</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%BB%8E%E5%85%83%E4%BB%B6%E5%BA%93%E4%B8%AD%E7%AD%9B%E6%9F%A5%E5%85%83%E4%BB%B6%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.0.0.1.3.</span> <span class="nav-text">从元件库中筛查元件技巧</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BE%E7%BD%AE%E5%9F%BA%E6%9C%AC"><span class="nav-number">1.1.0.0.2.</span> <span class="nav-text">2) 放置基本</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%94%BB%E7%BA%BF%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.0.0.2.1.</span> <span class="nav-text">画线技巧</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">3. 编辑原理图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-browse"><span class="nav-number">1.2.1.</span> <span class="nav-text">1) Edit-&gt;Browse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-find"><span class="nav-number">1.2.2.</span> <span class="nav-text">2) Edit-&gt;Find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#design-cache-%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.3.</span> <span class="nav-text">3) Design Cache 操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BC%96%E8%BE%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">1.2.4.</span> <span class="nav-text">4) 原理图编辑的一些小技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%85%83%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">编辑元件属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pcb-%E5%B0%81%E8%A3%85%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">PCB 封装属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%AD%E5%8D%95%E4%B8%AA%E6%B7%BB%E5%8A%A0%E6%88%96%E6%9B%B4%E6%94%B9"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">1) 原理图中单个添加或更改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E5%85%83%E4%BB%B6%E5%BA%93%E6%9D%A5%E6%B7%BB%E5%8A%A0%E6%88%96%E6%9B%B4%E6%94%B9"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">2）通过更改元件库来添加或更改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%AD%E9%80%89%E4%B8%AD%E5%90%8E%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3) 原理图中选中后批量修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%B3%E5%87%BB%E5%8E%9F%E7%90%86%E5%9B%BE%E6%96%87%E4%BB%B6%E5%90%8E%E9%80%9A%E8%BF%87-edit-object-properties-%E6%9D%A5%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">4)
+右击原理图文件后通过 Edit Object Properties 来批量修改</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%BD%91%E8%A1%A8"><span class="nav-number">1.4.</span> <span class="nav-text">生成网表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%85%83%E5%99%A8%E4%BB%B6%E6%B8%85%E5%8D%95-bom"><span class="nav-number">1.5.</span> <span class="nav-text">生成元器件清单 (BOM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.6.</span> <span class="nav-text">打印原理图</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%95%8C%E9%9D%A2%E9%BB%98%E8%AE%A4%E5%B8%83%E5%B1%80"><span class="nav-number">1.</span> <span class="nav-text">界面默认布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BB%98%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">2. 原理图绘制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BE%E7%BD%AE%E5%85%83%E4%BB%B6-part"><span class="nav-number">1.1.0.0.1.</span> <span class="nav-text">1) 放置元件 (Part)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%BA%93"><span class="nav-number">1.1.0.0.1.1.</span> <span class="nav-text">内置库</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#design-cache"><span class="nav-number">1.1.0.0.1.2.</span> <span class="nav-text">Design Cache</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%BB%8E%E5%85%83%E4%BB%B6%E5%BA%93%E4%B8%AD%E7%AD%9B%E6%9F%A5%E5%85%83%E4%BB%B6%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.0.0.1.3.</span> <span class="nav-text">从元件库中筛查元件技巧</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BE%E7%BD%AE%E5%9F%BA%E6%9C%AC"><span class="nav-number">1.1.0.0.2.</span> <span class="nav-text">2) 放置基本</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%94%BB%E7%BA%BF%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.0.0.2.1.</span> <span class="nav-text">画线技巧</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">3. 编辑原理图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-browse"><span class="nav-number">1.2.1.</span> <span class="nav-text">1) Edit-&gt;Browse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-find"><span class="nav-number">1.2.2.</span> <span class="nav-text">2) Edit-&gt;Find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#design-cache-%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.3.</span> <span class="nav-text">3) Design Cache 操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E7%BC%96%E8%BE%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">1.2.4.</span> <span class="nav-text">4) 原理图编辑的一些小技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%85%83%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">编辑元件属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pcb-%E5%B0%81%E8%A3%85%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">PCB 封装属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%AD%E5%8D%95%E4%B8%AA%E6%B7%BB%E5%8A%A0%E6%88%96%E6%9B%B4%E6%94%B9"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">1) 原理图中单个添加或更改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%9B%B4%E6%94%B9%E5%85%83%E4%BB%B6%E5%BA%93%E6%9D%A5%E6%B7%BB%E5%8A%A0%E6%88%96%E6%9B%B4%E6%94%B9"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">2）通过更改元件库来添加或更改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%AD%E9%80%89%E4%B8%AD%E5%90%8E%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3) 原理图中选中后批量修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%B3%E5%87%BB%E5%8E%9F%E7%90%86%E5%9B%BE%E6%96%87%E4%BB%B6%E5%90%8E%E9%80%9A%E8%BF%87-edit-object-properties-%E6%9D%A5%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">4)
+右击原理图文件后通过 Edit Object Properties 来批量修改</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%BD%91%E8%A1%A8"><span class="nav-number">1.4.</span> <span class="nav-text">生成网表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%85%83%E5%99%A8%E4%BB%B6%E6%B8%85%E5%8D%95-bom"><span class="nav-number">1.5.</span> <span class="nav-text">生成元器件清单 (BOM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.6.</span> <span class="nav-text">打印原理图</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

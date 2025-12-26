@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            QEMU ARM64 仿真 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">QEMU ARM64 仿真</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-01-18 08:04:16</span>
+                <span class="mobile">2023-01-18 08:04</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/QEMU/">QEMU</a>
+                            </li>
+                        
+                    
+                            <li class="category-item">
+                                
+                                    <span class="category-separator"><i class="icon fas fa-angle-right"></i></span>
+                                
+                                <a href="/categories/QEMU/ARM64/">ARM64</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/QEMU/">QEMU</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BB%BF%E7%9C%9F/">仿真</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍如何通过 QEMU 仿真 ARM64 板子 <span id="more"></span></p>
+<h1 id="qemu-arm64a">QEMU ARM64A</h1>
+<p>测试环境 Win10 VMWare: Ubuntu18.04</p>
+<h3 id="创建工作目录">1. 创建工作目录</h3>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/lfs -p</span><br><span class="line"><span class="built_in">export</span> LFS=~/lfs</span><br><span class="line"><span class="built_in">mkdir</span> <span class="variable">$LFS</span>/src <span class="variable">$LFS</span>/rootfs <span class="variable">$LFS</span>/dst -p</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="构建-kernel">2. 构建 Kernel</h3>
+<h5 id="下载源码">2.1 下载源码</h5>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$LFS</span>/src</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.18.2.tar.xz</span><br><span class="line">tar -xvf linux-5.18.2.tar.xz</span><br><span class="line"><span class="built_in">cd</span> linux-5.18.2</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="内核配置">2.2 内核配置</h5>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ARCH=arm64 </span><br><span class="line"><span class="built_in">export</span> CROSS_COMPILE=aarch64-linux-gnu-</span><br><span class="line"></span><br><span class="line">make defconfig</span><br><span class="line">make menuconfig</span><br></pre></td></tr></tbody></table></figure>
+<p>Linux arm 和 arm64 的 “defconfig” 应该包括 virtio 和 PCI
+控制器的正确设备驱动程序；一些较旧的内核版本，尤其是 32 位
+Arm，默认情况下并未启用所有功能。如果您没有看到您期望的 PCI
+设备，请检查您的配置是否具有： </p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_PCI=y</span><br><span class="line">CONFIG_VIRTIO_PCI=y</span><br><span class="line">CONFIG_PCI_HOST_GENERIC=y</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h5 id="虚拟机图形支持">2.3 虚拟机图形支持</h5>
+<p>图形也可用，但与 x86 不同，没有启用默认显示设备：您应该从 “-device ?”
+的显示设备部分选择打开。一个好的选择是使用： </p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-device virtio-gpu-pci</span><br></pre></td></tr></tbody></table></figure> 并启用以下
+Linux 内核选项（以及前面列出的通用 “virtio PCI for the virt machine”
+选项）： <figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_DRM=y </span><br><span class="line">CONFIG_DRM_VIRTIO_GPU=y</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h5 id="编译导出内核镜像">2.4 编译导出内核镜像</h5>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> <span class="built_in">arch</span>/arm64/boot/Image <span class="variable">$LFS</span>/dst</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="制作根文件系统">3. 制作根文件系统</h3>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 工具下载</span></span><br><span class="line">sudo apt-get install arch-install-scripts binfmt-support qemu-system-arm qemu-user-binfmt qemu-user-static</span><br><span class="line"></span><br><span class="line"><span class="comment"># 制作镜像</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=<span class="variable">$LFS</span>/dst/rootfs.img bs=1G count=4</span><br><span class="line">mkfs.ext4 <span class="variable">$LFS</span>/dst/rootfs.img</span><br><span class="line">sudo mount -o loop <span class="variable">$LFS</span>/dst/rootfs.img /mnt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压 Ubuntu base</span></span><br><span class="line">wget -P <span class="variable">$LFS</span>/src -c https://cdimage.ubuntu.com/ubuntu-base/releases/18.04/release/ubuntu-base-18.04.5-base-armhf.tar.gz</span><br><span class="line">sudo tar -pxf <span class="variable">$LFS</span>/src/ubuntu-base-18.04.5-base-armhf.tar.gz -C /mnt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入 chroot &gt;&gt;&gt;</span></span><br><span class="line">sudo arch-chroot /mnt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 必备软件下载</span></span><br><span class="line">sed -i <span class="string">'s/ports.ubuntu.com/mirrors.ustc.edu.cn/g'</span> /etc/apt/sources.list</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install systemd vim net-tools dhcpcd5 kmod </span><br><span class="line"></span><br><span class="line"><span class="comment"># 可选下载 (可在启动后再安装)</span></span><br><span class="line">apt-get install qt5-defeault libsdl2-dev libsdl-dev libdrm-tests git gcc make openssh-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加串口服务</span></span><br><span class="line"><span class="built_in">ln</span> -s /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@ttyAMA0.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置默认登录用户为 root 且免密登录</span></span><br><span class="line">vim /lib/systemd/system/getty@.service</span><br><span class="line"><span class="comment"># 替换该行 ExecStart=-/sbin/agetty --autologin root --noclear %I $TERM</span></span><br><span class="line"></span><br><span class="line">vim /etc/hosts</span><br><span class="line"><span class="comment"># 127.0.0.1     localhost</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 离开 chroot &lt;&lt;&lt;</span></span><br><span class="line">sudo umount /mnt</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="启动参数">4. 启动参数</h3>
+<p>基本启动参数</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-aarch64         \</span><br><span class="line">    -M  virt                \</span><br><span class="line">    -cpu cortex-a53         \</span><br><span class="line">    -smp 2                  \</span><br><span class="line">    -m 4096M                \</span><br><span class="line">    -kernel <span class="variable">$LFS</span>/dst/Image  \</span><br><span class="line">    -nographic              \</span><br><span class="line">    -net nic -net user,hostfwd=tcp::10021-:22 \</span><br><span class="line">    -append <span class="string">"root=/dev/vda rw rootfstype=ext4 console=ttyAMA0 ignore_loglevel"</span> \</span><br><span class="line">    -drive <span class="keyword">if</span>=none,file=<span class="variable">$LFS</span>/dst/rootfs.img,<span class="built_in">id</span>=hd0 \</span><br><span class="line">    -device virtio-blk-device,drive=hd0</span><br></pre></td></tr></tbody></table></figure>
+<p>可选参数 </p><figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 需要连接网络或通过 ssh 远程操作时</span></span><br><span class="line">-net nic -net user,hostfwd=tcp::10021-:22</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动图形时, 将当前终端作为模拟串口</span></span><br><span class="line">-serial stdio</span><br><span class="line"></span><br><span class="line">-usb</span><br><span class="line">-device nec-usb-xhci</span><br><span class="line">-device usb-host,hostbus=2,hostaddr=1</span><br><span class="line">-device usb-mouse</span><br><span class="line">-device usb-kbd</span><br><span class="line">-show-cursor</span><br><span class="line">-fsdev <span class="built_in">local</span>,security_model=passthrough,<span class="built_in">id</span>=fsdev0,path=/nfsroot</span><br><span class="line">-device virtio-9p-pci,<span class="built_in">id</span>=fs0,fsdev=fsdev0,mount_tag=hostshare</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="远程登录">5. 远程登录</h3>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">确保 QEMU 启动时带如下参数, 并且 root 设置了密码 passwd</span></span><br><span class="line">-net nic -net user,hostfwd=tcp::10021-:22</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 openssh-server 和配置 sshd</span></span><br><span class="line">apt-get install openssh-server</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将 PermitRootLogin 改成 <span class="built_in">yes</span></span></span><br><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">然后重启 sshd, 如果出错使用 sshd -T 查看原因</span></span><br><span class="line">service sshd restart</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">远程登录</span></span><br><span class="line">ssh root@localhost -p 10021</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">上传文件</span></span><br><span class="line">scp -P 10021 xxx root@localhost:/root</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">免密登录 <span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span></span><br><span class="line">ssh-keygen</span><br><span class="line">vim authorized_keys</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="本机模块编译">6. 本机模块编译</h3>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 要在本机编译模块, 需拷贝整个源码 (此方法待商榷)</span></span><br><span class="line">sudo mount -o loop <span class="variable">$LFS</span>/dst/rootfs.img /mnt</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$LFS</span>/src/linux-5.18.2</span><br><span class="line">make modules</span><br><span class="line">make modules_install INSTALL_MOD_PATH=./outlib</span><br><span class="line">make headers_install INSTALL_HDR_PATH=./outheader</span><br><span class="line">sudo <span class="built_in">cp</span> -a outlib/lib/modules /mnt/lib</span><br><span class="line">sudo <span class="built_in">cp</span> -a outheader/include /mnt/usr/include</span><br><span class="line">make clean</span><br><span class="line">sudo <span class="built_in">cp</span> -r <span class="variable">$LFS</span>/src/linux-5.18.2 /mnt/usr/src</span><br><span class="line"><span class="comment"># &gt;&gt;&gt; 在新的 host 中重新生成脚本</span></span><br><span class="line"><span class="built_in">ln</span> -s /usr/src/linux-5.18.2 /lib/modules/`<span class="built_in">uname</span> -r`/build</span><br><span class="line">apt-get install flex bison bc</span><br><span class="line">make scripts</span><br><span class="line"><span class="comment"># 还是需要 make 一下的, 要生成一些 hostcc 的东西, scripts 执行生成不全. 执行到内核源码编译时就可以直接停止掉了</span></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以直接从源代码中执行, 但是需要从之前编译中获取 .config 和 Module.symvers 放在源码目录中</span></span><br><span class="line"><span class="comment"># 参考 https://unix.stackexchange.com/questions/270123/how-to-create-usr-src-linux-headers-version-files</span></span><br><span class="line"><span class="comment"># 然后执行</span></span><br><span class="line">make modules_prepare</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="测试图形">7. 测试图形</h3>
+<h5 id="测试-libdrm">1. 测试 libdrm</h5>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libdrm-tests</span><br><span class="line">modetest -M virtio_gpu -s 36@35:640x480</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="测试-frambuffer">2. 测试 frambuffer</h5>
+<p>fbtest.c</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fb.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">int</span> i, j, fd, var;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_var_screeninfo</span> <span class="title">vinfo</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_fix_screeninfo</span> <span class="title">finfo</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Example: %s /dev/fb0\n"</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDWR);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)</span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Can't open file %s: %s\n"</span>, argv[<span class="number">1</span>], strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Get variable screen information */</span></span><br><span class="line">    <span class="keyword">if</span> (ioctl(fd, FBIOGET_VSCREENINFO, &amp;vinfo))</span><br><span class="line">    {</span><br><span class="line">        perror(<span class="string">"Can't get FBIOGET_VSCREENINFO"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Get fixed screen information */</span></span><br><span class="line">    <span class="keyword">if</span> (ioctl(fd, FBIOGET_FSCREENINFO, &amp;finfo))</span><br><span class="line">    {</span><br><span class="line">        perror(<span class="string">"Can't get FBIOGET_VSCREENINFO"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* show these information*/</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"vinfo.xres          = %d\n"</span>, vinfo.xres);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"vinfo.yres          = %d\n"</span>, vinfo.yres);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"vinfo.bits_per_bits = %d\n"</span>, vinfo.bits_per_pixel);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"vinfo.xoffset       = %d\n"</span>, vinfo.xoffset);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"vinfo.yoffset       = %d\n"</span>, vinfo.yoffset);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"finfo.line_length   = %d\n"</span>, finfo.line_length);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Figure out the size of the screen in bytes */</span></span><br><span class="line">    <span class="type">int</span> screensize = vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Map the device to memory */</span></span><br><span class="line">    <span class="type">char</span> *fbp = mmap(<span class="number">0</span>, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (fbp == MAP_FAILED)</span><br><span class="line">    {</span><br><span class="line">        perror(<span class="string">"mmap error"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(fbp, <span class="number">0xff</span>, screensize);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* Where we are going to put the pixel */</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">0</span>; x &lt; vinfo.xres; x++)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">0</span>; y &lt; vinfo.yres; y++)</span><br><span class="line">        {</span><br><span class="line">            <span class="type">int</span> location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / <span class="number">8</span>) +</span><br><span class="line">                       (y + vinfo.yoffset) * finfo.line_length;</span><br><span class="line"></span><br><span class="line">            *(fbp + location) = <span class="number">0xff</span>; <span class="comment">/*  blue */</span></span><br><span class="line">            *(fbp + location + <span class="number">1</span>) = <span class="number">0x00</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* release the memory */</span></span><br><span class="line">    munmap(fbp, screensize); </span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"all ok\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>编译运行</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install gcc</span><br><span class="line">gcc fbtest.c</span><br><span class="line">./a.out</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="测试-qt-基于-frambuffer">3. 测试 QT (基于 frambuffer)</h5>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QLabel&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> </span><br><span class="line">{</span><br><span class="line">    QApplication <span class="title function_">a</span><span class="params">(argc, argv)</span>;</span><br><span class="line">    </span><br><span class="line">    QLabel *label = new QLabel(<span class="string">"Hello, world!"</span>);</span><br><span class="line">    label-&gt;show();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> a.exec();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>demo.pro</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QT += core gui widgets</span><br><span class="line">TARGET = qtdemo</span><br><span class="line">SOURCES += main.cpp</span><br></pre></td></tr></tbody></table></figure>
+<p>编译运行</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apt-get install qt5-default g++ make</span><br><span class="line">qmake &amp;&amp; make -j8</span><br><span class="line">export QT_QPA_PLATFORM=linuxfb:tty=/dev/fb0</span><br><span class="line">export QT_QPA_GENERIC_PLUGINS=evdevmouse:/dev/input/event2,evdevkeyboard:/dev/input/event1</span><br><span class="line">./qtdemo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更多 QT 选项</span></span><br><span class="line">export QTDIR=/usr/lib/qt5</span><br><span class="line">export QT_QPA_PLATFORM_PLUGIN_PATH=$QTDIR/plugins</span><br><span class="line">export QT_QPA_PLATFORM=eglfs:fb=/dev/fb0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">触摸设备支持 evdevtouch 或 tslib</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">evdevtouch:/dev/input/event1</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tslib:/dev/input/ts0</span></span><br><span class="line">export QT_QPAFONTDIR=/usr/lib/fonts</span><br><span class="line">export QML2_IMPORT_PATH=$QTDIR/qml</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li>https://wiki.qemu.org/Documentation/Platforms/ARM</li>
+<li>https://www.cnblogs.com/pengdonglin137/p/6431234.html</li>
+</ul>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Virtual/Qemu/ARM64/01UbuntuBase/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/QEMU/"><i class="icon fas fa-hashtag"></i>QEMU</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E4%BB%BF%E7%9C%9F/"><i class="icon fas fa-hashtag"></i>仿真</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/01/21/auto/27/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">GTK Base</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/01/18/auto/48/Makefile%E8%A7%A3%E6%9E%90/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">Makefile解析</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#qemu-arm64a"><span class="nav-number">1.</span> <span class="nav-text">QEMU ARM64A</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 创建工作目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-kernel"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 构建 Kernel</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">1.0.2.0.1.</span> <span class="nav-text">2.1 下载源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.0.2.0.2.</span> <span class="nav-text">2.2 内核配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%9B%BE%E5%BD%A2%E6%94%AF%E6%8C%81"><span class="nav-number">1.0.2.0.3.</span> <span class="nav-text">2.3 虚拟机图形支持</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AF%BC%E5%87%BA%E5%86%85%E6%A0%B8%E9%95%9C%E5%83%8F"><span class="nav-number">1.0.2.0.4.</span> <span class="nav-text">2.4 编译导出内核镜像</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 制作根文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. 启动参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. 远程登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E6%A8%A1%E5%9D%97%E7%BC%96%E8%AF%91"><span class="nav-number">1.0.6.</span> <span class="nav-text">6. 本机模块编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%9B%BE%E5%BD%A2"><span class="nav-number">1.0.7.</span> <span class="nav-text">7. 测试图形</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-libdrm"><span class="nav-number">1.0.7.0.1.</span> <span class="nav-text">1. 测试 libdrm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-frambuffer"><span class="nav-number">1.0.7.0.2.</span> <span class="nav-text">2. 测试 frambuffer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-qt-%E5%9F%BA%E4%BA%8E-frambuffer"><span class="nav-number">1.0.7.0.3.</span> <span class="nav-text">3. 测试 QT (基于 frambuffer)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.1.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#qemu-arm64a"><span class="nav-number">1.</span> <span class="nav-text">QEMU ARM64A</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 创建工作目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-kernel"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 构建 Kernel</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">1.0.2.0.1.</span> <span class="nav-text">2.1 下载源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.0.2.0.2.</span> <span class="nav-text">2.2 内核配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%9B%BE%E5%BD%A2%E6%94%AF%E6%8C%81"><span class="nav-number">1.0.2.0.3.</span> <span class="nav-text">2.3 虚拟机图形支持</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AF%BC%E5%87%BA%E5%86%85%E6%A0%B8%E9%95%9C%E5%83%8F"><span class="nav-number">1.0.2.0.4.</span> <span class="nav-text">2.4 编译导出内核镜像</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 制作根文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. 启动参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. 远程登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%9C%BA%E6%A8%A1%E5%9D%97%E7%BC%96%E8%AF%91"><span class="nav-number">1.0.6.</span> <span class="nav-text">6. 本机模块编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%9B%BE%E5%BD%A2"><span class="nav-number">1.0.7.</span> <span class="nav-text">7. 测试图形</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-libdrm"><span class="nav-number">1.0.7.0.1.</span> <span class="nav-text">1. 测试 libdrm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-frambuffer"><span class="nav-number">1.0.7.0.2.</span> <span class="nav-text">2. 测试 frambuffer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-qt-%E5%9F%BA%E4%BA%8E-frambuffer"><span class="nav-number">1.0.7.0.3.</span> <span class="nav-text">3. 测试 QT (基于 frambuffer)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.1.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>

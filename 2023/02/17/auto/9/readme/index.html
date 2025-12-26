@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="东东">
+    
+    <title>
+        
+            RTThread 开发环境 |
+        
+        Keep
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.jpg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":true},"code_block":{},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":true,"use":"valine","valine":{"appid":"1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va","appkey":"3zfwVYosv58ANUow3kpXbAqd","placeholder":"😜 尽情吐槽吧~"},"gitalk":{"github_id":null,"repository":null,"client_id":null,"client_secret":null},"twikoo":{"env_id":null,"region":null}},"post":{"word_count":{"enable":false,"wordcount":false,"min2read":false},"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect","CTO","BOSS"]}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":false,"site_pv":false,"page_pv":true}},"version":"3.7.3"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+            <a class="site-name border-box" href="/">
+               Keep
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            <div class="article-title">
+                <span class="title-hover-animation">RTThread 开发环境</span>
+            </div>
+
+            
+                <div class="article-header border-box">
+                    
+                        <div class="avatar-box border-box">
+                            <img src="/images/avatar.jpg">
+                        </div>
+                    
+                    <div class="info-box">
+                        <div class="author">
+                            <span class="name">东东</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info border-box">
+                            
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-17 11:12:50</span>
+                <span class="mobile">2023-02-17 11:12</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc">2025-12-26 11:03:43</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                            <li class="category-item">
+                                
+                                <a href="/categories/RTThread/">RTThread</a>
+                            </li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul>
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RTThread/">RTThread</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <html><head></head><body><p>本文主要介绍如何搭建 RTThread 开发的开发环境 <span id="more"></span></p>
+<p>RTThread 开发支持裸机移植, Env 工具移植, 和 RTThread Studio
+直接开发。一般裸机移植只适用于 RTThread Nano, 因为 Nano
+不需要各种组件包, 很简洁适用于系统资源十分有限的MCU中, 但这样就发挥不了
+RTThread 组件生态的好处了, 通过 Env 工具和 RTThread Studio
+开发可以直接获取网络的官方或第三方成熟的组件,
+加快开发流程。下面将主要讨论使用 Env 工具开发的基本流程。</p>
+<h4 id="准备工作">准备工作</h4>
+<p>到<a class="link" target="_blank" rel="noopener" href="https://www.rt-thread.org/page/download.html">官网下载<i class="fas fa-external-link-alt"></i></a>:</p>
+<ul>
+<li>RTThread 标准版源码</li>
+<li>Env 工具</li>
+</ul>
+<h4 id="env-工具的基本使用">Env 工具的基本使用</h4>
+<p>参考官方<a class="link" target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/development-tools/env/env">使用介绍<i class="fas fa-external-link-alt"></i></a></p>
+<p>安装完成后打开 env.exe, 为了能随时随地打开env.exe方便使用,
+将工具添加到注册表(标题栏右击-&gt;Settings-&gt;Integration-&gt;Register)</p>
+<p>Env 中携带了 Python &amp; scons 以及 gcc 工具链,
+安装完就可以直接编译.</p>
+<h5 id="编译-bsp">1. 编译 BSP</h5>
+<p>在源码的 bsp 目录找到适合自己板子的工程模板, 在模板目录下打开 env.exe
+输入 <code>scons</code> 即可开始编译当前板子的工程代码.</p>
+<h5 id="生成工程文件">2.生成工程文件</h5>
+<p>如果使用 mdk/iar 来进行项目开发, 可以直接使用 BSP
+中的工程文件或者使用以下命令中的其中一种，重新生成工程.
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scons --target=iar</span><br><span class="line">scons --target=mdk4</span><br><span class="line">scons --target=mdk5</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h4 id="menuconfig">3. menuconfig</h4>
+<p>输入 <code>menuconfig</code> 进行配置, 配置完后后自动生成 rtconfig.h
+文件。此时再次使用 scons 命令就会根据新的 rtconfig.h
+文件重新编译工程了</p>
+<h4 id="pkg-包管理器官方包地址">4. pkg 包管理器(<a class="link" target="_blank" rel="noopener" href="https://github.com/RT-Thread-packages">官方包地址<i class="fas fa-external-link-alt"></i></a>)</h4>
+<p>package 工具作为 Env
+的组成部分，为开发者提供了软件包的下载、更新、删除等管理功能.</p>
+<p>在下载、更新软件包前，需要先在 menuconfig 中 开启 你想要操作的软件包,
+这些软件包位于 RT-Thread online packages 菜单下.
+找到你需要的软件包然后选中开启，保存并退出 menuconfig
+。此时软件包已被标记选中，但是还没有下载到本地，所以还无法使用。</p>
+<p>这时候使用 pkg 命令进行下载、更新、删除软件包</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 下载</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果软件包在 menuconfig 已被选中，但是未下载，此时输入如下命令, 该软件包自动下载；</span></span><br><span class="line">pkgs --update</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 更新</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果选中的软件包在服务器端有更新，并且版本号在 menuconfig 中选择的是 latest. 输入如下指令, 该软件包将会进行更新；</span></span><br><span class="line">pkgs --update</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3. 删除</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">需要先在 menuconfig 中取消其的选中状态，然后再执行如下指令 。此时本地已下载但未被选中的软件包将会被删除。</span></span><br><span class="line">pkgs --update</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4. 升级本地软件包信息</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这个命令不仅会对本地的包信息进行更新同步，还会对 Env 的功能脚本进行升级，建议定期使用</span></span><br><span class="line">pkgs --upgrade</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="scons-更多功能">5. scons 更多功能</h4>
+<p>参考<a class="link" target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/development-tools/scons/scons">官方说明<i class="fas fa-external-link-alt"></i></a></p>
+<p>SCons 基本功能</p>
+<p>RT-Thread 构建系统支持多种编译器, 可以阅读该 BSP 目录下的 rtconfig.py
+里的 CROSS_TOOL 选项查看当前支持的编译器。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">scons --target=mdk5     # 生成 mdk5 的工程</span><br><span class="line">scons -c                # 清除构建内容</span><br><span class="line">scons -s                # 不输出内部命令信息, 可以连着用比如 scons --target=mdk5 -s</span><br><span class="line">scons -jN               # 多线程编译</span><br><span class="line">scons --dist            # 输出BSP相关工程, 所有 bsp 相关源码都拷贝到 dist 目录下</span><br><span class="line">scons --verbose         # 显示编译参数</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>注：要生成 MDK 或者 IAR 的工程文件，前提条件是 BSP
+目录存在一个工程模版文件，然后 scons
+才会根据这份模版文件加入相关的源码，头文件搜索路径，编译参数，链接参数等。而至于这个工程是针对哪颗芯片的，则直接由这份工程模版文件指定。所以大多数情况下，这个模版文件是一份空的工程文件，用于辅助
+SCons 生成 project.uvprojx 或者 project.eww。</p>
+</blockquote>
+<h4 id="env-高级用法">Env 高级用法</h4>
+<p>该用法是我独自探索出来的, 实用性还是不错的.</p>
+<p>我发现下载的 env 包里面有一个 env.bat, 运行后直接开启一个 ConEmu.exe
+终端程序, 其关键内容正是这段启动脚本</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start  .\tools\ConEmu\ConEmu.exe </span><br></pre></td></tr></tbody></table></figure>
+<p>ConEmu.exe 是随包下载放在 tools 目录下的. ConEmu.exe
+是一个开源的终端模拟器, RTT 官方默认让用户使用该终端来承载他们提供的 env
+环境.</p>
+<p>然而一般来说我习惯在 VSCode 中使用 VSCode
+自带的终端模拟器或者直接使用 Windows Terminal, 但是当我在 VSCode 或 cmd
+中启动 RTT env 时, 不论我是使用 env.bat 还是 直接运行 ..exe
+它总是开启一个新的窗口, 有没有办法直接在 Windows Terminal 中进入 RTT env
+环境呢?</p>
+<p>我想 ConEmu.exe 作为一个终端模拟器, 和 Windows Terminal 本质是一样的,
+只是作为承载开发环境的工具, 在进入 ConEmu.exe 的同时,
+一定有环境导出的相关脚本，要不然就是官方更改了 ConEmu.exe 源码,
+将环境导出内置了, 但这可能性不大。</p>
+<p>最终果然在 <code>.\tools\ConEmu\ConEmu</code> 目录下找到初始化脚本
+<code>CmdInit.cmd</code>, 这样一来就方便多了。</p>
+<p>例如我可以写一个 <code>rtt.bat</code> 放入 Windows 的 PATH 中,
+不论我是使用 VSCode 自带的终端模拟器还是 Windows Terminal, 只需输入 rtt
+即可进入 RTT env 环境, 或者如果不想进入 RTT env
+只是临时调用一下来编译程序只需输入 <code>rtt scons</code>, 这一点通过
+<code>CmdInit.cmd &amp; %* &amp; exit"</code> 来实现, %* 在bat
+脚本中是获取所有的输入参数, 即运行 CmdInit.cmd 脚本进入环境后后立刻运行
+rtt.bat 其后的参数, 比如 scons, 最后运行完后执行 exit 退出环境.</p>
+<p>rtt.bat 的实现如下:</p>
+<figure class="highlight bat"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">@REM 如果输入参数不为空, 就按需执行, 执行完后立刻退出, 否则直接进入 RTT Env 环境</span></span><br><span class="line"></span><br><span class="line">@<span class="keyword">if</span> <span class="keyword">not</span> "%*" == "" (</span><br><span class="line">    <span class="built_in">cmd</span> /k "C:\ProgramFiles\Library\RTThread-env-tools-v1.<span class="number">3</span>.<span class="number">5</span>\tools\ConEmu\ConEmu\CmdInit.<span class="built_in">cmd</span> &amp; %* &amp; <span class="keyword">exit</span>"</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">    <span class="built_in">cmd</span> /k "C:\ProgramFiles\Library\RTThread-env-tools-v1.<span class="number">3</span>.<span class="number">5</span>\tools\ConEmu\ConEmu\CmdInit.<span class="built_in">cmd</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="rtthread-vscode-插件">RTThread VSCode 插件</h4>
+<p>最后, 我发现 RTThread 官方已经提供 VSCode 的开发插件,
+使用起来更简单了.</p>
+<h2 id="官方教程">官方教程</h2>
+<p><a class="link" target="_blank" rel="noopener" href="https://www.rt-thread.org/document/site/#/rt-thread-version/rt-thread-standard/README">官方教程<i class="fas fa-external-link-alt"></i></a></p>
+<h2 id="note">Note</h2>
+<p>scons 使用的是 python 2.7, 里面的命令无法支持长路径复制, 因此 scons
+--dist 如果路径过长就会导出失败, 真的坑...</p>
+<p><a class="link" target="_blank" rel="noopener" href="https://gitee.com/wjundong/code/blob/master/./Embedded/OS/RTThread/readme.md">源文件来自于<i class="fas fa-external-link-alt"></i></a></p>
+</body></html>
+            </div>
+
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/RTThread/"><i class="icon fas fa-hashtag"></i>RTThread</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"><i class="icon fas fa-hashtag"></i>开发环境</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/02/17/auto/10/readme/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">RTThread 开发环境</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/02/17/auto/15/readme/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item text-ellipsis">通过 __attribute( (section(x)) ) 来对函数进行快速测试</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                
+
+
+    <div class="comments-container">
+        <div id="comments-anchor"></div>
+        <div class="comment-area-title">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        
+            
+
+    <div class="valine-container">
+        <script  src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script >
+          function loadValine() {
+
+            const config = {
+              el: '#vcomments',
+              appId: '1GsTzLXD2JDPagWBb56hYuYW-9Nh9j0Va',
+              appKey: '3zfwVYosv58ANUow3kpXbAqd',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '😜 尽情吐槽吧~',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('') {
+              config.serverURLs = ''
+            }
+
+            new Valine(config)
+
+            function getAuthor(language) {
+              switch (language) {
+                case 'en':
+                  return 'Author'
+                case 'zh-CN':
+                  return '博主'
+                case 'zh-TW':
+                  return '站長'
+                default:
+                  return 'Master'
+              }
+            }
+
+            // Add "Author" identify
+            const getValineDomTimer = setInterval(() => {
+              const vcards = document.querySelectorAll('#vcomments .vcards .vcard')
+              if (vcards.length > 0) {
+                let author = '东东'
+
+                if (author) {
+                  for (let vcard of vcards) {
+                    const vnick_dom = vcard.querySelector('.vhead .vnick')
+                    const vnick = vnick_dom.innerHTML
+                    if (vnick === author) {
+                      vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                    }
+                  }
+                }
+                clearInterval(getValineDomTimer)
+              } else {
+                clearInterval(getValineDomTimer)
+              }
+            }, 2000)
+          }
+
+          if ('false' === 'true') {
+            const loadValineTimeout = setTimeout(() => {
+              loadValine()
+              clearTimeout(loadValineTimeout)
+            }, 1000)
+          } else {
+            window.addEventListener('DOMContentLoaded', loadValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+            
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E5%B7%A5%E5%85%B7%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Env 工具的基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-bsp"><span class="nav-number">2.1.</span> <span class="nav-text">1. 编译 BSP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%B7%A5%E7%A8%8B%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.生成工程文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#menuconfig"><span class="nav-number">3.</span> <span class="nav-text">3. menuconfig</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pkg-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E5%AE%98%E6%96%B9%E5%8C%85%E5%9C%B0%E5%9D%80"><span class="nav-number">4.</span> <span class="nav-text">4. pkg 包管理器(官方包地址)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scons-%E6%9B%B4%E5%A4%9A%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">5. scons 更多功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">Env 高级用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rtthread-vscode-%E6%8F%92%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">RTThread VSCode 插件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E6%95%99%E7%A8%8B"><span class="nav-number"></span> <span class="nav-text">官方教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#note"><span class="nav-number"></span> <span class="nav-text">Note</span></a>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2021</span>&nbsp;-&nbsp;2025
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">东东</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.7.3</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E5%B7%A5%E5%85%B7%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Env 工具的基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-bsp"><span class="nav-number">2.1.</span> <span class="nav-text">1. 编译 BSP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%B7%A5%E7%A8%8B%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.生成工程文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#menuconfig"><span class="nav-number">3.</span> <span class="nav-text">3. menuconfig</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pkg-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E5%AE%98%E6%96%B9%E5%8C%85%E5%9C%B0%E5%9D%80"><span class="nav-number">4.</span> <span class="nav-text">4. pkg 包管理器(官方包地址)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scons-%E6%9B%B4%E5%A4%9A%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">5. scons 更多功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#env-%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">Env 高级用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rtthread-vscode-%E6%8F%92%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">RTThread VSCode 插件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E6%95%99%E7%A8%8B"><span class="nav-number"></span> <span class="nav-text">官方教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#note"><span class="nav-number"></span> <span class="nav-text">Note</span></a>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/post-helper.js"></script>
+
+        
+            
+<script src="/js/libs/anime.min.js"></script>
+
+        
+        
+            
+<script src="/js/toc.js"></script>
+
+        
+    
+    
+    
+</div>
+
+
+
+
+</body>
+</html>
